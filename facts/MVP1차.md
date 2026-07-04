@@ -35,22 +35,26 @@
 
 ## 3. 1차 한 사이클 — 무엇이 무엇을 출력하나 (출력 명세)
 
-> "언제 출력이 나오나"를 단계별 산출물로 못 박음. 각 단계는 **DB 테이블 1개**를 쓴다(= 데이터 계약).
+> "언제 출력이 나오나"를 단계별 산출물로 못 박음. 각 단계는 **DB 테이블 1개**를 쓴다(= 데이터 계약). 한 사이클 = 1개 `cycle_id`.
 
+```mermaid
+flowchart TB
+  SCR["① 스크리너"] --> P[["tb_daily_pick<br/>오늘의 후보 N개"]]
+  P --> TECH["② 기술"] & MAC["③ 매크로"] & DIS["④ 공시"] & NEW["⑤ 뉴스"]
+  TECH --> T[["tb_technical_signals"]]
+  MAC --> M[["tb_macro_signals"]]
+  DIS --> D[["tb_disclosure_signals"]]
+  NEW --> N[["tb_news_signals"]]
+  T & M & D & N --> ST["⑥ Strategist"] --> SS[["tb_strategist_signals<br/>매수/보류 + 근거"]]
+  SS --> CR["⑦ Risk Critic"] --> CV[["tb_critic_verdict<br/>통과/기각"]]
+  CV --> PM["⑧ PM·게이트"] --> PD[["tb_portfolio_decision"]]
+  PD --> EX["⑨ 실행"] --> OF[["tb_order / tb_fill<br/>가상 체결"]]
+  OF --> RV["⑩ Reviewer"] --> ME[["tb_memory_entries<br/>회고 (observe-only)"]]
+  ME -.다음 사이클 참고.-> ST
 ```
-① 스크리너(지현)     → tb_daily_pick     : 오늘의 후보 N개
-② 기술(지현)         → tb_technical_signals : 후보별 지표
-③ 매크로(지현)       → tb_macro_signals  : 오늘의 시장 국면 1행
-④ 공시(창욱)         → tb_disclosure_signals : 후보별 공시 신호
-⑤ 뉴스(창욱)         → tb_news_signals   : 후보별 뉴스 신호
-⑥ Strategist(은미)   → tb_strategist_signals : 후보별 매수/보류 + 근거
-⑦ Risk Critic(미연)  → tb_critic_verdict : 통과/기각 + 반박
-⑧ PM·게이트(지현)    → tb_portfolio_decision / tb_risk_gate : 수량·최종 허용
-⑨ 실행(지현)         → tb_order / tb_fill : 가상 체결 기록
-⑩ Reviewer(성혁)     → tb_memory_entries : 회고(observe-only)
-```
-- 한 사이클 = 1개 `cycle_id`로 전부 묶임 (08:30 실행 시 오케스트레이터가 발급)
+
 - **각 테이블 스키마·필드 = `데이터 계약` 페이지 참조** (여기선 "무엇을 출력하나"만)
+- cycle_id는 08:30 실행 시 오케스트레이터가 발급(⚠️ A3 확정 필요)
 
 ---
 
