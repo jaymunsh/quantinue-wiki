@@ -42,7 +42,7 @@ def file_hash(p: Path) -> str:
     return hashlib.sha256(p.read_bytes()).hexdigest()[:16]
 
 def scan_raw() -> list[Path]:
-    exts = {".html", ".htm", ".md", ".txt"}
+    exts = {".html", ".htm", ".md", ".txt", ".json"}
     return sorted(p for p in (ROOT / "raw").rglob("*")
                   if p.is_file() and p.suffix.lower() in exts and not p.name.startswith("."))
 
