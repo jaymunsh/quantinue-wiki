@@ -1,31 +1,31 @@
 #!/usr/bin/env python3
 """
-DocStill 증류 러너 — 백엔드 3종 지원 (claude / codex / ollama)
+DocStill 증류 러너 — LLM 벤더 중립 (claude / codex / ollama / openai_compat)
 
 사용:
-    python3 tools/distill.py                      # config.json의 기본 백엔드
-    python3 tools/distill.py --backend ollama     # 백엔드 지정
-    python3 tools/distill.py --dry-run            # 새 파일 목록만 확인 (LLM 호출 X)
+    python3 tools/distill.py                       # config.json의 기본 백엔드
+    python3 tools/distill.py --backend ollama      # 백엔드 즉석 지정
+    python3 tools/distill.py --dry-run             # 새 파일 목록만 (LLM 호출 X)
 
-구조 (함수 분리):
-    공통 파이프라인 : scan_raw → load/save_state(해시) → find_new_files → git_commit
-    에이전트형     : run_agent()      — claude/codex가 직접 파일을 읽고 씀 (CLI 위임)
-    API형(ollama)  : run_ollama()     — 파이썬이 읽기/쓰기, LLM은 생각만
-                     ├ extract_text() — HTML→텍스트
-                     ├ build_ollama_prompt()
-                     ├ call_ollama()
-                     └ apply_ollama_output() — 마커 분리 후 STATUS.md/질문.md 기록
+설계 — 백엔드는 두 종류(type)뿐. 새 LLM 추가는 config.json만 손대면 됨:
+    ┌ agent  (claude·codex): CLI 에이전트가 스스로 파일을 읽고 STATUS/질문.md를 씀. 우리는 호출만.
+    └ api    (ollama·openai_compat): LLM은 텍스트만 주고받음 → 읽기/쓰기는 파이썬(이 파일)이 대행.
+              ├ api_ollama  : ollama 네이티브 /api/generate
+              └ api_openai  : OpenAI 호환 /v1/chat/completions (OpenAI·Groq·Together·vLLM·LM Studio…)
+
+    벤더 중립의 핵심 = "무엇을 추출하나"(주장·4분류)는 tools/distill_prompt.md 한 곳에만 있고,
+    "어떻게 파일을 읽고 쓰나"만 백엔드별로 여기서 감싼다. → 프롬프트는 어떤 LLM에도 그대로 통한다.
 """
-import argparse, hashlib, html.parser, json, re, subprocess, sys, urllib.request
+import argparse, hashlib, html.parser, json, os, re, subprocess, sys, urllib.request
 from datetime import datetime
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent          # mkwiki/
 TOOLS = ROOT / "tools"
-STATE_FILE = TOOLS / ".state.json"                     # 처리한 파일 해시 기록
+STATE_FILE = TOOLS / ".state.json"
 PROMPT_FILE = TOOLS / "distill_prompt.md"
 
-# ──────────────────────────── 공통: 설정/상태 ────────────────────────────
+# ──────────────────────────── 공통: 설정/상태/파일 ────────────────────────────
 
 def load_config() -> dict:
     return json.loads((TOOLS / "config.json").read_text(encoding="utf-8"))
@@ -41,21 +41,15 @@ def save_state(state: dict) -> None:
 def file_hash(p: Path) -> str:
     return hashlib.sha256(p.read_bytes()).hexdigest()[:16]
 
-# ──────────────────────────── 공통: 파일 스캔 ────────────────────────────
-
 def scan_raw() -> list[Path]:
     exts = {".html", ".htm", ".md", ".txt"}
     return sorted(p for p in (ROOT / "raw").rglob("*")
                   if p.is_file() and p.suffix.lower() in exts and not p.name.startswith("."))
 
 def find_new_files(state: dict) -> list[Path]:
-    """해시가 바뀐(또는 처음 보는) 파일만 — 같은 파일 재투입은 자동 무시"""
-    new = []
-    for p in scan_raw():
-        rel = str(p.relative_to(ROOT))
-        if state["processed"].get(rel) != file_hash(p):
-            new.append(p)
-    return new
+    """해시가 바뀐(또는 처음 보는) 파일만 — 같은 파일 재투입은 자동 무시. 백엔드를 바꿔도 중복 없음."""
+    return [p for p in scan_raw()
+            if state["processed"].get(str(p.relative_to(ROOT))) != file_hash(p)]
 
 def mark_processed(state: dict, files: list[Path]) -> None:
     for p in files:
@@ -63,16 +57,12 @@ def mark_processed(state: dict, files: list[Path]) -> None:
     state["run_count"] += 1
     state["last_run"] = datetime.now().strftime("%Y-%m-%d %H:%M")
 
-# ──────────────────────────── 공통: git ────────────────────────────
-
 def git_commit(msg: str) -> None:
     subprocess.run(["git", "add", "-A"], cwd=ROOT, check=False)
-    r = subprocess.run(["git", "commit", "-m", msg], cwd=ROOT,
-                       capture_output=True, text=True)
+    r = subprocess.run(["git", "commit", "-m", msg], cwd=ROOT, capture_output=True, text=True)
     print("📦 " + ("커밋 완료" if r.returncode == 0 else "변경 없음 (커밋 생략)"))
 
-# ════════════════════ 에이전트형 백엔드 (claude / codex) ════════════════════
-# 에이전트가 직접 raw를 읽고 STATUS.md/질문.md를 수정한다. 우리는 호출만.
+# ════════════════════ 백엔드 A · 에이전트형 (claude / codex) ════════════════════
 
 def build_agent_prompt(new_files: list[Path], run_no: int) -> str:
     files = "\n".join(f"- {p.relative_to(ROOT)}" for p in new_files)
@@ -89,11 +79,10 @@ def run_agent(cfg: dict, backend: str, new_files: list[Path], run_no: int) -> bo
     prompt = build_agent_prompt(new_files, run_no)
     cmd = [a.replace("{prompt}", prompt) for a in cfg[backend]["cmd"]]
     print(f"🤖 {backend} 에이전트 실행 중... (수 분 걸릴 수 있음)\n")
-    r = subprocess.run(cmd, cwd=ROOT)
-    return r.returncode == 0
+    return subprocess.run(cmd, cwd=ROOT).returncode == 0
 
-# ════════════════════ API형 백엔드 (ollama) ════════════════════
-# LLM은 텍스트만 주고받음 → 읽기/쓰기는 여기(파이썬)서 처리.
+# ════════════════════ 백엔드 B · API형 (ollama / openai_compat) ════════════════════
+# LLM은 텍스트만 주고받음 → 읽기/쓰기는 여기(파이썬)서. 프롬프트·출력처리는 두 API가 공유.
 
 class _TextExtractor(html.parser.HTMLParser):
     SKIP = {"script", "style", "head"}
@@ -109,8 +98,7 @@ class _TextExtractor(html.parser.HTMLParser):
 def extract_text(p: Path, max_chars: int) -> str:
     raw = p.read_text(encoding="utf-8", errors="ignore")
     if p.suffix.lower() in (".html", ".htm"):
-        ex = _TextExtractor(); ex.feed(raw)
-        text = "\n".join(ex.parts)
+        ex = _TextExtractor(); ex.feed(raw); text = "\n".join(ex.parts)
     else:
         text = raw
     text = re.sub(r"\n{3,}", "\n\n", text)
@@ -118,7 +106,7 @@ def extract_text(p: Path, max_chars: int) -> str:
         text = text[:max_chars] + f"\n...[잘림: 원문 {len(text)}자 중 {max_chars}자만]"
     return text
 
-def build_ollama_prompt(new_files: list[Path], run_no: int, max_chars: int) -> str:
+def build_api_prompt(new_files: list[Path], run_no: int, max_chars: int) -> str:
     instructions = PROMPT_FILE.read_text(encoding="utf-8")
     status = (ROOT / "STATUS.md").read_text(encoding="utf-8")
     questions = (ROOT / "질문.md").read_text(encoding="utf-8")
@@ -131,7 +119,7 @@ def build_ollama_prompt(new_files: list[Path], run_no: int, max_chars: int) -> s
 파일을 직접 수정할 수 없으므로, 결과를 반드시 아래 3개 마커 형식 "만" 출력하라. 다른 말 금지.
 
 ===STATUS===
-(STATUS.md 전체 새 내용 — 이번 회차 {run_no}회차 기준으로 재작성)
+(STATUS.md 전체 새 내용 — 이번 {run_no}회차 기준 재작성)
 ===QUESTIONS===
 (질문.md 전체 새 내용 — 기존 안건 유지 + 새 안건 추가)
 ===REPORT===
@@ -155,48 +143,67 @@ def build_ollama_prompt(new_files: list[Path], run_no: int, max_chars: int) -> s
 
 def call_ollama(cfg: dict, prompt: str) -> str:
     o = cfg["ollama"]
+    print(f"🦙 ollama({o['model']}) 호출 중...")
     req = urllib.request.Request(
         o["url"],
         data=json.dumps({"model": o["model"], "prompt": prompt, "stream": False}).encode(),
         headers={"Content-Type": "application/json"})
-    print(f"🦙 ollama({o['model']}) 호출 중... (로컬 모델 속도에 따라 오래 걸릴 수 있음)")
     with urllib.request.urlopen(req, timeout=o.get("timeout_sec", 600)) as resp:
         return json.loads(resp.read())["response"]
 
-def apply_ollama_output(out: str, run_no: int) -> bool:
-    """마커로 분리해 파일 기록. 마커가 깨졌으면 원문만 보관하고 기존 파일은 건드리지 않음(안전)."""
-    m = re.search(r"===STATUS===\s*(.*?)\s*===QUESTIONS===\s*(.*?)\s*===REPORT===\s*(.*)",
-                  out, re.S)
-    backup = ROOT / "briefings" / f"ollama_{run_no}회차_{datetime.now():%m%d_%H%M}.txt"
+def call_openai_compat(cfg: dict, prompt: str) -> str:
+    o = cfg["openai_compat"]
+    print(f"🔌 openai-compat({o['model']} @ {o['url']}) 호출 중...")
+    headers = {"Content-Type": "application/json"}
+    key = os.environ.get(o.get("api_key_env", ""), "") if o.get("api_key_env") else ""
+    if key:
+        headers["Authorization"] = f"Bearer {key}"
+    body = {"model": o["model"], "messages": [{"role": "user", "content": prompt}],
+            "temperature": 0.2, "stream": False}
+    req = urllib.request.Request(o["url"], data=json.dumps(body).encode(), headers=headers)
+    with urllib.request.urlopen(req, timeout=o.get("timeout_sec", 600)) as resp:
+        return json.loads(resp.read())["choices"][0]["message"]["content"]
+
+def apply_api_output(out: str, run_no: int) -> bool:
+    """마커로 분리해 파일 기록. 마커가 깨지면 파일은 안 건드리고 원문만 보관(안전)."""
+    m = re.search(r"===STATUS===\s*(.*?)\s*===QUESTIONS===\s*(.*?)\s*===REPORT===\s*(.*)", out, re.S)
+    backup = ROOT / "briefings" / f"api_{run_no}회차_{datetime.now():%m%d_%H%M}.txt"
     backup.write_text(out, encoding="utf-8")
     if not m:
-        print("⚠️ 출력 마커를 못 찾음 — 파일은 수정하지 않고 원문만 보관:", backup.name)
-        return False
+        print("⚠️ 출력 마커를 못 찾음 — 파일 미수정, 원문만 보관:", backup.name); return False
     (ROOT / "STATUS.md").write_text(m.group(1).strip() + "\n", encoding="utf-8")
     (ROOT / "질문.md").write_text(m.group(2).strip() + "\n", encoding="utf-8")
     print("\n────── 보고 ──────\n" + m.group(3).strip())
     return True
 
-def run_ollama(cfg: dict, new_files: list[Path], run_no: int) -> bool:
-    prompt = build_ollama_prompt(new_files, run_no, cfg["ollama"]["max_chars_per_doc"])
-    return apply_ollama_output(call_ollama(cfg, prompt), run_no)
+def run_api(cfg: dict, backend: str, new_files: list[Path], run_no: int) -> bool:
+    o = cfg[backend]
+    prompt = build_api_prompt(new_files, run_no, o.get("max_chars_per_doc", 60000))
+    caller = call_ollama if o["type"] == "api_ollama" else call_openai_compat
+    # api형 백엔드는 config 키 이름이 caller 안에서 고정('ollama'/'openai_compat')이므로
+    # 별칭 백엔드를 쓰려면 config에 같은 키로 두거나 caller를 일반화하면 됨.
+    return apply_api_output(caller(cfg, prompt), run_no)
 
 # ──────────────────────────── 메인 ────────────────────────────
 
 def main():
-    ap = argparse.ArgumentParser(description="DocStill 증류 러너")
-    ap.add_argument("--backend", choices=["claude", "codex", "ollama"], default=None)
+    ap = argparse.ArgumentParser(description="DocStill 증류 러너 (벤더 중립)")
+    ap.add_argument("--backend", default=None, help="claude|codex|ollama|openai_compat (config의 키)")
     ap.add_argument("--dry-run", action="store_true", help="새 파일 목록만 보고 종료")
     ap.add_argument("--no-commit", action="store_true")
     args = ap.parse_args()
 
     cfg = load_config()
     backend = args.backend or cfg["backend"]
+    if backend not in cfg or not isinstance(cfg[backend], dict) or "type" not in cfg[backend]:
+        sys.exit(f"❌ 알 수 없는 백엔드: {backend} (config.json 확인)")
+    btype = cfg[backend]["type"]
+
     state = load_state()
     new_files = find_new_files(state)
     run_no = state["run_count"] + 1
 
-    print(f"🌀 DocStill 증류 {run_no}회차 · 백엔드={backend}")
+    print(f"🌀 DocStill 증류 {run_no}회차 · 백엔드={backend} (type={btype})")
     if not new_files:
         print("변경된 파일 없음 — 종료"); return
     print(f"새 파일 {len(new_files)}개:")
@@ -204,12 +211,15 @@ def main():
     if args.dry_run:
         print("(dry-run — 여기서 종료)"); return
 
-    ok = (run_ollama(cfg, new_files, run_no) if backend == "ollama"
-          else run_agent(cfg, backend, new_files, run_no))
+    if btype == "agent":
+        ok = run_agent(cfg, backend, new_files, run_no)
+    elif btype in ("api_ollama", "api_openai"):
+        ok = run_api(cfg, backend, new_files, run_no)
+    else:
+        sys.exit(f"❌ 지원하지 않는 type: {btype}")
 
     if ok:
-        mark_processed(state, new_files)
-        save_state(state)
+        mark_processed(state, new_files); save_state(state)
         if cfg.get("auto_git_commit", True) and not args.no_commit:
             git_commit(f"증류 {run_no}회차 ({backend})")
         print("\n✅ 끝. STATUS.md 와 질문.md 를 확인하세요.")

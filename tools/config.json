@@ -1,19 +1,42 @@
 {
   "backend": "claude",
 
-  "_설명": "backend: claude | codex | ollama. 아래는 백엔드별 설정 — CLI 버전에 따라 플래그만 조정하면 됨",
+  "_설명": "backend = 사용할 LLM. 종류: 에이전트형(claude·codex — CLI가 스스로 파일 읽고 씀) / API형(ollama·openai_compat — 파이썬이 파일 대신 읽고 씀). 아래에서 골라 'backend' 값만 바꾸면 됨.",
 
   "claude": {
+    "type": "agent",
     "cmd": ["claude", "-p", "{prompt}", "--permission-mode", "acceptEdits"]
   },
+
   "codex": {
+    "type": "agent",
     "cmd": ["codex", "exec", "--full-auto", "{prompt}"]
   },
+
   "ollama": {
+    "type": "api_ollama",
     "url": "http://localhost:11434/api/generate",
     "model": "qwen3.6:35b-a3b-coding-mxfp8",
     "max_chars_per_doc": 60000,
     "timeout_sec": 600
+  },
+
+  "openai_compat": {
+    "_설명": "OpenAI 호환 /v1/chat/completions 를 쓰는 모든 서버. url·model·api_key_env만 바꾸면 됨. 예시는 주석 참고.",
+    "type": "api_openai",
+    "url": "https://api.openai.com/v1/chat/completions",
+    "model": "gpt-4o-mini",
+    "api_key_env": "OPENAI_API_KEY",
+    "max_chars_per_doc": 60000,
+    "timeout_sec": 600,
+
+    "_예시_다른_서버": {
+      "Groq":      { "url": "https://api.groq.com/openai/v1/chat/completions", "api_key_env": "GROQ_API_KEY" },
+      "Together":  { "url": "https://api.together.xyz/v1/chat/completions",   "api_key_env": "TOGETHER_API_KEY" },
+      "DeepSeek":  { "url": "https://api.deepseek.com/v1/chat/completions",    "api_key_env": "DEEPSEEK_API_KEY" },
+      "로컬_vLLM":  { "url": "http://localhost:8000/v1/chat/completions",       "api_key_env": "" },
+      "LM_Studio": { "url": "http://localhost:1234/v1/chat/completions",       "api_key_env": "" }
+    }
   },
 
   "auto_git_commit": true
