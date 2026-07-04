@@ -29,6 +29,7 @@ extra_css:
 nav:
   - 📊 현황판: index.md
   - ❓ 회의 안건: 질문.md
+  - 🎯 MVP 1차 정의: facts/MVP1차.md
   - Facts (확정 사실):
       - 파이프라인: facts/파이프라인.md
       - 데이터 계약: facts/데이터계약.md
