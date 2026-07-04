@@ -1,0 +1,20 @@
+{
+  "backend": "claude",
+
+  "_설명": "backend: claude | codex | ollama. 아래는 백엔드별 설정 — CLI 버전에 따라 플래그만 조정하면 됨",
+
+  "claude": {
+    "cmd": ["claude", "-p", "{prompt}", "--permission-mode", "acceptEdits"]
+  },
+  "codex": {
+    "cmd": ["codex", "exec", "--full-auto", "{prompt}"]
+  },
+  "ollama": {
+    "url": "http://localhost:11434/api/generate",
+    "model": "qwen3.6:35b-a3b-coding-mxfp8",
+    "max_chars_per_doc": 60000,
+    "timeout_sec": 600
+  },
+
+  "auto_git_commit": true
+}
