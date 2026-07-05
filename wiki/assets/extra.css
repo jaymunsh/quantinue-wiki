@@ -20,3 +20,9 @@
 .md-typeset table:not([class]) th { padding: .55em .8em; }
 /* 본문 폭 살짝 넓혀 표 잘림 완화 */
 .md-grid { max-width: 68rem; }
+
+/* 상단바(헤더) 색 — 라이트/다크 공통 #232323 */
+.md-header,
+.md-tabs {
+  background-color: #232323;
+}
