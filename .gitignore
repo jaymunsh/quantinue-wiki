@@ -1,3 +1,5 @@
 site/
 __pycache__/
 tools/.state.json
+.DS_Store
+**/.DS_Store
