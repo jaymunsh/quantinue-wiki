@@ -1,1 +1,1 @@
-../documents/STATUS.md
+../documents/홈.md

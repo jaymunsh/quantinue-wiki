@@ -20,17 +20,17 @@
 
 | 영역 | 🟢 1차 IN (만든다) | 🔵 2차 OUT (미룬다) |
 |---|---|---|
-| 투자유형 | **1종만** (⚠️ 공격형 제안 · A1 확정 필요) | 나머지 유형 (config 복제로 추가) |
-| 스크리너 | 시총 top2000 → 오늘의 후보 (규칙) | 5버킷 정교화·백테스트 튜닝 |
-| 공시·뉴스 | 후보만 LLM 분석 → Bundle | 소셜 감성 |
-| 기술 | 지표 규칙(trend·RSI·MACD) | **ML(ml_prob_up) — 1차 매매 미연결** |
-| 매크로 | 규칙 risk_score(0~100) + regime | 정책 마스터 스위치 정교화·LLM 해석 |
-| Strategist | 코드게이트 샌드위치 + LLM 판단 | 거장 페르소나 |
-| Risk Critic | 반박 1패스(통과/기각) | 재검토 루프(최대 2회) |
-| PM·리스크게이트 | 수량·EV·손절·한도·하드룰 | — |
-| 실행 | **PaperBroker 가상 체결** + 근거 기록 | 실거래(LiveBroker) |
-| Reviewer(성혁) | **observe-only** — tb_memory_entries 채움 | 전략 피드백 반영 |
-| 저장소 | **로컬 SQLite** | 통합 Postgres + TimescaleDB |
+| 투자유형 | **공격형 단일 (✅ 확정)** | 나머지 유형 (config 복제로 추가) |
+| 스크리너 | 시총 top 2,000 → 공통필터+5버킷 → **오늘의 50** (규칙) | 버킷·필터 백테스트 튜닝 |
+| 공시·뉴스 | 후보 50만 LLM 분석 (1시간·5분 간격 누적) | 소셜 감성 |
+| 기술 | 지표 규칙(trend·RSI·MACD) | **ML(ml_probs) — 1차 빈값 {}** |
+| 매크로 | 규칙 risk_score(0~100) + regime (✅ 확정) | 유가 등 추가 지표·LLM 해석 |
+| Strategist | 코드게이트 샌드위치 + GPT 판단 | 거장 페르소나(persona_notes) |
+| Critic | 반박 1패스(통과/기각 → 스킵) | 멀티턴 재제안(1~2회 토론) |
+| 리스크·포트폴리오 | 비중·손절·한도 (25%·5종목·−15%) | 정책 정교화 |
+| 실행 | **Alpaca 페이퍼 가상 체결** (브래킷 주문) + 근거 기록 | 실거래 |
+| 리뷰어(성혁) | **observe-only** — tb_review 채움 (기록만) | 전략 피드백 반영 |
+| 저장소 | Postgres 1개 (창욱 SQLite → 통합 시점 협의) | tb_candle 분리·TimescaleDB 최적화 |
 | 클라이언트 | 결정 저널(웹) | 텔레그램·앱·AWS 5계좌 |
 
 !!! warning "⭐ 핵심 컷 2개"
@@ -41,26 +41,26 @@
 
 ## 3. 1차 한 사이클 — 무엇이 무엇을 출력하나 (출력 명세)
 
-> "언제 출력이 나오나"를 단계별 산출물로 못 박음. 각 단계는 **DB 테이블 1개**를 쓴다(= 데이터 계약). 한 사이클 = 1개 `cycle_id`.
+> "언제 출력이 나오나"를 단계별 산출물로 못 박음. 각 단계는 **DB 테이블**을 쓴다(= 데이터 계약). 한 사이클 = 1개 `cycle_id`.
 
 ```mermaid
 flowchart TB
-  SCR["① 스크리너"] --> P[["tb_daily_pick<br/>오늘의 후보 N개"]]
-  P --> TECH["② 기술"] & MAC["③ 매크로"] & DIS["④ 공시"] & NEW["⑤ 뉴스"]
-  TECH --> T[["tb_technical_signals"]]
-  MAC --> M[["tb_macro_signals"]]
-  DIS --> D[["tb_disclosure_signals"]]
-  NEW --> N[["tb_news_signals"]]
-  T & M & D & N --> ST["⑥ Strategist"] --> SS[["tb_strategist_signals<br/>매수/보류 + 근거"]]
-  SS --> CR["⑦ Risk Critic"] --> CV[["tb_critic_verdict<br/>통과/기각"]]
-  CV --> PM["⑧ PM·게이트"] --> PD[["tb_portfolio_decision"]]
-  PD --> EX["⑨ 실행"] --> OF[["tb_order / tb_fill<br/>가상 체결"]]
-  OF --> RV["⑩ Reviewer"] --> ME[["tb_memory_entries<br/>회고 (observe-only)"]]
+  U["01 1차 스크리너 (주1회)"] --> UV[["tb_universe<br/>감시 2,000"]]
+  UV --> TECH["02 기술"] --> T[["tb_technical"]]
+  T --> SCR["03 2차 스크리너"] --> P[["tb_daily_pick<br/>오늘의 50"]]
+  P --> DIS["05 공시"] & NEW["06 뉴스"]
+  MAC["04 매크로"] --> M[["tb_macro"]]
+  DIS --> D[["tb_disclosure"]]
+  NEW --> N[["tb_news"]]
+  T & M & D & N --> ST["07 Strategist"] --> SS[["tb_strategist_signals<br/>매수/보류 + 근거"]]
+  SS --> CR["08 Critic"] --> CV[["tb_critic_verdict<br/>통과/기각"]]
+  CV --> PM["09 리스크·포트폴리오"] --> EX["10 주문·체결 (Alpaca)"] --> OF[["tb_order / tb_fill<br/>가상 체결"]]
+  OF --> RV["11 리뷰·회고"] --> ME[["tb_review<br/>교훈·통계 (observe-only)"]]
   ME -.다음 사이클 참고.-> ST
 ```
 
 - **각 테이블 스키마·필드 = `데이터 계약` 페이지 참조** (여기선 "무엇을 출력하나"만)
-- cycle_id는 08:30 실행 시 오케스트레이터가 발급(⚠️ A3 확정 필요)
+- cycle_id 발급 주체 = 오케스트레이터 (팀 확인 중 → 회의 안건)
 
 ---
 
@@ -68,13 +68,13 @@ flowchart TB
 
 아래가 **전부 되면 1차 성공**. 수익률 아님.
 
-- [ ] 스크리너가 후보 N개를 자동 선정 (사람이 안 고름)
+- [ ] 스크리너가 오늘의 50을 자동 선정 (사람이 안 고름)
 - [ ] 후보에만 공시·뉴스 LLM 분석이 붙음
 - [ ] Strategist가 `매수 / 보류(NO_TRADE)` 를 근거와 함께 출력
-- [ ] Risk Critic이 `통과 / 기각` 을 반박과 함께 출력
+- [ ] Critic이 `통과 / 기각` 을 반박과 함께 출력
 - [ ] 게이트가 `허용 / 차단 / 축소` 중 하나 (하드룰 작동)
-- [ ] PaperBroker가 **중복 없이** 가상 체결 (재실행해도 주문 1건)
-- [ ] Reviewer가 observe-only 회고를 tb_memory_entries에 기록
+- [ ] Alpaca 페이퍼가 **중복 없이** 가상 체결 (재실행해도 주문 1건)
+- [ ] 리뷰어가 observe-only 회고를 tb_review에 기록
 - [ ] 결정 저널에서 "왜 샀나/왜 안 샀나"가 한 화면으로 설명됨
 - [ ] 한 `cycle_id`가 처음(스크리너)부터 끝(회고)까지 DB에 남음
 - [ ] **실거래 기능 없음** (전부 가상)
@@ -83,16 +83,10 @@ flowchart TB
 
 ---
 
-## 5. 1차에 걸린 결정 (이것만 정하면 착수 가능)
+## 5. 1차에 걸린 결정
 
-| # | 결정 | 1차 착수에 필요한 이유 |
-|---|---|---|
-| A1 | **투자유형 1종 확정** (공격형 제안) | 문턱 POLICY·스크리너가 여기 종속 — 안 정하면 은미·지현 구현 못 함 |
-| A2 | **1차 = 로컬 SQLite 확정** | 창욱 이미 SQLite. 이대로 통일하면 즉시 병렬 개발 |
-| A3 | **cycle_id 생성 = 오케스트레이터** | 신호 매칭 열쇠. 누가 언제 발급하는지 |
-| — | **ml_prob_up 1차 제외 확정** | 설계서 원칙대로면 은미 기술 카운트에서 빼야 |
-
-> ✅ 위 4개만 회의에서 정하면 → 이 MVP1차 정의서가 **구현 착수 기준선(확정)** 이 된다.
+투자유형(공격형 단일)·risk_score 범위 등은 **확정 완료** → [결정 로그](결정로그.md).
+남은 것(리뷰어 테이블 통일 · DB 통합 시점 · cycle_id 발급 · ml 제외 확정 등)은 → **[회의 안건](../질문.md)**. 이것만 정하면 이 정의서가 **구현 착수 기준선(확정)** 이 된다.
 
 ---
 
@@ -103,4 +97,4 @@ Day0 계약 고정(데이터 계약 fixture) → Day1 DB 척추(cycle_id 흐름)
 Day2 스크리너+기술+매크로 → Day3 공시+뉴스 → Day4 Strategist+Critic →
 Day5 PM+게이트+PaperBroker → Day6 결정저널+Reviewer → Day7 페이퍼 운용 시작
 ```
-> 상세 일정·담당은 `일정` 페이지(병입 예정) 참조. 이 정의서는 "무엇을 만드나"의 경계, Day 계획은 "언제 만드나".
+> 상세 일정·담당은 [일정](일정.md) 페이지 참조. 이 정의서는 "무엇을 만드나"의 경계, Day 계획은 "언제 만드나".

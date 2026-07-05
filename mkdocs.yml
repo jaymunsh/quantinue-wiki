@@ -27,18 +27,21 @@ extra_css:
   - assets/extra.css
 
 nav:
-  - 📊 현황판: index.md
-  - ❓ 회의 안건: 질문.md
-  - 🎯 MVP 1차 정의: facts/MVP1차.md
-  - Facts (확정 사실):
-      - 파이프라인: facts/파이프라인.md
-      - 데이터 계약: facts/데이터계약.md
-      - 일정: facts/일정.md
-      - 화면: facts/화면.md
-      - 결정 로그: facts/결정로그.md
-  - 🎯 산출물 현황: 산출물.md
-  - 📘 사용 가이드: 가이드.md
-  - 🛠️ 시스템 설명서: 시스템설명서.md
+  - 🏠 홈: index.md
+  - 프로젝트:
+      - 🔄 파이프라인: facts/파이프라인.md
+      - 🔌 데이터 계약: facts/데이터계약.md
+      - 🎯 MVP 1차 정의: facts/MVP1차.md
+      - 📅 일정: facts/일정.md
+      - 🖥️ 화면: facts/화면.md
+  - 협업:
+      - ❓ 회의 안건: 질문.md
+      - ✅ 결정 로그: facts/결정로그.md
+      - 📦 산출물 현황: 산출물.md
+  - 운영:
+      - 📊 현황판: 현황판.md
+      - 📘 사용 가이드: 가이드.md
+      - 🛠️ 시스템 설명서: 시스템설명서.md
 
 markdown_extensions:
   - admonition
