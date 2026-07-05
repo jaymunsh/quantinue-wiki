@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -m mkdocs build*)",
+      "Bash(python3 -m mkdocs serve*)",
+      "Bash(python3 tools/distill.py --dry-run*)"
+    ]
+  }
+}
