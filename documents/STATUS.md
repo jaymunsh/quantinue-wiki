@@ -1,55 +1,60 @@
 # 📊 팀 현황판 (STATUS)
 
-> 기준: **2026-07-04 · 증류 2회차** · 이번 처리 3개 — 은미 Strategist 진행상황 · 창욱 정보분석 개발보고서 · 창욱 전달예시 10건
-> ✅ 병입 확정 **0** · 🟢 확정후보 **26** · ❓ 미정 **13** · ⚠️ 충돌 **8**
-> 🔥 이번 회차 핵심: **각 파트가 실제 인터페이스 계약·스키마를 만들기 시작 → 서로 안 맞는 지점이 대거 드러남.** "데이터 계약"을 맞추는 게 지금 최우선.
+> 기준: **2026-07-05 · 증류 3회차** · 이번 처리 1개 — 김지현 「파이프라인 흐름순 상세 명세」(raw/공용)
+> ✅ 확정(결정#1) **1** · 🟢 확정후보 **26 + 3회차 신규** · ❓ 미정 · ⚠️ 충돌 **기존 8→완화 · 신규 3**
+> 🔥 이번 회차 핵심: **파이프라인 owner(지현)가 흐름을 10→11단계로 확정하고 미결 안건 A1(투자유형)·A4(risk_score)를 사실상 해소했다.** 대신 하류 스키마(내 출력 테이블 이름·상류 키)에서 지현↔은미 새 충돌이 드러남.
 
 ---
 
-## ⚠️ 충돌 8건 (증류 1회차 4건 + 이번에 4건 추가·심화)
+## 🟢 이번 문서로 "거의 풀린" 안건 (병입만 남음)
 
-| # | 충돌 | 실태 | 왜 중요 |
+| 안건 | 이전 실태 | 3회차 변화 | 남은 것 |
 |---|---|---|---|
-| 1 | **투자유형 (3자 불일치)** 🔴 | 설계서 7/3=**공격형 1종** · 은미=**안정형+공격형 2개** · solutions=**균형형** | 문턱값·스크리너·PM·POLICY가 전부 유형에 종속. 셋이 다 다름 — **제일 급함** |
-| 2 | **저장소 DB** 🔴 | 설계서=Postgres+Timescale · 은미=PostgreSQL · **창욱=SQLite(이미 코드 구현됨)** | 창욱은 실제로 SQLite로 돌아가는 코드 보유. "로컬 SQLite → 통합 Postgres" 시점/방식 합의 필요 |
-| 3 | **테이블명 규칙** | 은미=`tb_` 접두사(tb_news_signals…) · 창욱=접두사 없음(news_signals…) | 같은 테이블을 다르게 부름 → SELECT 깨짐 |
-| 4 | **필드명: category vs sector** | 창욱 전송=`category` · 은미 요청=`sector`(v1.3에서 변경) | 이름 하나 안 맞으면 조인/파싱 실패 |
-| 5 | **cross_source_confirmed 필드** | 은미 필수 요청 · 창욱 NewsBundle에 명시 없음(news_confirmed/rumor·confirmed_score만) | 은미 교차확인 로직이 이 필드에 의존 — 창욱이 만들어줘야 |
-| 6 | **cycle_id vs run_id** | 은미=`cycle_id`(사이클 키) · solutions=`run_id` · 창욱=accession/news_key(사이클 개념 없음) | 신호 매칭 열쇠. 이름·생성 주체 통일 필요 |
-| 7 | **LLM 모델 (3자)** | 설계서=GPT-5.4mini/5.5 · 은미=GPT-4o · 창욱=gpt-4o-mini | 비용·품질·프롬프트가 갈림. 모델명 확정 필요 |
-| 8 | **데이터 흐름 아키텍처** | 은미=**Pull**(각 팀 DB 저장→Strategist가 SELECT) · solutions=**Context Builder가 조립(push)** | 파이프라인 배관 방식 자체가 다름 |
+| **A1 투자유형** 🔴→🟢 | 공격1(설계서)/안정+공격2(은미)/균형(solutions) 3자 | **은미가 v2.2에서 "공격형 단일"로 선회** → 설계서·은미·지현 3자 일치. 문서 전체가 "공격형 1차 MVP" | solutions(균형)만 이견 → 회의서 공격형 단일 확정 도장만 |
+| **A4 매크로 risk_score** ⚠️→🟢 | 0~10 vs 0~1 vs 0~100 갈림 | **지현(매크로 owner)이 0~100 + 가중식 확정**: `0.40×VIX+0.30×지수+0.15×금리+0.15×달러`. regime 구간 ≤30/30~70/≥70 | 병입만 |
+| **A2 저장소** 🔴→🟡 | 창욱 SQLite(코드) vs 은미·설계서 Postgres | **지현: "Postgres 1개, FK로 촘촘해 두 DB로 못 나눔"** 단호 | 창욱 SQLite 코드 존치 → "통합 시점/방식"만 합의 |
+| **A3 cycle_id** | 이름·생성주체 미정 | **지현도 "오케스트레이터 발급" 지지**(팀 확인 중) | ⚠️ 새 갭 발견(아래 충돌⑩) |
 
-## 🔄 이번에 새로 드러난 것 (은미·창욱 실제 구현 수준)
+---
 
-**이은미(Strategist) — 인터페이스 계약을 매우 상세히 확정**
-- 담당 = STEP 2~7 · 실행 08:30 AM ET (APScheduler)
-- **판단 = 코드 게이트 샌드위치**: 앞문(hard_block·macro_veto) → GPT-4o(맥락 판단·계산 안 함) → 뒷문(min_conviction). 강제 규칙 3개(🔒), 나머진 힌트
-- **문턱 POLICY 이원화**(안정형/공격형): 공시·뉴스·기술 문턱, 필요 합의 수(3/2), 매크로 거부권(risk_score 6/8), min_conviction(8.0/5.0)
-- **출력 tb_strategist_signals** 컬럼 확정: side·conviction·signal_consensus·bull_case·key_risk·risk_rebuttal·counter_scenarios·evidence·sizing_hint(PM용 제안)·persona_notes(MVP2)
-- **Critic 전달 = 요약+설득 payload만**(원본 4신호 안 보냄, cycle_id로 조회)
+## ⚠️ 충돌 — 기존 8건은 완화, 하류 스키마에서 신규 3건
 
-**정창욱(정보분석) — 이미 코드 구현 + 산출물 계약 확정**
-- 산출물 = **DisclosureBundle(24필드)·NewsBundle(31필드)** JSON
-- **매매권한 6단계**(BLOCK_ALL→TRADE_ELIGIBLE) · 가장 보수적 채택 · MVP는 스스로 매수확정 안 함
-- **하드리스크 키워드→권한 강제**(거래정지/파산/상폐/회계문제/희석 = hard_block)
-- **출처 등급 3단계**(ALLOW1.0/GRAY0.6/BLOCK0.0) + 키워드 화이트/블랙 사전필터 → LLM 전에 노이즈 컷
-- **event_type 11종 온톨로지**(공시·뉴스 공유) · **0~1 지표 산출 공식**(신뢰가중 집계·비대칭 감쇠) 단일 진실원천
-- 코드=사실/LLM=해석만 · 증분(processed_filings.accession) · 전방수익률 백테스트(+1/3/5d)
-- ⚠️ 알려진 갭: hard_risk 플래그 미소비(2.06 자동차단 안 됨) · event_type=other 빈발 · sector 미채움
+| # | 충돌 | 실태 | 상태 |
+|---|---|---|---|
+| 🔴⑨ | **내(성혁) 출력 테이블 이름·스키마** | 데이터계약=`tb_memory_entries`(7컬럼: side·conviction·outcome·lesson…, 은미가 읽음) · **지현 ERD=`tb_review`**(id·trade_date·ticker·lesson·stats JSONB) | **신규 · 나 직격**. 07 은미는 여전히 tb_memory_entries를 읽음 → 둘이 같은 표인지/별개(회고 원본→은미 입력)인지 확정 필요 |
+| ⑩ | **상류 테이블 키 체계** | 지현 상류(tb_technical·daily_pick·disclosure·news)는 `trade_date+ticker`(공시·뉴스는 `collected_at`) 키 · **은미 07은 "ticker+cycle_id로 SELECT"** | 신규. 상류엔 cycle_id 컬럼이 없음 → **cycle_id↔trade_date 매핑 규칙** 없으면 SELECT 안 붙음 |
+| ⑪ | **테이블명 접미사** | 데이터계약(은미)=`tb_*_signals`(tb_technical_signals…) · **지현=`tb_*`(tb_technical…)** | 신규. tb_ 접두사(#1)는 합의됐으나 `_signals` 유무에서 갈림 |
+| ③✅ | 테이블명 접두사 tb_ | — | **해소(결정#1 병입 완료)** |
+| ⑤ | cross_source_confirmed | 은미 필수 · 창욱 Bundle 없음 | 유지 — 지현 "원자료 있어 산출 가능, 창욱 신설 요청"으로 정리 |
+| ⑦ | LLM 모델 | 이 문서는 GPT-4o만 언급 | 유지(변화 없음) |
+| ①②④⑥⑧ | 투자유형·저장소·category·cycle_id·Pull | — | **위 🟢표로 대거 완화** |
 
-**🔗 나(성혁·Reviewer)와 직접 연결된 발견:** 은미가 **tb_memory_entries**(내 회고 출력)를 소비하는 스펙을 확정함 — `ticker·cycle_id·side·conviction·outcome·lesson·created_at` → Strategist가 ticker별 최근 5개를 GPT 프롬프트에 주입. **내 Reviewer 초안(review_note)을 이 스키마에 맞춰야 함.**
+## 🔄 기존 facts를 갱신해야 하는 변경 (병입 대기 — facts는 아직 옛 내용)
 
-## 🟢 확정후보 (1회차 15 + 이번 11 = 26) — 상세는 병입 시 facts로
-1회차 15건 + 신규: Strategist 코드게이트 샌드위치 · 문턱 POLICY 이원화 · tb_strategist_signals 컬럼 · Critic payload=요약만 · 정보분석 6단계 권한 · 하드리스크 키워드 · 출처 3등급 · event_type 11종 · 0~1 지표 공식 · 증분 수집 · tb_memory_entries 스키마
+| 대상 | 기존 facts | 3회차 문서 | 안건 |
+|---|---|---|---|
+| **파이프라인 단계** | 10단계(스크리너 1개·PM·게이트·실행 분리) | **11단계**: 01 1차/02 기술/03 2차 스크리너 분리 · 09 리스크·포트폴리오 · 10 주문·체결 · 11 회고 | P2 |
+| **코드게이트 강제규칙** | 3개(hard_block·**macro_veto**·min_conviction) | **macro_veto 폐지** — 은미가 거부권 없애고 매크로는 conviction 감점만 → **강제 2개**(hard_block·min_conviction) | P1 |
+| **실행 broker** | "PaperBroker 가상체결"(총칭) | **Alpaca 페이퍼** + 지정가·손절·익절 **브래킷 주문**(체결 감시는 Alpaca 서버 위임) | P3 |
+| **실행 타이밍** | "매일 08:30 AM ET 한 사이클" | **다중 주기**: 배치(01~03)는 KST 애프터마켓 종료~데이마켓 시작 **10분 공백(08:50~09:00)** · 04~07은 장중 상시(매크로 1h·공시 1h·뉴스 5분·전략 상시) | P4 |
 
-## ❓ 미정 13 — 회의 안건 (상세 질문.md)
-기존 7건 + 인터페이스 계약 6건: 기술 trend 값형태 · 매크로 risk_score 범위(0~10 vs 0~1) · cycle_id 생성주체 · category→sector 확정 · cross_source_confirmed 생성책임 · 테이블명 tb_ 규칙
+## 🆕 이번에 처음 확정 수준으로 구체화된 스펙 (확정후보)
+
+- **오늘의 50** = 5버킷(추세리더·거래량급증·신고가돌파·눌림목·스퀴즈돌파) × 각 10 + 백필. `tb_daily_pick`
+- **공통필터 5개**: 종가≥$5 · 20일평균 거래대금≥$5M · ATR≤종가15% · 종가>ma20 · 20일수익률>0
+- **공격형 POLICY 문턱**(은미 v2.2): 공시 sent≥0.60·imp≥0.25 · 뉴스 sent≥0.60·grade≥0.50·confirmed≥0.40 · 기술 ml_prob_up≥0.50 · **필요 합의 2/4** · min_conviction **5.0** · 무조건차단은 hard_block만
+- **공격형 포트폴리오 정책**(aggressive.yaml): 한 종목 최대 **25%** · 목표 **5종목** · 손절 **−15%** · 1회 리스크 **4%** · 주식 비중 100%
+- **DisclosureBundle 24→18 / NewsBundle 31→28** 감축 제안(지현) — company_name·category는 tb_universe JOIN, verdict 등 중복 제거 (창욱 협의 예정)
+- **grade_score(코드·사전 관문) vs source_trust(LLM·사후 해석)** 둘 다 유지(별도 축) · 뉴스 **peak_importance** 신설
+- **정보 2층 구조**: 느린 층(지표·공시·뉴스·매크로=DB) / 빠른 층(현재가=즉석 API 1회) — 07 담당 필독, 협의 필요
+- **Critic 1차 단일턴**(거절 시 스킵) / 2차 멀티턴(재제안) + **최근 기각 쿨다운**(N일 재제안 억제)
 
 ## 👥 파트별 한 줄
+
 | 파트 | 근황 |
 |---|---|
-| 지현(코어) | 설계서 7/3 구체화(5버킷·매크로식·ERD) — 단 은미·창욱 인터페이스와 정합 확인 필요 |
-| 창욱(뉴스공시) | **코드 구현 상당 진척**(collector·analyzer·policy·storage/SQLite). 산출물 계약 확정 |
-| 은미(전략가) | **인터페이스 계약 v1.8까지 매우 상세**. 팀에 6건 확인 요청 중 |
-| 미연(크리틱) | 아직 자료 없음 — 은미가 Critic payload 구조 합의 대기 |
-| 성혁(리뷰어) | tb_memory_entries 스키마가 은미 쪽에서 확정됨 → 내 review_note 정합 필요 |
+| **지현(코어·인프라)** | **파이프라인 흐름순 명세 배포 = 이번 회차 주역.** 11단계·13테이블 ERD·공통필터·버킷·매크로식·세션운영까지 확정 수준. 창욱·은미 스키마 조율안 제시 |
+| 창욱(뉴스공시) | 변화 없음 — 지현이 Bundle 감축(24→18/31→28)·collected_at PK·cross_source_confirmed 신설을 협의 요청 |
+| 은미(전략가) | **v2.2 = 공격형 단일로 선회**(A1 완화) · macro 거부권 폐지 · POLICY 문턱 구체화. 실시간시세 2층·표이름 조율 필요 |
+| 미연(크리틱) | 지현이 tb_critic_verdict 초안(agree·objection·confidence) + 1차 단일턴/2차 멀티턴 흐름 스케치. 미연 확정 대기 |
+| **성혁(리뷰어·나)** | 🔴 **내 출력 테이블이 tb_memory_entries(은미) vs tb_review(지현)로 갈림** — schema keeper로서 이름·스키마 통일이 최우선 안건(⑨) |
