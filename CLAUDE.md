@@ -46,6 +46,7 @@ python3 -m mkdocs build          # 에러·링크 경고 0 확인 (Material 팀 
 - 렌더 결과는 `site/<페이지>/index.html`을 grep으로 확인 (홈만 예외: `site/index.html`).
 - `mkdocs serve`가 백그라운드에 떠 있으면 자동 리로드된다 — 재시작 불필요.
 - 한글 파일명 git 명령은 `git -c core.quotepath=false`로 확인 (8진수 이스케이프 오탐 방지).
+- **한글 경로 비교는 NFC/NFD 함정 주의** — macOS 파일시스템은 NFD를 반환하므로, 코드에 쓴 한글 리터럴(NFC)과 `in`/`==` 비교가 조용히 실패한다. `unicodedata.normalize("NFC", ...)`로 양쪽을 맞춘 뒤 비교하고, `.state.json` 키는 파일시스템이 준 경로 원형 그대로 써라.
 
 ## git 규칙
 
