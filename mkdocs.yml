@@ -38,6 +38,7 @@ nav:
       - 결정 로그: facts/결정로그.md
   - 🎯 산출물 현황: 산출물.md
   - 📘 사용 가이드: 가이드.md
+  - 🛠️ 시스템 설명서: 시스템설명서.md
 
 markdown_extensions:
   - admonition

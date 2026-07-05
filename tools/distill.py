@@ -22,6 +22,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent          # mkwiki/
 TOOLS = ROOT / "tools"
+DOCS = ROOT / "documents"                               # 사이트 노출 문서(SSOT) — STATUS·질문·facts
+ARCHIVE = ROOT / "archive"                              # 안 보는 파일 — 증류 백업 등
 STATE_FILE = TOOLS / ".state.json"
 PROMPT_FILE = TOOLS / "distill_prompt.md"
 
@@ -70,9 +72,9 @@ def build_agent_prompt(new_files: list[Path], run_no: int) -> str:
         f"tools/distill_prompt.md 를 읽고, 그 지시서대로 증류를 지금 수행하라.\n"
         f"이번 회차: {run_no}회차\n"
         f"이번에 처리할 새 파일 (이것만 처리, 다른 파일 재분석 금지):\n{files}\n"
-        f"STATUS.md 와 질문.md 를 지시서 형식대로 갱신하고, "
+        f"documents/STATUS.md 와 documents/질문.md 를 지시서 형식대로 갱신하고, "
         f"마지막에 보고(새 주장 N · 충돌 N · 소멸 N · 추천 안건)를 출력하라. "
-        f"facts/ 는 절대 직접 수정하지 마라."
+        f"documents/facts/ 는 절대 직접 수정하지 마라."
     )
 
 def run_agent(cfg: dict, backend: str, new_files: list[Path], run_no: int) -> bool:
@@ -108,10 +110,10 @@ def extract_text(p: Path, max_chars: int) -> str:
 
 def build_api_prompt(new_files: list[Path], run_no: int, max_chars: int) -> str:
     instructions = PROMPT_FILE.read_text(encoding="utf-8")
-    status = (ROOT / "STATUS.md").read_text(encoding="utf-8")
-    questions = (ROOT / "질문.md").read_text(encoding="utf-8")
-    facts = "\n\n".join(f"### facts/{f.name}\n{f.read_text(encoding='utf-8')}"
-                        for f in sorted((ROOT / "facts").glob("*.md")))
+    status = (DOCS / "STATUS.md").read_text(encoding="utf-8")
+    questions = (DOCS / "질문.md").read_text(encoding="utf-8")
+    facts = "\n\n".join(f"### documents/facts/{f.name}\n{f.read_text(encoding='utf-8')}"
+                        for f in sorted((DOCS / "facts").glob("*.md")))
     docs = "\n\n".join(
         f"### 문서: {p.relative_to(ROOT)} (작성자: {p.parent.name})\n{extract_text(p, max_chars)}"
         for p in new_files)
@@ -167,12 +169,13 @@ def call_openai_compat(cfg: dict, prompt: str) -> str:
 def apply_api_output(out: str, run_no: int) -> bool:
     """마커로 분리해 파일 기록. 마커가 깨지면 파일은 안 건드리고 원문만 보관(안전)."""
     m = re.search(r"===STATUS===\s*(.*?)\s*===QUESTIONS===\s*(.*?)\s*===REPORT===\s*(.*)", out, re.S)
-    backup = ROOT / "briefings" / f"api_{run_no}회차_{datetime.now():%m%d_%H%M}.txt"
+    (ARCHIVE / "briefings").mkdir(parents=True, exist_ok=True)
+    backup = ARCHIVE / "briefings" / f"api_{run_no}회차_{datetime.now():%m%d_%H%M}.txt"
     backup.write_text(out, encoding="utf-8")
     if not m:
         print("⚠️ 출력 마커를 못 찾음 — 파일 미수정, 원문만 보관:", backup.name); return False
-    (ROOT / "STATUS.md").write_text(m.group(1).strip() + "\n", encoding="utf-8")
-    (ROOT / "질문.md").write_text(m.group(2).strip() + "\n", encoding="utf-8")
+    (DOCS / "STATUS.md").write_text(m.group(1).strip() + "\n", encoding="utf-8")
+    (DOCS / "질문.md").write_text(m.group(2).strip() + "\n", encoding="utf-8")
     print("\n────── 보고 ──────\n" + m.group(3).strip())
     return True
 

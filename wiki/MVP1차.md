@@ -1,1 +1,1 @@
-../facts/MVP1차.md
+../documents/facts/MVP1차.md
