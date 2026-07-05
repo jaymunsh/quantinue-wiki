@@ -26,7 +26,7 @@
 
 | 파트 | 근황 |
 |---|---|
-| 지현 (코어·인프라) | 파이프라인 명세 = 1차 baseline 병입 완료. A5(tb_cycle 원장) 제안 검토 대상 |
+| 지현 (코어·인프라) | 파이프라인 명세 = 1차 baseline 병입 완료. A5(cycle_id 발급 규칙·배치) 확정 요청 대상 |
 | 창욱 (공시·뉴스) | Bundle 감축(24→18 / 31→28)·cross_source_confirmed 신설 협의 대기 |
 | 은미 (Strategist) | **확인 요청 2건 추가**: B8(tb_memory_entries→tb_review+JOIN 통일) · B11-③(1차 주입 여부) |
 | 미연 (Critic) | tb_critic_verdict 초안(agree·objection·confidence). 본인 확정 대기 |
