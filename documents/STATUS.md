@@ -8,7 +8,7 @@
 | 항목 | 상태 |
 |---|---|
 | 증류 | **4회차** (2026-07-06) — 이번 처리 1: 성혁 「tb_review 설계초안 v2」 · 처리 누적 14파일 |
-| 병입 | 결정 #1~#10 (#10: updated_at은 account·order만 — #8 변경) → [결정 로그](facts/결정로그.md) |
+| 병입 | 결정 #1~#11 (#11: Reviewer 구현 — snapshot 테이블·Critic 미참조) → [결정 로그](facts/결정로그.md) |
 | 열린 안건 | B8 개정 + B11 신설 (이번 회차) → [회의 안건](질문.md) |
 | 주의 | 없음 — `.state.json` 4회차 동기화됨 |
 
@@ -30,7 +30,7 @@
 | 창욱 (공시·뉴스) | Bundle 감축(24→18 / 31→28)·cross_source_confirmed 신설 협의 대기 |
 | 은미 (Strategist) | **확인 요청 2건 추가**: B8(tb_memory_entries→tb_review+JOIN 통일) · B11-③(1차 주입 여부) |
 | 미연 (Critic) | tb_critic_verdict 초안(agree·objection·confidence). 본인 확정 대기 |
-| **성혁 (Reviewer)** | **tb_review 스키마 확정(#9)** — Scorer/Reflector 2단·FK 설계 데이터계약 반영. 남은 것: 은미 확인(B8)·세부 이의(B11) |
+| **성혁 (Reviewer)** | **구현 착수 — 1안 완성·검증(#11)**. 2단 배치(스냅샷 적재→T+5 회고)·Scorer/Reflector 코드 존재. 남은 것: 은미 확인(B8)·B11-③④ |
 
 ## 자료·작업 대기
 
