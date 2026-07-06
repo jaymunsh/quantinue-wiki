@@ -13,7 +13,8 @@ raw(원본) → 증류(AI 대조) → 병입(확정) → facts(SSOT) → MkDocs 
 
 ```
 raw/{이름}/        원본 — 절대 불변. 수정·삭제 금지 (운영자가 직접 지시한 경우만 예외)
-documents/         사이트 노출 = SSOT. STATUS·질문·산출물·홈 + facts/(확정 사실)
+raw/회의/          회의 전사(txt) — 증류 시 특별 규칙(지시서 참조): 회의록 생성 + 결정은 병입 대기로
+documents/         사이트 노출 = SSOT. STATUS·질문·산출물·홈·회의록/ + facts/(확정 사실)
 archive/           사이트에 안 보이는 보관물 (briefings, 구자료)
 tools/             증류 엔진. distill_prompt.md = 규칙 소스코드, distill.py = 러너
 wiki/              MkDocs docs_dir — documents/로 향하는 심볼릭 링크만 있음
