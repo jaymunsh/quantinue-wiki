@@ -34,6 +34,9 @@ nav:
       - 🎯 MVP 1차 정의: facts/MVP1차.md
       - 📅 일정: facts/일정.md
       - 🖥️ 화면: facts/화면.md
+  - 🤖 에이전트:
+      - 개요: 에이전트/index.md
+      - 📓 Reviewer: 에이전트/reviewer.md
   - 협업:
       - ❓ 회의 안건: 질문.md
       - 🗣️ 회의록: 회의록/index.md
