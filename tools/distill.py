@@ -16,7 +16,7 @@ DocStill 증류 러너 — LLM 벤더 중립 (claude / codex / ollama / openai_c
     벤더 중립의 핵심 = "무엇을 추출하나"(주장·4분류)는 tools/distill_prompt.md 한 곳에만 있고,
     "어떻게 파일을 읽고 쓰나"만 백엔드별로 여기서 감싼다. → 프롬프트는 어떤 LLM에도 그대로 통한다.
 """
-import argparse, hashlib, html.parser, json, os, re, subprocess, sys, urllib.request
+import argparse, hashlib, html.parser, json, os, re, subprocess, sys, unicodedata, urllib.request
 from datetime import datetime
 from pathlib import Path
 
@@ -32,9 +32,16 @@ PROMPT_FILE = TOOLS / "distill_prompt.md"
 def load_config() -> dict:
     return json.loads((TOOLS / "config.json").read_text(encoding="utf-8"))
 
+def _key(p: Path) -> str:
+    """상태 키 = ROOT 상대경로의 NFC 정규형. macOS(NFD)와 셸 입력(NFC)이 섞여도 같은 파일은 같은 키."""
+    return unicodedata.normalize("NFC", str(p.relative_to(ROOT)))
+
 def load_state() -> dict:
     if STATE_FILE.exists():
-        return json.loads(STATE_FILE.read_text(encoding="utf-8"))
+        st = json.loads(STATE_FILE.read_text(encoding="utf-8"))
+        # 과거에 어떤 형태로 저장됐든 로드 시점에 NFC로 통일
+        st["processed"] = {unicodedata.normalize("NFC", k): v for k, v in st["processed"].items()}
+        return st
     return {"processed": {}, "run_count": 0}
 
 def save_state(state: dict) -> None:
@@ -51,11 +58,11 @@ def scan_raw() -> list[Path]:
 def find_new_files(state: dict) -> list[Path]:
     """해시가 바뀐(또는 처음 보는) 파일만 — 같은 파일 재투입은 자동 무시. 백엔드를 바꿔도 중복 없음."""
     return [p for p in scan_raw()
-            if state["processed"].get(str(p.relative_to(ROOT))) != file_hash(p)]
+            if state["processed"].get(_key(p)) != file_hash(p)]
 
 def mark_processed(state: dict, files: list[Path]) -> None:
     for p in files:
-        state["processed"][str(p.relative_to(ROOT))] = file_hash(p)
+        state["processed"][_key(p)] = file_hash(p)
     state["run_count"] += 1
     state["last_run"] = datetime.now().strftime("%Y-%m-%d %H:%M")
 
