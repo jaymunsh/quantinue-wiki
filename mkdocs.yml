@@ -37,6 +37,10 @@ nav:
   - 🤖 에이전트:
       - 개요: 에이전트/index.md
       - 📓 Reviewer: 에이전트/reviewer.md
+      - ⚖️ Critic: 에이전트/critic.md
+      - 🧠 Strategist: 에이전트/strategist.md
+      - 📰 정보분석: 에이전트/정보분석.md
+      - ⚙️ 코어·인프라 (코드 계층): 에이전트/코어인프라.md
   - 협업:
       - ❓ 회의 안건: 질문.md
       - 🗣️ 회의록:
