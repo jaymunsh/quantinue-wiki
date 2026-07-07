@@ -2,7 +2,7 @@
 
 !!! success "✅ 구현됨 · 담당 김미연"
     Strategist의 매수 추천을 **일부러 반박**해 통과/기각을 정하는 모듈. 코드 하드룰 → LLM 반박 → 코드 게이트의 3계층.
-    참조 소스: `quantinue` repo · `critic-agent-1` @ `d107834` · 패키지 `agents/critic/` (import `quantinue.agents.risk_critic`)
+    참조 소스: `quantinue` repo · `critic-agent-1` @ `d107834` · 구현 완료·테스트 51개 통과(gpt-4o-mini) · 패키지 `agents/critic/` (import `quantinue.agents.risk_critic`)
 
 !!! warning "위키 baseline과 정합 필요"
     코드 README는 옛 번호(결정층 ⑥)·**균형형 활성** 기준. 현재 위키 baseline은 **⑧ · 공격형 단일**. → `config`의 `THRESHOLDS`에 공격형 임계값 추가 + `ACTIVE_PROFILES` 확장으로 정합(코드 분기 없음). 모델도 현재 OpenAI(`CRITIC_MODEL`) — 모델명 안건 참조.
@@ -19,7 +19,7 @@
 flowchart TB
   IN["Strategist 추천 + 신호·맥락"] --> L0{"Layer 0 · hard_rules<br/>코드 선차단<br/>거래정지·미확인뉴스·펌프·risk-off·이벤트·고점추격"}
   L0 -->|차단| REJECT["기각 (LLM 안 감)"]
-  L0 -->|통과| L1["Layer 1 · agent (LLM)<br/>적대적 반박 4각도<br/>근거/고점/펌프/이벤트·매크로"]
+  L0 -->|통과| L1["Layer 1 · agent (LLM)<br/>적대적 반박 5각도<br/>근거·고점·펌프·이벤트·과신"]
   L1 --> L2{"Layer 2 · gate<br/>코드 게이트 — 유형별<br/>confidence·conviction 임계값"}
   L2 -->|미달| REJECT
   L2 -->|통과| PASS["통과 → 포트폴리오 ⑨"]
