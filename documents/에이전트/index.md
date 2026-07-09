@@ -7,9 +7,9 @@
 
 | 구성요소 | 담당 | 파이프라인 | 종류 | 구현 상태 |
 |---|---|---|---|---|
-| [⚙️ Core · Infra](core.md) | 김지현 | ①~④·⑨⑩ | 코드 계층 | — 계산·강제 |
-| [📰 Info Agent](info.md) | 정창욱 | ⑤⑥ 공시·뉴스 | LLM 에이전트 | ⚪ 설계 예정 |
-| [🧠 Strategist Agent](strategist.md) | 이은미 | ⑦ 전략 종합 | LLM 에이전트 | ⚪ 설계 예정 |
+| [⚙️ Core · Infra](core.md) | 김지현 | ①~④·⑨⑩ | 코드 계층 | 🟡 규칙 상세(사이징·배관) |
+| [📰 Info Agent](info.md) | 정창욱 | ⑤⑥ 공시·뉴스 | LLM 에이전트 | 🟡 설계 상세(공시18·뉴스25) |
+| [🧠 Strategist Agent](strategist.md) | 이은미 | ⑦ 전략 종합 | LLM 에이전트 | 🟡 설계 상세(v3.0 계약) |
 | [⚖️ Critic Agent](critic.md) | 김미연 | ⑧ 반박·검증 | LLM 에이전트 | ✅ 구현 — 3계층 하이브리드 |
 | [📓 Reviewer Agent](reviewer.md) | 문성혁 | ⑪ 회고 | LLM 에이전트 | ✅ 구현 — Scorer·Reflector |
 
