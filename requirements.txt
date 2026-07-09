@@ -1,0 +1,2 @@
+# 위키 빌드 의존성 — 로컬과 CI(GitHub Actions)가 같은 버전을 쓰도록 고정
+mkdocs-material==9.7.6

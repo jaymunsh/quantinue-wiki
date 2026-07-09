@@ -1,0 +1,42 @@
+# main에 push하면 위키를 빌드해 gh-pages로 배포한다.
+# → 로컬 `mkdocs gh-deploy` 불필요. push = 배포.
+# 표준 MkDocs 워크플로 — 다른 위키 repo에 그대로 복사해도 동작.
+name: deploy-wiki
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}        # Actions 탭에서 수동 재실행 (재트리거 용도)
+
+permissions:
+  contents: write              # gh-pages 브랜치 push 권한
+
+concurrency:
+  group: deploy-wiki
+  cancel-in-progress: true     # 연속 push 시 마지막 것만 배포
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install deps
+        run: pip install -r requirements.txt
+
+      - name: Static lint (기계 검사)
+        run: python3 tools/lint.py
+
+      - name: Build (경고 = 실패)
+        run: mkdocs build --strict
+
+      - name: Deploy to gh-pages
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          mkdocs gh-deploy --force

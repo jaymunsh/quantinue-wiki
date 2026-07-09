@@ -42,8 +42,10 @@ mkdocs.yml         nav 3구역: 프로젝트 / 협업 / 운영
 ## 검증 루틴 (문서·설정을 고친 뒤 반드시)
 
 ```bash
-python3 -m mkdocs build          # 에러·링크 경고 0 확인 (Material 팀 공지 경고는 무시)
+python3 tools/lint.py            # 기계 검사 — nav·링크·심볼릭·번호 연속성·용어 (ERROR 0)
+python3 -m mkdocs build --strict # 빌드 검증 (Material 팀 공지 경고는 무시)
 ```
+- lint 오탐(정당한 이력 언급 등)은 우회하지 말고 `tools/lint.py`의 `CONFIG` allow 목록에 추가.
 - 렌더 결과는 `site/<페이지>/index.html`을 grep으로 확인 (홈만 예외: `site/index.html`).
 - `mkdocs serve`가 백그라운드에 떠 있으면 자동 리로드된다 — 재시작 불필요.
 - 한글 파일명 git 명령은 `git -c core.quotepath=false`로 확인 (8진수 이스케이프 오탐 방지).
@@ -53,7 +55,7 @@ python3 -m mkdocs build          # 에러·링크 경고 0 확인 (Material 팀 
 
 - 커밋 메시지는 한글, 논리 단위별로 분리(구조 변경 vs 내용 변경 섞지 않기).
 - 커밋·푸시는 운영자가 요청할 때만. `raw/` 파일 삭제가 보이면 커밋 전에 반드시 운영자에게 확인.
-- 배포: `python3 -m mkdocs gh-deploy --force` (운영자 확인 후).
+- **main push = 자동 배포** (`.github/workflows/deploy.yml`: lint → strict build → gh-deploy). push 전 반드시 로컬 lint 통과.
 
 ## 자주 하는 작업
 
@@ -61,5 +63,6 @@ python3 -m mkdocs build          # 에러·링크 경고 0 확인 (Material 팀 
 |---|---|
 | 증류 | `/증류` 명령 또는 tools/distill_prompt.md 읽고 지시서대로 수행 |
 | 병입 | `/병입 <결정 내용>` — 지시서 "병입 지시를 받았을 때" 절차대로 |
-| 사이트 점검 | `/점검` — nav 누락·깨진 링크·낡은 참조 감사 |
-| 배포 | `/배포` — build 검증 후 gh-deploy |
+| 사이트 점검 | `/점검` — lint.py(기계) + LLM(판단) 2단 감사 |
+| 배포 | `/배포` — lint·strict build 후 push → Actions 자동 배포 |
+| 에이전트 페이지 갱신 | `/에이전트갱신 <이름>` — quantinue repo 읽기전용 참조로 핵심 기능 페이지 갱신 |

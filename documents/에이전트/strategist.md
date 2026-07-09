@@ -1,4 +1,4 @@
-# 🧠 Strategist 에이전트 (⑦ 전략 종합)
+# 🧠 Strategist Agent (⑦ 전략 종합)
 
 !!! note "⚪ 설계 예정 · 담당 이은미"
     코드는 아직 스켈레톤(`agents/fundmanager/__init__.py`). 계약(스키마)은 확정 수준 — 아래는 계약 기준 설명. 코드 나오면 이 페이지를 채운다.

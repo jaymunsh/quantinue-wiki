@@ -20,6 +20,7 @@ theme:
       toggle: { icon: material/brightness-4, name: 라이트 모드 }
   features:
     - navigation.sections
+    - navigation.indexes    # 섹션 제목 클릭 시 개요(index) 페이지 표시
     - search.highlight
     - content.tables.wrap
 
@@ -34,19 +35,20 @@ nav:
       - 🎯 MVP 1차 정의: facts/MVP1차.md
       - 📅 일정: facts/일정.md
       - 🖥️ 화면: facts/화면.md
-  - 🤖 에이전트:
-      - 개요: 에이전트/index.md
-      - 📓 Reviewer: 에이전트/reviewer.md
-      - ⚖️ Critic: 에이전트/critic.md
-      - 🧠 Strategist: 에이전트/strategist.md
-      - 📰 정보분석: 에이전트/정보분석.md
-      - ⚙️ 코어·인프라 (코드 계층): 에이전트/코어인프라.md
+  - 핵심 기능:
+      - 에이전트/index.md
+      - ⚙️ Core · Infra: 에이전트/core.md
+      - 📰 Info Agent: 에이전트/info.md
+      - 🧠 Strategist Agent: 에이전트/strategist.md
+      - ⚖️ Critic Agent: 에이전트/critic.md
+      - 📓 Reviewer Agent: 에이전트/reviewer.md
   - 협업:
       - ❓ 회의 안건: 질문.md
       - 🗣️ 회의록:
           - 목록: 회의록/index.md
-          - 4차 (07-06): 회의록/2026-07-06.md
+          - 5차 (07-08): 회의록/2026-07-08.md
           - 4차-2 (07-06): 회의록/2026-07-06-2.md
+          - 4차 (07-06): 회의록/2026-07-06.md
           - 3차 (07-03): 회의록/2026-07-03.md
           - 1차 (06-30): 회의록/2026-06-30.md
       - ✅ 결정 로그: facts/결정로그.md
