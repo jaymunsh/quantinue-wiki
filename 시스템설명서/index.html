@@ -1,0 +1,2555 @@
+
+<!doctype html>
+<html lang="ko" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="팀 여름이었다 · SSOT — 확정 기준은 이 위키">
+      
+      
+      
+      
+        <link rel="prev" href="../%EA%B0%80%EC%9D%B4%EB%93%9C/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>🛠️ 시스템 설명서 - Quantinue-Wiki</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans KR";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="green" data-md-color-accent="green">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#docstill" class="md-skip">
+          콘텐츠로 이동
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="상단/헤더">
+    <a href=".." title="Quantinue-Wiki" class="md-header__button md-logo" aria-label="Quantinue-Wiki" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Quantinue-Wiki
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              🛠️ 시스템 설명서
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="green" data-md-color-accent="green"  aria-label="다크 모드"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="다크 모드" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="green" data-md-color-accent="green"  aria-label="라이트 모드"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="라이트 모드" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="검색" placeholder="검색" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="검색">
+        
+        <button type="reset" class="md-search__icon md-icon" title="지우기" aria-label="지우기" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            검색 초기화
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="네비게이션" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Quantinue-Wiki" class="md-nav__button md-logo" aria-label="Quantinue-Wiki" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Quantinue-Wiki
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🏠 홈
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    프로젝트
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    프로젝트
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../facts/%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🔄 파이프라인
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../facts/%EB%8D%B0%EC%9D%B4%ED%84%B0%EA%B3%84%EC%95%BD/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🔌 데이터 계약
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../facts/MVP1%EC%B0%A8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🎯 MVP 1차 정의
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../facts/%EC%9A%A9%EC%96%B4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📖 용어 사전
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../facts/%EC%9D%BC%EC%A0%95/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📅 일정
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../facts/%ED%99%94%EB%A9%B4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🖥️ 화면
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    핵심 기능
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    핵심 기능
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8/core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ⚙️ Core · Infra
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8/info/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📰 Info Agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8/strategist/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🧠 Strategist Agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8/critic/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ⚖️ Critic Agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8/reviewer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📓 Reviewer Agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    협업
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    협업
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%EC%B6%94%EC%B2%9C%EC%A0%9C%EC%95%88/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🤖 AI 추천 제안
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%EC%A7%88%EB%AC%B8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ❓ 회의 안건
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../%ED%9A%8C%EC%9D%98%EB%A1%9D/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🗣️ 회의록
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_3" id="__nav_4_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    🗣️ 회의록
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%ED%9A%8C%EC%9D%98%EB%A1%9D/2026-07-09-2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    6차-2 (07-09)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%ED%9A%8C%EC%9D%98%EB%A1%9D/2026-07-09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    6차 (07-09)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%ED%9A%8C%EC%9D%98%EB%A1%9D/2026-07-08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    5차 (07-08)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%ED%9A%8C%EC%9D%98%EB%A1%9D/2026-07-06-2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4차-2 (07-06)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%ED%9A%8C%EC%9D%98%EB%A1%9D/2026-07-06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4차 (07-06)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%ED%9A%8C%EC%9D%98%EB%A1%9D/2026-07-03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3차 (07-03)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%ED%9A%8C%EC%9D%98%EB%A1%9D/2026-06-30/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1차 (06-30)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../facts/%EA%B2%B0%EC%A0%95%EB%A1%9C%EA%B7%B8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✅ 결정 로그
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%EC%97%85%EB%8D%B0%EC%9D%B4%ED%8A%B8%EB%A1%9C%EA%B7%B8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📜 업데이트 로그
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%EC%82%B0%EC%B6%9C%EB%AC%BC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📦 산출물 현황
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    운영
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    운영
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%ED%98%84%ED%99%A9%ED%8C%90/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📊 현황판
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%EA%B0%80%EC%9D%B4%EB%93%9C/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📘 사용 가이드
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🛠️ 시스템 설명서
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🛠️ 시스템 설명서
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 설계 철학 — 왜 이렇게 만들었나
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 전체 구조 한눈에
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 문서 한 장의 일생 (Lifecycle)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-toolsdistillpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 증류 엔진 — 증분 처리의 원리 (tools/distill.py)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-llm-2-configjson" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. LLM 벤더 중립 — 백엔드 2종류 (config.json)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-4-distill_promptmd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 증류 로직 — 주장 추출 + 4분류 (distill_prompt.md = 소스코드)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. 증류 로직 — 주장 추출 + 4분류 (distill_prompt.md = 소스코드)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#5-1-claim" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5-1. 주장(claim) 추출 — "굵기"가 관건
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-2-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5-2. 4분류 대조
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-3-md" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5-3. 산출물 스타일 규칙 (모든 md 공통)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5-4. 절대 금지 (안전 규칙)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-bottling-facts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 병입(Bottling) — 확정 사실을 facts에 쌓는 절차
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-mkdocs-github-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 출판 — MkDocs + GitHub Pages
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. 출판 — MkDocs + GitHub Pages">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#7-b-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7-B. 자동화 2종 + 명령 하네스
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. 디렉터리 구조 &amp; 파일 레퍼런스
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. 시스템이 보장하는 것 (불변식)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. 실패 모드 &amp; 대처
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. 용어 사전
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 설계 철학 — 왜 이렇게 만들었나
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 전체 구조 한눈에
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 문서 한 장의 일생 (Lifecycle)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-toolsdistillpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 증류 엔진 — 증분 처리의 원리 (tools/distill.py)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-llm-2-configjson" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. LLM 벤더 중립 — 백엔드 2종류 (config.json)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-4-distill_promptmd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 증류 로직 — 주장 추출 + 4분류 (distill_prompt.md = 소스코드)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. 증류 로직 — 주장 추출 + 4분류 (distill_prompt.md = 소스코드)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#5-1-claim" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5-1. 주장(claim) 추출 — "굵기"가 관건
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-2-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5-2. 4분류 대조
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-3-md" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5-3. 산출물 스타일 규칙 (모든 md 공통)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5-4. 절대 금지 (안전 규칙)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-bottling-facts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 병입(Bottling) — 확정 사실을 facts에 쌓는 절차
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-mkdocs-github-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 출판 — MkDocs + GitHub Pages
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. 출판 — MkDocs + GitHub Pages">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#7-b-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7-B. 자동화 2종 + 명령 하네스
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. 디렉터리 구조 &amp; 파일 레퍼런스
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. 시스템이 보장하는 것 (불변식)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. 실패 모드 &amp; 대처
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. 용어 사전
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="docstill">🛠️ DocStill 시스템 설명서 — 이 위키는 어떻게 구동되는가<a class="headerlink" href="#docstill" title="Permanent link">&para;</a></h1>
+<div class="admonition abstract">
+<p class="admonition-title">이 문서가 다루는 것</p>
+<p><em>운영 절차</em>(→ <code>사용가이드.md</code>)가 아니라, <strong>이 위키 시스템(DocStill)이 내부에서 어떻게 동작하는지</strong> — 어떤 부품이 무엇을 하고, 문서 한 장이 웹 위키가 되기까지 어떤 처리를 거치는지.</p>
+<p><strong>한 줄 정의:</strong> 팀원이 각자 AI로 만든 HTML/MD 문서를, AI가 '주장(claim)' 단위로 증류·대조해, 확정된 것만 SSOT(<code>facts/</code>)에 쌓고 MkDocs로 웹 배포하는 파이프라인.</p>
+</div>
+<hr />
+<h2 id="0">0. 설계 철학 — 왜 이렇게 만들었나<a class="headerlink" href="#0" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>원칙</th>
+<th>뜻</th>
+<th>코드/구조에서의 보장</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SSOT (Single Source of Truth)</strong></td>
+<td>확정된 사실은 <code>documents/facts/</code> <strong>한 곳</strong>에만 있다</td>
+<td>위키가 읽는 건 여기뿐. 나머지는 과정 산출물</td>
+</tr>
+<tr>
+<td><strong>raw 불변 (immutable)</strong></td>
+<td>원본은 절대 안 고친다 → 언제든 재증류 가능</td>
+<td>증류 엔진은 raw를 <strong>읽기만</strong> 함. 쓰기는 STATUS/질문/facts에만</td>
+</tr>
+<tr>
+<td><strong>수동은 딱 2곳</strong></td>
+<td>①raw에 파일 넣기 ②확정 판단(병입)</td>
+<td>나머지(추출·대조·배포)는 전부 자동</td>
+</tr>
+<tr>
+<td><strong>프롬프트 = 소스코드</strong></td>
+<td>"무엇을 추출하나"는 <code>distill_prompt.md</code> 한 파일에만</td>
+<td>규칙 수정 = 이 md 한 줄 추가 (파이썬 안 건드림)</td>
+</tr>
+<tr>
+<td><strong>LLM 벤더 중립</strong></td>
+<td>어떤 LLM으로도 증류가 돈다</td>
+<td>백엔드는 <code>config.json</code> 값 하나로 교체 (§4)</td>
+</tr>
+<tr>
+<td><strong>재현성</strong></td>
+<td>같은 raw + 같은 지시서 → 같은 결과로 되짚음</td>
+<td>raw 불변 + 해시 기반 증분 처리</td>
+</tr>
+</tbody>
+</table>
+<p><strong>핵심 통찰:</strong> 팀원의 행동을 바꾸지 않는다. 그들은 하던 대로 AI로 문서를 만들 뿐. 그 이질적인 문서들을 <strong>하나의 확정 사실 집합으로 수렴</strong>시키는 게 이 시스템의 전부다.</p>
+<hr />
+<h2 id="1">1. 전체 구조 한눈에<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
+<pre class="mermaid"><code>flowchart TB
+  subgraph 사람["👤 수동 (딱 2곳)"]
+    M1["① raw/이름/ 에 문서 넣기"]
+    M2["② 회의 후 '병입' 판단"]
+  end
+
+  subgraph 엔진["⚙️ 자동 — 증류 엔진 (tools/)"]
+    SCAN["scan_raw()&lt;br/&gt;해시로 새 파일만 골라냄"]
+    LLM["LLM 백엔드&lt;br/&gt;주장 추출 + 4분류 대조"]
+    OUT["STATUS.md · 질문.md&lt;br/&gt;갱신"]
+  end
+
+  subgraph 확정["📚 SSOT"]
+    FACTS[("facts/*.md&lt;br/&gt;확정 사실")]
+    LOG[("결정로그.md")]
+  end
+
+  subgraph 배포["🌐 출판 (MkDocs)"]
+    WIKI["wiki/ (심볼릭 링크)"]
+    SITE["site/ 빌드"]
+    PAGES["GitHub Pages"]
+  end
+
+  M1 --&gt; SCAN --&gt; LLM --&gt; OUT
+  OUT --&gt;|"회의에서 결정"| M2
+  M2 --&gt;|"병입 명령"| FACTS
+  M2 --&gt; LOG
+  FACTS --&gt; WIKI --&gt; SITE --&gt; PAGES
+
+  classDef man fill:#f9ebe8,stroke:#b03a2e,color:#213
+  classDef auto fill:#e9f4ec,stroke:#2C6E52,color:#213
+  class M1,M2 man
+  class SCAN,LLM,OUT auto</code></pre>
+<blockquote>
+<p>🟥 빨강 = 사람이 하는 일(2곳뿐) · 🟩 초록 = 자동. <strong>엔진은 raw를 읽고 STATUS/질문만 쓴다. facts는 사람이 병입 명령을 내릴 때만 바뀐다.</strong></p>
+</blockquote>
+<hr />
+<h2 id="2-lifecycle">2. 문서 한 장의 일생 (Lifecycle)<a class="headerlink" href="#2-lifecycle" title="Permanent link">&para;</a></h2>
+<p>한 팀원의 HTML이 웹 위키의 "확정 사실"이 되기까지:</p>
+<pre class="mermaid"><code>sequenceDiagram
+  autonumber
+  participant U as 팀원
+  participant R as raw/이름/
+  participant E as 증류 엔진
+  participant S as STATUS.md·질문.md
+  participant O as 운영자(성혁)
+  participant F as facts/ (SSOT)
+  participant W as 웹 위키
+
+  U-&gt;&gt;R: AI로 만든 문서 드래그 (10초)
+  Note over R: 원본은 이후 불변
+  O-&gt;&gt;E: 증류 실행 (회의 전날)
+  E-&gt;&gt;R: 새/변경 파일만 스캔 (해시)
+  E-&gt;&gt;E: 주장 추출 → facts·질문과 4분류 대조
+  E-&gt;&gt;S: 현황판·회의안건 갱신 (facts는 안 건드림)
+  Note over O,F: — 회의에서 결정 —
+  O-&gt;&gt;F: "안건 N번 ○○로 확정, 병입해줘"
+  F-&gt;&gt;W: mkdocs gh-deploy (1분)</code></pre>
+<p><strong>단계별 무슨 일이 실제로 일어나나:</strong></p>
+<ol>
+<li><strong>투입</strong> — <code>raw/{공용,지현,창욱,은미,미연,성혁,멘토}/</code> 아래 파일 드래그. HTML·MD·TXT·JSON 지원.</li>
+<li><strong>스캔</strong> — 엔진이 <code>raw/</code>를 재귀 탐색해 <strong>SHA-256 해시가 바뀐 파일만</strong> 골라냄 (§3). 같은 파일 재투입은 자동 무시.</li>
+<li><strong>증류</strong> — 새 문서에서 "팀의 결정·수치·계약·일정"에 해당하는 문장을 <strong>주장(claim)</strong> 단위로 뽑고, 기존 <code>facts/</code>·<code>질문.md</code>와 대조해 4가지로 분류 (§5).</li>
+<li><strong>산출</strong> — <code>STATUS.md</code>(현황판) 전체 재작성 + <code>질문.md</code>(회의안건) 추가. <strong>facts/는 절대 안 건드림.</strong></li>
+<li><strong>결정</strong> — 팀 회의에서 안건을 판단.</li>
+<li><strong>병입(bottling)</strong> — 운영자가 "N번 확정 병입해줘" 하면 그 사실만 <code>facts/</code>에 추가 + <code>결정로그.md</code>에 1줄 (§6).</li>
+<li><strong>출판</strong> — <code>mkdocs gh-deploy</code>로 <code>facts/</code>가 웹 위키에 반영 (§7).</li>
+</ol>
+<hr />
+<h2 id="3-toolsdistillpy">3. 증류 엔진 — 증분 처리의 원리 (<code>tools/distill.py</code>)<a class="headerlink" href="#3-toolsdistillpy" title="Permanent link">&para;</a></h2>
+<p>엔진은 <strong>"지난번 이후 달라진 것만"</strong> 처리한다. 이를 위해 파일별 해시를 <code>.state.json</code>에 기억한다.</p>
+<pre class="mermaid"><code>flowchart LR
+  A["raw/ 전체 스캔&lt;br/&gt;(.html·.md·.txt·.json)"] --&gt; B{"각 파일&lt;br/&gt;SHA-256 해시"}
+  B --&gt; C{".state.json의&lt;br/&gt;기록과 같나?"}
+  C --&gt;|같음| D["건너뜀 (이미 처리)"]
+  C --&gt;|"다름/처음"| E["이번 처리 대상"]
+  E --&gt; F["LLM 백엔드 호출"]
+  F --&gt;|성공| G["해시 저장 · run_count+1&lt;br/&gt;· auto commit"]
+  F --&gt;|실패| H["상태 기록 안 함&lt;br/&gt;→ 다음에 재시도"]</code></pre>
+<p><strong>핵심 함수 (distill.py):</strong></p>
+<table>
+<thead>
+<tr>
+<th>함수</th>
+<th>하는 일</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>scan_raw()</code></td>
+<td><code>raw/**</code> 재귀 · 지원 확장자만 · 숨김파일(<code>.</code>) 제외</td>
+</tr>
+<tr>
+<td><code>file_hash(p)</code></td>
+<td>파일 내용 SHA-256 앞 16자 — <strong>내용이 바뀌면 해시가 바뀜</strong></td>
+</tr>
+<tr>
+<td><code>find_new_files(state)</code></td>
+<td>해시가 <code>.state.json</code>과 다른(또는 처음 보는) 파일만 반환</td>
+</tr>
+<tr>
+<td><code>mark_processed()</code></td>
+<td>성공 시에만 해시 기록 · <code>run_count</code>·<code>last_run</code> 갱신</td>
+</tr>
+<tr>
+<td><code>git_commit()</code></td>
+<td><code>auto_git_commit=true</code>면 회차별 자동 커밋</td>
+</tr>
+</tbody>
+</table>
+<p><strong>이게 왜 중요한가:</strong>
+- ♻️ <strong>재투입 안전</strong> — 같은 파일을 두 번 넣어도 해시가 같으면 무시. (멱등성 = 같은 걸 두 번 해도 결과 한 번)
+- 🔁 <strong>재증류 가능</strong> — raw가 불변이라, <code>.state.json</code>만 지우면 전체를 처음부터 다시 증류할 수 있음.
+- ✅ <strong>실패 안전</strong> — LLM 호출이 실패하면 상태를 기록 안 함 → 다음 실행 때 같은 파일을 다시 시도.</p>
+<blockquote>
+<p><strong>참고:</strong> 처리 회차·파일 해시는 <code>.state.json</code>이 기억한다(현재 값은 파일 직접 참조). 대화형(<code>/증류</code>)으로 처리한 회차도 끝나고 <code>mark_processed</code>로 같은 파일에 반영하므로, 엔진 실행이든 대화형이든 상태가 한곳에서 관리된다.</p>
+</blockquote>
+<hr />
+<h2 id="4-llm-2-configjson">4. LLM 벤더 중립 — 백엔드 2종류 (<code>config.json</code>)<a class="headerlink" href="#4-llm-2-configjson" title="Permanent link">&para;</a></h2>
+<p>증류를 돌리는 LLM은 <code>config.json</code>의 <code>"backend"</code> 값 <strong>하나</strong>로 갈아끼운다. 백엔드는 딱 두 종류(type)뿐:</p>
+<pre class="mermaid"><code>flowchart TB
+  CFG["config.json&lt;br/&gt;backend = ?"] --&gt; T{"type"}
+  T --&gt;|agent| AG["🤖 에이전트형&lt;br/&gt;claude · codex"]
+  T --&gt;|api| API["🔌 API형&lt;br/&gt;ollama · openai_compat"]
+
+  AG --&gt; AG2["CLI가 &lt;b&gt;스스로&lt;/b&gt; 파일 읽고&lt;br/&gt;STATUS/질문.md 씀&lt;br/&gt;(우리는 호출만)"]
+  API --&gt; API2["LLM은 &lt;b&gt;텍스트만&lt;/b&gt; 주고받음&lt;br/&gt;→ 읽기/쓰기는 파이썬이 대행&lt;br/&gt;(HTML 텍스트 추출·마커 파싱)"]
+
+  classDef a fill:#e9f4ec,stroke:#2C6E52
+  classDef b fill:#eef2f9,stroke:#2c4a7c
+  class AG,AG2 a
+  class API,API2 b</code></pre>
+<table>
+<thead>
+<tr>
+<th>type</th>
+<th>백엔드</th>
+<th>동작 방식</th>
+<th>파일 입출력</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>agent</code></td>
+<td><strong>claude</strong>, codex</td>
+<td>CLI 에이전트가 지시서를 읽고 스스로 파일 조작</td>
+<td>에이전트가 직접</td>
+</tr>
+<tr>
+<td><code>api_ollama</code></td>
+<td>ollama (로컬·무료)</td>
+<td><code>/api/generate</code> 호출, 텍스트만</td>
+<td>파이썬이 대행</td>
+</tr>
+<tr>
+<td><code>api_openai</code></td>
+<td>openai_compat (OpenAI·Groq·Together·vLLM·LM Studio…)</td>
+<td><code>/v1/chat/completions</code> 호출</td>
+<td>파이썬이 대행</td>
+</tr>
+</tbody>
+</table>
+<p><strong>벤더 중립의 원리 (distill.py 주석):</strong></p>
+<blockquote>
+<p><em>"무엇을 추출하나(주장·4분류)"</em> 는 <code>distill_prompt.md</code> <strong>한 곳</strong>에만 있고, <em>"어떻게 파일을 읽고 쓰나"</em> 만 백엔드별로 감싼다. → 같은 프롬프트가 어떤 LLM에도 그대로 통한다.</p>
+</blockquote>
+<ul>
+<li><strong>agent형</strong> — <code>build_agent_prompt()</code>가 "지시서 읽고 이 파일들만 증류하라"는 짧은 명령을 만들어 CLI에 넘김. 에이전트가 알아서 STATUS/질문을 씀.</li>
+<li><strong>api형</strong> — <code>build_api_prompt()</code>가 지시서 + 현재 STATUS/질문/facts + 새 문서 텍스트를 <strong>한 프롬프트에 다 담아</strong> 보냄. HTML은 <code>_TextExtractor</code>(script·style·head 제거)로 텍스트만 뽑고 <code>max_chars</code>로 자름. 응답은 <code>===STATUS===</code> / <code>===QUESTIONS===</code> / <code>===REPORT===</code> <strong>마커로 분리</strong>해 파일에 기록. 마커가 깨지면 파일을 안 건드리고 원문만 <code>archive/briefings/</code>에 백업(안전).</li>
+</ul>
+<hr />
+<h2 id="5-4-distill_promptmd">5. 증류 로직 — 주장 추출 + 4분류 (<code>distill_prompt.md</code> = 소스코드)<a class="headerlink" href="#5-4-distill_promptmd" title="Permanent link">&para;</a></h2>
+<p>이 시스템의 "지능"은 파이썬이 아니라 <strong><code>tools/distill_prompt.md</code></strong> 에 있다. 규칙을 바꾸면 이 md에 한 줄 더 쓴다.</p>
+<h3 id="5-1-claim">5-1. 주장(claim) 추출 — "굵기"가 관건<a class="headerlink" href="#5-1-claim" title="Permanent link">&para;</a></h3>
+<p>문서에서 <strong>"팀의 결정·수치·계약·일정에 해당하는 문장"</strong> 만 뽑는다.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>예</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>✅ 좋은 굵기</td>
+<td>"DB는 Postgres로 한다" / "후보는 5~10개로 제한"</td>
+</tr>
+<tr>
+<td>❌ 너무 잘게</td>
+<td>"PER은 주가수익비율이다" (용어 설명은 주장 아님)</td>
+</tr>
+<tr>
+<td>❌ 너무 크게</td>
+<td>"시스템 아키텍처 전체" (문서 통째는 주장 아님)</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>배경·교육용·비유는 건너뛴다. <strong>결정·수치·계약·일정만</strong> 주장이다. 모든 주장엔 <strong>출처 필수</strong>(못 대면 버림 = 환각 방지).</p>
+</blockquote>
+<h3 id="5-2-4">5-2. 4분류 대조<a class="headerlink" href="#5-2-4" title="Permanent link">&para;</a></h3>
+<p>각 주장을 <code>facts/</code>(확정)와 <code>질문.md</code>(기존 미정)에 비교:</p>
+<pre class="mermaid"><code>flowchart TB
+  C["주장 하나"] --&gt; Q{"facts/기존 안건과&lt;br/&gt;비교"}
+  Q --&gt;|"의미가 같음"| DUP["♻️ 이미 있음&lt;br/&gt;→ 버림, 개수만 집계"]
+  Q --&gt;|"처음 등장"| NEW["🆕 새것&lt;br/&gt;→ 질문.md에 추가"]
+  Q --&gt;|"같은 주제, 내용 다름"| CHG["🔄 달라짐&lt;br/&gt;→ '기존 A→이번 B' 안건화"]
+  Q --&gt;|"다른 작성자와 어긋남"| CONF["⚠️ 충돌&lt;br/&gt;→ 최우선, STATUS 충돌란"]
+
+  classDef d fill:#eee,stroke:#888
+  classDef n fill:#e9f4ec,stroke:#2C6E52
+  classDef c fill:#fdf3e7,stroke:#b7791f
+  classDef x fill:#f9ebe8,stroke:#b03a2e
+  class DUP d
+  class NEW n
+  class CHG c
+  class CONF x</code></pre>
+<ul>
+<li><strong>"실질 동일"</strong> 은 표현이 아니라 <strong>의미</strong> 기준(숫자·방식이 같으면 동일).</li>
+<li><strong>⚠️ 충돌</strong>은 <em>다른 작성자끼리</em> 어긋날 때만 — 최우선 처리.</li>
+<li><strong>멘토 피드백</strong>의 지적·요구는 자동으로 🆕 안건(우선순위 높음).</li>
+</ul>
+<h3 id="5-3-md">5-3. 산출물 스타일 규칙 (모든 md 공통)<a class="headerlink" href="#5-3-md" title="Permanent link">&para;</a></h3>
+<ul>
+<li>쉬운 말 우선 · 긴 설명보다 표·목록</li>
+<li><strong>흐름·구조·관계는 Mermaid 적극 활용</strong> (flowchart·erDiagram·sequenceDiagram·stateDiagram·gantt) — MkDocs Material에서 자동 렌더</li>
+<li>읽는 사람 = 비개발자 팀원 기준</li>
+</ul>
+<h3 id="5-4">5-4. 절대 금지 (안전 규칙)<a class="headerlink" href="#5-4" title="Permanent link">&para;</a></h3>
+<ul>
+<li>❌ <strong>facts/ 직접 수정 금지</strong> — 병입은 운영자 별도 명령으로만</li>
+<li>❌ <strong>원문에 없는 내용 지어내기 금지</strong> — 출처 없으면 버림</li>
+<li>❌ 애매하면 "확정후보"가 아니라 "제안"으로 (거짓 확정이 최악)</li>
+<li>❌ 질문.md 기존 안건 삭제 금지</li>
+</ul>
+<hr />
+<h2 id="6-bottling-facts">6. 병입(Bottling) — 확정 사실을 facts에 쌓는 절차<a class="headerlink" href="#6-bottling-facts" title="Permanent link">&para;</a></h2>
+<p>증류는 facts를 못 건드린다. <strong>오직 운영자의 "N번 확정 병입해줘" 명령</strong>만이 facts를 바꾼다.</p>
+<pre class="mermaid"><code>stateDiagram-v2
+  [*] --&gt; 제안: 증류가 주장 추출
+  제안 --&gt; 확정후보: 이의 없음
+  제안 --&gt; 안건: 충돌/미정
+  안건 --&gt; 회의: 결정 대기
+  확정후보 --&gt; 회의
+  회의 --&gt; 확정: 병입 명령
+  확정 --&gt; [*]: facts/ + 결정로그 기록
+  확정 --&gt; 변경: 뒤집힘(새 번호로 기록)
+  변경 --&gt; [*]</code></pre>
+<p><strong>병입 시 엔진(또는 클로드)이 하는 4가지:</strong>
+1. <code>facts/해당주제.md</code>에 추가 — 형식: <code>- 내용 (확정 YYYY-MM-DD, 출처: …, 결정 #k)</code>
+2. <code>facts/결정로그.md</code>에 1줄: <code>| #k | 날짜 | 결정 | 이유 |</code>
+3. <code>질문.md</code>에서 해당 안건 제거, <code>STATUS.md</code> 갱신
+4. <strong>뒤집힌 결정은 삭제하지 않고</strong> 결정로그에 새 번호로 "변경" 기록 (이력 보존)</p>
+<hr />
+<h2 id="7-mkdocs-github-pages">7. 출판 — MkDocs + GitHub Pages<a class="headerlink" href="#7-mkdocs-github-pages" title="Permanent link">&para;</a></h2>
+<p>facts가 웹 위키가 되는 마지막 단계. 핵심은 <strong>심볼릭 링크</strong>로 SSOT를 실시간 반영하는 것.</p>
+<pre class="mermaid"><code>flowchart LR
+  subgraph src["documents/ (SSOT·실제 파일)"]
+    H["홈.md"]
+    ST["STATUS.md"]
+    Q["질문.md"]
+    F["facts/*.md"]
+  end
+  subgraph wiki["wiki/ (심볼릭 링크)"]
+    L0["index.md → ../documents/홈.md"]
+    L1["현황판.md → ../documents/STATUS.md"]
+    L2["질문.md → ../documents/질문.md"]
+    L3["facts → ../documents/facts/"]
+  end
+  H -.link.-&gt; L0
+  ST -.link.-&gt; L1
+  Q -.link.-&gt; L2
+  F -.link.-&gt; L3
+  wiki --&gt;|"main push"| CI["GitHub Actions&lt;br/&gt;lint → strict build → gh-deploy"]
+  CI --&gt; GH["GitHub Pages&lt;br/&gt;jaymunsh.github.io/quantinue-wiki"]</code></pre>
+<ul>
+<li><strong><code>docs_dir: wiki</code></strong> — MkDocs는 <code>wiki/</code>만 읽음. 그 안은 <code>documents/</code>의 실제 파일로 향하는 심볼릭 링크라, <code>documents/</code>의 STATUS/질문/facts를 고치면 <strong>위키에 즉시 반영</strong>. (심볼릭 = 이름표만 다른 바로가기)</li>
+<li><strong>테마</strong> — Material · 한국어 · Noto Sans KR · Mermaid 활성화(<code>pymdownx.superfences</code>) · 상단바 <code>#232323</code>(extra.css).</li>
+<li><strong>로컬 미리보기</strong> — <code>mkdocs serve</code> → <code>http://localhost:8000</code> (자동 리로드).</li>
+<li><strong>배포 = main push</strong> — <code>.github/workflows/deploy.yml</code>이 lint → strict build → <code>gh-deploy</code>를 자동 수행(1~2분). 검증 실패 시 배포 자체가 안 되므로 깨진 사이트가 라이브에 올라갈 수 없다. 수동 폴백: <code>mkdocs gh-deploy --force</code>.</li>
+</ul>
+<h3 id="7-b-2">7-B. 자동화 2종 + 명령 하네스<a class="headerlink" href="#7-b-2" title="Permanent link">&para;</a></h3>
+<p>사람이 기억할 일을 시스템이 대신 지키는 장치들:</p>
+<table>
+<thead>
+<tr>
+<th>장치</th>
+<th>무엇을 자동화</th>
+<th>어디에</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>CI 배포</strong></td>
+<td>main push → lint·strict build 통과 시에만 배포. Queued 멈춤은 Actions 수동 재실행(workflow_dispatch)으로 해결</td>
+<td><code>.github/workflows/deploy.yml</code></td>
+</tr>
+<tr>
+<td><strong>정적 점검기</strong></td>
+<td>nav 커버리지·깨진 링크·심볼릭·NFC 충돌·결정번호 연속성·안건코드 정합·운영용어·낡은 참조를 몇 초에 기계 검사. <strong>엔진/설정(CONFIG) 분리</strong> — 다른 위키에 가져가면 CONFIG만 수정</td>
+<td><code>tools/lint.py</code></td>
+</tr>
+</tbody>
+</table>
+<p>클로드 코드 명령 (<code>.claude/commands/</code>):</p>
+<table>
+<thead>
+<tr>
+<th>명령</th>
+<th>하는 일</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/증류</code></td>
+<td>새 raw 파일 → 주장 추출·4분류 대조 → STATUS·질문 갱신</td>
+</tr>
+<tr>
+<td><code>/병입 &lt;내용&gt;</code></td>
+<td>확정 사실을 facts에 기록 + 결정 번호 부여</td>
+</tr>
+<tr>
+<td><code>/점검</code></td>
+<td>lint.py(기계) + LLM(판단) 2단 감사</td>
+</tr>
+<tr>
+<td><code>/배포</code></td>
+<td>lint·strict build → 커밋 확인 → push → Actions 배포 확인</td>
+</tr>
+<tr>
+<td><code>/에이전트갱신 &lt;이름&gt;</code></td>
+<td>quantinue repo 브랜치를 읽기전용 참조해 핵심 기능 페이지 갱신(참조 커밋 자동 추적)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="8">8. 디렉터리 구조 &amp; 파일 레퍼런스<a class="headerlink" href="#8" title="Permanent link">&para;</a></h2>
+<p>폴더는 <strong>역할별로 4갈래</strong>로 나뉜다: 📤 사이트 노출(<code>documents/</code>) · 📥 원본(<code>raw/</code>) · ⚙️ 엔진(<code>tools/</code>) · 🗄️ 안 보는 파일(<code>archive/</code>).</p>
+<div class="highlight"><pre><span></span><code>quantinue-wiki/
+├─ documents/            📤 사이트에 노출되는 것 = SSOT + 문서 (wiki가 이걸 가리킴)
+│  ├─ 홈.md                  🏠 사이트 첫 화면 — 프로젝트 소개 대시보드
+│  ├─ STATUS.md              운영 현황판 — 증류가 매번 재작성 (운영 섹션)
+│  ├─ 질문.md                회의 안건 — 증류가 누적
+│  ├─ 추천제안.md            🤖 AI 추천 제안 — 증류가 매번 재생성
+│  ├─ 산출물_현황판.md        산출물 추적
+│  ├─ 사용가이드.md           운영 절차 문서
+│  ├─ 시스템설명서.md         (이 문서) 시스템 동작 원리
+│  ├─ 업데이트로그.md         위키 변경 이력 (증류·병입마다 1줄)
+│  ├─ 회의록/                회의별 규격 요약 (결정·보류·액션)
+│  ├─ 에이전트/              에이전트별 코드 동작 설명 (개요 + Reviewer…)
+│  └─ facts/             ⭐ SSOT — 확정 사실(병입으로만 바뀜)
+│     ├─ MVP1차.md · 파이프라인.md · 데이터계약.md · 용어.md
+│     └─ 일정.md · 화면.md · 결정로그.md
+│
+├─ raw/                  📥 원본 문서 (불변 · 언제든 재증류)
+│  ├─ {공용,지현,창욱,은미,미연,성혁,멘토}/
+│  └─ 회의/                  회의 녹음 전사(txt) — 증류가 규격 회의록으로 변환
+│
+├─ CLAUDE.md             🤖 AI 세션 규칙 — 새 세션이 자동으로 읽는 운영 헌법
+├─ .claude/              🤖 하네스: commands/(/증류·/병입·/점검·/배포) + settings.json(권한)
+│
+├─ tools/                ⚙️ 증류 엔진
+│  ├─ distill.py             러너 (증분 스캔 · 백엔드 분기)
+│  ├─ distill_prompt.md      증류 규칙 = &quot;소스코드&quot;
+│  ├─ config.json            백엔드 선택·설정
+│  └─ .state.json            처리 이력(해시·회차) · gitignore
+│
+├─ archive/              🗄️ 사이트에 안 나오는 보관물
+│  ├─ briefings/             회차별 STATUS 사본 · API 원문 백업
+│  └─ (구자료·공지 원본 등)    무효화됐지만 보존하는 파일들
+│
+├─ wiki/                 🔗 MkDocs 소스 = documents/로 향하는 심볼릭 링크 + assets/extra.css
+├─ site/                 빌드 결과(배포 대상) · gitignore
+├─ mkdocs.yml            사이트 설정(nav·테마·mermaid)
+└─ *.command            더블클릭 실행기(증류실행·위키보기)
+</code></pre></div>
+<p><strong>어디를 만지고, 무엇이 자동인가:</strong></p>
+<table>
+<thead>
+<tr>
+<th>경로</th>
+<th>역할</th>
+<th>누가 씀</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>raw/{이름}/</code></td>
+<td>원본 문서 (불변)</td>
+<td>사람(드래그)</td>
+</tr>
+<tr>
+<td><code>documents/facts/*.md</code></td>
+<td><strong>SSOT — 확정 사실</strong> (파이프라인·데이터계약·MVP1차·일정·화면·결정로그)</td>
+<td>병입 명령만</td>
+</tr>
+<tr>
+<td><code>documents/홈.md</code></td>
+<td>사이트 첫 화면 (프로젝트 대시보드)</td>
+<td>수동</td>
+</tr>
+<tr>
+<td><code>documents/STATUS.md</code></td>
+<td>운영 현황판 (증류마다 전체 재작성)</td>
+<td>증류 엔진</td>
+</tr>
+<tr>
+<td><code>CLAUDE.md</code> · <code>.claude/</code></td>
+<td>AI 하네스 — 세션 규칙 자동 로드 + 슬래시 명령·권한</td>
+<td>사람</td>
+</tr>
+<tr>
+<td><code>documents/질문.md</code></td>
+<td>회의 안건 (누적, 병입 시 정리)</td>
+<td>증류 엔진</td>
+</tr>
+<tr>
+<td><code>documents/추천제안.md</code></td>
+<td>🤖 AI 추천 제안 (매 증류 재생성 · 루브릭은 distill_prompt)</td>
+<td>증류 엔진</td>
+</tr>
+<tr>
+<td><code>documents/산출물_현황판.md</code> · <code>사용가이드.md</code> · <code>시스템설명서.md</code></td>
+<td>사이트 문서</td>
+<td>수동</td>
+</tr>
+<tr>
+<td><code>documents/회의록/</code></td>
+<td>회의별 규격 요약</td>
+<td>증류(회의 전사)</td>
+</tr>
+<tr>
+<td><code>documents/에이전트/</code></td>
+<td>에이전트별 코드 동작 설명</td>
+<td>외부 repo 참조로 생성</td>
+</tr>
+<tr>
+<td><code>documents/업데이트로그.md</code></td>
+<td>위키 변경 이력</td>
+<td>증류·병입 시 1줄</td>
+</tr>
+<tr>
+<td><code>tools/distill.py</code></td>
+<td>증류 러너 (증분·백엔드 분기)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>tools/distill_prompt.md</code></td>
+<td><strong>증류 규칙 = 소스코드</strong></td>
+<td>규칙 수정 시 사람</td>
+</tr>
+<tr>
+<td><code>tools/config.json</code></td>
+<td>백엔드 선택·설정</td>
+<td>사람</td>
+</tr>
+<tr>
+<td><code>tools/.state.json</code></td>
+<td>처리 이력(해시·회차)</td>
+<td>엔진 자동</td>
+</tr>
+<tr>
+<td><code>archive/briefings/</code></td>
+<td>회차별 STATUS 사본·API 원문 백업</td>
+<td>엔진 자동</td>
+</tr>
+<tr>
+<td><code>archive/</code></td>
+<td>세션 메모 등 사이트에 안 보이는 파일</td>
+<td>수동</td>
+</tr>
+<tr>
+<td><code>wiki/</code></td>
+<td>MkDocs 소스(→documents/ 심볼릭) + <code>assets/extra.css</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>mkdocs.yml</code></td>
+<td>사이트 설정(nav·테마·mermaid)</td>
+<td>사람</td>
+</tr>
+<tr>
+<td><code>site/</code></td>
+<td>빌드 결과(배포 대상)</td>
+<td>엔진 자동</td>
+</tr>
+<tr>
+<td><code>*.command</code></td>
+<td>더블클릭 실행기(증류·위키보기)</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">일반 문서 외 특수 입력 2종</p>
+<ul>
+<li><strong>회의 전사</strong>(<code>raw/회의/*.txt</code>) — 일반 문서는 "제안→안건"이지만 회의는 <strong>결정의 원천</strong>. 증류가 규격 회의록(결정·보류·액션·맥락)을 만들고, 결정은 facts에 바로 안 쓰고 <strong>"병입 대기"로 제시</strong> → 운영자 승인 후 반영. (전사 오인식이 SSOT를 오염시키지 않게)</li>
+<li><strong>에이전트 코드</strong>(외부 <code>quantinue</code> repo) — raw에 안 넣고, 운영자가 "에이전트 X 갱신해줘" 하면 <strong>로컬 repo를 읽기 전용 참조</strong>해 <code>documents/에이전트/</code> 페이지 생성. 페이지에 <strong>참조 커밋 해시</strong>를 박아 "어느 시점 기준"인지 추적. 소스 원문이 아니라 정리된 설명만 위키에 올라감.</li>
+</ul>
+</div>
+<hr />
+<h2 id="9">9. 시스템이 보장하는 것 (불변식)<a class="headerlink" href="#9" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>불변식</th>
+<th>어떻게 지켜지나</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>raw는 절대 안 바뀐다</strong></td>
+<td>엔진은 raw를 읽기 전용으로만 연다</td>
+</tr>
+<tr>
+<td><strong>facts는 병입으로만 바뀐다</strong></td>
+<td>증류 프롬프트·에이전트 명령에 "facts 수정 금지" 명시</td>
+</tr>
+<tr>
+<td><strong>모든 확정엔 출처·결정번호가 있다</strong></td>
+<td>병입 형식이 <code>(확정 날짜, 출처, 결정 #k)</code> 강제</td>
+</tr>
+<tr>
+<td><strong>뒤집힌 결정도 흔적이 남는다</strong></td>
+<td>결정로그는 삭제 없이 새 번호로 "변경" 기록</td>
+</tr>
+<tr>
+<td><strong>같은 입력 → 재현 가능</strong></td>
+<td>raw 불변 + 해시 증분 + <code>.state.json</code> 리셋으로 전체 재증류</td>
+</tr>
+<tr>
+<td><strong>LLM을 바꿔도 규칙은 그대로</strong></td>
+<td>규칙은 <code>distill_prompt.md</code> 한 곳, 백엔드는 <code>config.json</code> 값 하나</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="10">10. 실패 모드 &amp; 대처<a class="headerlink" href="#10" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>증상</th>
+<th>원인</th>
+<th>대처</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>localhost:8000</code> 접속 안 됨</td>
+<td><code>mkdocs build</code>만 하고 서버 안 띄움</td>
+<td><code>mkdocs serve</code> (=<code>위키보기.command</code>) 실행</td>
+</tr>
+<tr>
+<td>증류가 파일을 안 잡음</td>
+<td>이미 같은 해시로 처리됨</td>
+<td>내용이 바뀌었나 확인 · 전체 재증류는 <code>.state.json</code> 삭제</td>
+</tr>
+<tr>
+<td>api형에서 파일 미수정</td>
+<td>응답 마커(<code>===STATUS===</code> 등) 깨짐</td>
+<td><code>archive/briefings/</code>의 원문 백업 확인 후 수동 반영</td>
+</tr>
+<tr>
+<td>증류 실패 후 재실행</td>
+<td>성공 시에만 상태 기록</td>
+<td>그냥 다시 실행하면 같은 파일 재시도</td>
+</tr>
+<tr>
+<td>Mermaid 안 그려짐</td>
+<td>코드펜스가 <code>```mermaid</code> 아님</td>
+<td>펜스 언어 확인 · <code>superfences</code> 설정 확인</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="11">11. 용어 사전<a class="headerlink" href="#11" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>주장(claim)</strong> — 문서에서 뽑은 "결정·수치·계약·일정" 한 조각. 증류의 최소 단위.</li>
+<li><strong>증류(distill)</strong> — raw 문서 → 주장 추출 → 대조 → STATUS/질문 갱신하는 자동 처리.</li>
+<li><strong>병입(bottling)</strong> — 확정된 주장을 facts에 담는 수동 절차(= 술을 병에 담듯).</li>
+<li><strong>SSOT</strong> — Single Source of Truth. 확정 사실의 유일한 출처(<code>facts/</code>).</li>
+<li><strong>멱등성</strong> — 같은 걸 두 번 해도 결과가 한 번(재투입 안전).</li>
+<li><strong>증분 처리</strong> — 전체가 아니라 "바뀐 것만" 처리(해시 기반).</li>
+<li><strong>벤더 중립</strong> — 특정 LLM 회사에 묶이지 않음(백엔드 교체 가능).</li>
+</ul>
+<hr />
+<blockquote>
+<p>📌 <strong>요약:</strong> DocStill은 <em>raw(불변) → 증류(자동, 규칙은 프롬프트) → STATUS/질문 → 병입(수동) → facts(SSOT) → MkDocs(웹)</em> 의 단방향 파이프라인이다. 사람은 딱 2곳(넣기·확정 판단)만 만지고, 나머지는 재현 가능하고 LLM에 독립적으로 자동화돼 있다.</p>
+</blockquote>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.indexes", "search.highlight", "content.tables.wrap"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\ud074\ub9bd\ubcf4\ub4dc\uc5d0 \ubcf5\uc0ac\ub428", "clipboard.copy": "\ud074\ub9bd\ubcf4\ub4dc\ub85c \ubcf5\uc0ac", "search.result.more.one": "\uc774 \ubb38\uc11c\uc5d0\uc11c 1\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.more.other": "\uc774 \ubb38\uc11c\uc5d0\uc11c #\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.none": "\uac80\uc0c9\uc5b4\uc640 \uc77c\uce58\ud558\ub294 \ubb38\uc11c\uac00 \uc5c6\uc2b5\ub2c8\ub2e4", "search.result.one": "1\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.other": "#\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.placeholder": "\uac80\uc0c9\uc5b4\ub97c \uc785\ub825\ud558\uc138\uc694", "search.result.term.missing": "\ud3ec\ud568\ub418\uc9c0 \uc54a\uc740 \uac80\uc0c9\uc5b4", "select.version": "\ubc84\uc804 \uc120\ud0dd"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,3331 @@
+
+<!doctype html>
+<html lang="ko" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="팀 여름이었다 · SSOT — 확정 기준은 이 위키">
+      
+      
+      
+      
+        <link rel="prev" href="../%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8/">
+      
+      
+        <link rel="next" href="../MVP1%EC%B0%A8/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>🔌 데이터 계약 - Quantinue-Wiki</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans KR";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="green" data-md-color-accent="green">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          콘텐츠로 이동
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="상단/헤더">
+    <a href="../.." title="Quantinue-Wiki" class="md-header__button md-logo" aria-label="Quantinue-Wiki" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Quantinue-Wiki
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              🔌 데이터 계약
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="green" data-md-color-accent="green"  aria-label="다크 모드"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="다크 모드" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="green" data-md-color-accent="green"  aria-label="라이트 모드"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="라이트 모드" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="검색" placeholder="검색" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="검색">
+        
+        <button type="reset" class="md-search__icon md-icon" title="지우기" aria-label="지우기" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            검색 초기화
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="네비게이션" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Quantinue-Wiki" class="md-nav__button md-logo" aria-label="Quantinue-Wiki" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Quantinue-Wiki
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🏠 홈
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    프로젝트
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    프로젝트
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🔄 파이프라인
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🔌 데이터 계약
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🔌 데이터 계약
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 전체 그림
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. 전체 그림">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pull" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        데이터가 흐르는 법 — Pull(우편함) 방식
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#erd-tb_daily_pick-50" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        테이블 관계 (ERD) — 중심은 tb_daily_pick (오늘의 50)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        테이블 목록 (실행 순서)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 공통 규칙
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-01-11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 테이블 스키마 레퍼런스 (01 → 11)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 테이블 스키마 레퍼런스 (01 → 11)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tb_universe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tb_universe
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tb_daily_pick" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tb_daily_pick
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tb_technical" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tb_technical
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tb_macro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tb_macro
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tb_disclosure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tb_disclosure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tb_news" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tb_news
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tb_strategist_signals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tb_strategist_signals
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tb_critic_verdict" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tb_critic_verdict
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tb_account-tb_order-tb_fill" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tb_account · tb_order · tb_fill
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tb_review_price_snapshots" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tb_review_price_snapshots
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tb_review" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tb_review
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tb_candle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        (확장) tb_candle
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-event_type-11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 공유 온톨로지 — event_type 11종 (공시·뉴스 공통 · 👤 소유자 정창욱)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 확정 현황
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MVP1%EC%B0%A8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🎯 MVP 1차 정의
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%EC%9A%A9%EC%96%B4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📖 용어 사전
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%EC%9D%BC%EC%A0%95/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📅 일정
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%ED%99%94%EB%A9%B4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🖥️ 화면
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    핵심 기능
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    핵심 기능
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8/core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ⚙️ Core · Infra
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8/info/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📰 Info Agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8/strategist/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🧠 Strategist Agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8/critic/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ⚖️ Critic Agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8/reviewer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📓 Reviewer Agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    협업
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    협업
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%B6%94%EC%B2%9C%EC%A0%9C%EC%95%88/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🤖 AI 추천 제안
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%A7%88%EB%AC%B8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ❓ 회의 안건
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../%ED%9A%8C%EC%9D%98%EB%A1%9D/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🗣️ 회의록
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_3" id="__nav_4_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    🗣️ 회의록
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%ED%9A%8C%EC%9D%98%EB%A1%9D/2026-07-09-2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    6차-2 (07-09)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%ED%9A%8C%EC%9D%98%EB%A1%9D/2026-07-09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    6차 (07-09)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%ED%9A%8C%EC%9D%98%EB%A1%9D/2026-07-08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    5차 (07-08)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%ED%9A%8C%EC%9D%98%EB%A1%9D/2026-07-06-2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4차-2 (07-06)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%ED%9A%8C%EC%9D%98%EB%A1%9D/2026-07-06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4차 (07-06)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%ED%9A%8C%EC%9D%98%EB%A1%9D/2026-07-03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3차 (07-03)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%ED%9A%8C%EC%9D%98%EB%A1%9D/2026-06-30/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1차 (06-30)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%EA%B2%B0%EC%A0%95%EB%A1%9C%EA%B7%B8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ✅ 결정 로그
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%97%85%EB%8D%B0%EC%9D%B4%ED%8A%B8%EB%A1%9C%EA%B7%B8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📜 업데이트 로그
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%82%B0%EC%B6%9C%EB%AC%BC/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📦 산출물 현황
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    운영
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    운영
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%ED%98%84%ED%99%A9%ED%8C%90/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📊 현황판
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EA%B0%80%EC%9D%B4%EB%93%9C/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📘 사용 가이드
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%EC%8B%9C%EC%8A%A4%ED%85%9C%EC%84%A4%EB%AA%85%EC%84%9C/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🛠️ 시스템 설명서
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 전체 그림
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. 전체 그림">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pull" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        데이터가 흐르는 법 — Pull(우편함) 방식
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#erd-tb_daily_pick-50" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        테이블 관계 (ERD) — 중심은 tb_daily_pick (오늘의 50)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        테이블 목록 (실행 순서)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 공통 규칙
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-01-11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 테이블 스키마 레퍼런스 (01 → 11)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 테이블 스키마 레퍼런스 (01 → 11)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tb_universe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tb_universe
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tb_daily_pick" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tb_daily_pick
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tb_technical" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tb_technical
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tb_macro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tb_macro
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tb_disclosure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tb_disclosure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tb_news" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tb_news
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tb_strategist_signals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tb_strategist_signals
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tb_critic_verdict" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tb_critic_verdict
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tb_account-tb_order-tb_fill" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tb_account · tb_order · tb_fill
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tb_review_price_snapshots" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tb_review_price_snapshots
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tb_review" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tb_review
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tb_candle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        (확장) tb_candle
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-event_type-11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 공유 온톨로지 — event_type 11종 (공시·뉴스 공통 · 👤 소유자 정창욱)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 확정 현황
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="_1">🔌 데이터 계약 (통합 스키마)<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+<div class="admonition abstract">
+<p class="admonition-title">🟡 부분 확정 (2026-07-06) · 14개 테이블</p>
+<p>김지현 「파이프라인 흐름순 상세 명세」의 ERD를 기준으로, schema keeper(성혁)가 팀 계약으로 정리. 각 테이블 = <strong>전체 컬럼 + 샘플 데이터 + 계약 노트</strong>. ⚠️ 표시만 회의에서 결정하면 완전 확정 → <strong><a href="../../%EC%A7%88%EB%AC%B8/">회의 안건</a></strong>.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">왜 제일 중요한가</p>
+<p>파이프라인은 각 파트가 데이터를 주고받아 돈다. <strong>필드 이름 하나·타입 하나만 어긋나도 SELECT/파싱이 깨져 전체가 멈춘다.</strong> 이 문서가 그 "주고받기 규칙(계약)".</p>
+</div>
+<hr />
+<h2 id="1">1. 전체 그림<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
+<h3 id="pull">데이터가 흐르는 법 — Pull(우편함) 방식<a class="headerlink" href="#pull" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>flowchart LR
+  subgraph 입력["각 팀 저장 (INSERT)"]
+    direction TB
+    T1[["📈 tb_technical&lt;br/&gt;&lt;i&gt;지현&lt;/i&gt;"]]
+    T2[["🌤️ tb_macro&lt;br/&gt;&lt;i&gt;지현&lt;/i&gt;"]]
+    T3[["📄 tb_disclosure&lt;br/&gt;&lt;i&gt;창욱&lt;/i&gt;"]]
+    T4[["📰 tb_news&lt;br/&gt;&lt;i&gt;창욱&lt;/i&gt;"]]
+    T5[["📓 tb_review&lt;br/&gt;&lt;i&gt;성혁&lt;/i&gt;"]]
+  end
+  입력 --&gt;|"SELECT / JOIN"| ST["🧠 Strategist&lt;br/&gt;&lt;i&gt;은미&lt;/i&gt;"]
+  ST --&gt;|INSERT| OUT[["⭐ tb_strategist_signals"]]
+  OUT --&gt; CR["Critic&lt;br/&gt;&lt;i&gt;미연&lt;/i&gt;"] --&gt; PM["리스크 → 주문·체결&lt;br/&gt;&lt;i&gt;지현&lt;/i&gt;"]</code></pre>
+<p>각 팀은 "저장"만 하고, 읽을 필드 선택은 Strategist가 한다.</p>
+<h3 id="erd-tb_daily_pick-50">테이블 관계 (ERD) — 중심은 <code>tb_daily_pick</code> (오늘의 50)<a class="headerlink" href="#erd-tb_daily_pick-50" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>erDiagram
+  tb_universe ||--o{ tb_daily_pick : "주1회 2,000 → 매일 50"
+  tb_daily_pick ||--|| tb_technical : "지표 1:1"
+  tb_daily_pick ||--o{ tb_disclosure : "공시 시계열 누적"
+  tb_daily_pick ||--o{ tb_news : "뉴스 시계열 누적"
+  tb_daily_pick ||--o{ tb_strategist_signals : "추천"
+  tb_macro ||--o{ tb_strategist_signals : "그날 국면"
+  tb_strategist_signals ||--o{ tb_critic_verdict : "반박"
+  tb_strategist_signals ||--o{ tb_order : "게이트 통과 → 주문"
+  tb_account ||--o{ tb_order : "계좌"
+  tb_order ||--o| tb_fill : "체결"
+  tb_strategist_signals ||--o{ tb_review_price_snapshots : "signal별 T+1~5 종가"
+  tb_review_price_snapshots ||--o| tb_review : "5개 다 모이면 회고 1건"</code></pre>
+<blockquote>
+<p><strong>까치발 기호:</strong> <code>||</code> 정확히 1개 · <code>o{</code> 0개 이상 · <code>o|</code> 0 또는 1개. 예: <code>tb_daily_pick ||--|| tb_technical</code> = 한 종목당 지표 딱 한 줄(1:1).
+(확장) 대용량 시계열 <code>tb_candle</code>은 나중에 분리 후보 — §3 끝 참조.</p>
+</blockquote>
+<h3 id="_2">테이블 목록 (실행 순서)<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>테이블</th>
+<th>무엇</th>
+<th>소유</th>
+<th>주기</th>
+<th>상태</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01</td>
+<td><a href="#tb_universe">tb_universe</a></td>
+<td>감시 유니버스 2,000</td>
+<td>김지현</td>
+<td>주1회</td>
+<td>🟢 확정</td>
+</tr>
+<tr>
+<td>02</td>
+<td><a href="#tb_technical">tb_technical</a></td>
+<td>기술 지표 (오늘의 50)</td>
+<td>김지현</td>
+<td>매일</td>
+<td>🟢 확정</td>
+</tr>
+<tr>
+<td>03</td>
+<td><a href="#tb_daily_pick">tb_daily_pick</a></td>
+<td>오늘의 50 선정 결과</td>
+<td>김지현</td>
+<td>매일</td>
+<td>🟢 확정</td>
+</tr>
+<tr>
+<td>04</td>
+<td><a href="#tb_macro">tb_macro</a></td>
+<td>시장 국면 (시장 전체)</td>
+<td>김지현</td>
+<td>1시간</td>
+<td>🟢 확정</td>
+</tr>
+<tr>
+<td>05</td>
+<td><a href="#tb_disclosure">tb_disclosure</a></td>
+<td>공시 분석</td>
+<td>정창욱</td>
+<td>1시간</td>
+<td>🟡 필드 협의</td>
+</tr>
+<tr>
+<td>06</td>
+<td><a href="#tb_news">tb_news</a></td>
+<td>뉴스 분석</td>
+<td>정창욱</td>
+<td>5분</td>
+<td>🟡 필드 협의</td>
+</tr>
+<tr>
+<td>07</td>
+<td><a href="#tb_strategist_signals">tb_strategist_signals</a></td>
+<td>전략 판단 (매수/보류)</td>
+<td>이은미</td>
+<td>장중 상시</td>
+<td>🟡 조율 중</td>
+</tr>
+<tr>
+<td>08</td>
+<td><a href="#tb_critic_verdict">tb_critic_verdict</a></td>
+<td>반박·검증</td>
+<td>김미연</td>
+<td>매일</td>
+<td>🔘 설계 예정</td>
+</tr>
+<tr>
+<td>09~10</td>
+<td><a href="#tb_account-tb_order-tb_fill">tb_account · tb_order · tb_fill</a></td>
+<td>계좌·주문·체결</td>
+<td>김지현</td>
+<td>매일</td>
+<td>🔘 설계 예정</td>
+</tr>
+<tr>
+<td>11a</td>
+<td><a href="#tb_review_price_snapshots">tb_review_price_snapshots</a></td>
+<td>회고용 T+1~5 종가 (signal별)</td>
+<td>문성혁</td>
+<td>매일 적재</td>
+<td>🟢 확정 (#11)</td>
+</tr>
+<tr>
+<td>11b</td>
+<td><a href="#tb_review">tb_review</a></td>
+<td>회고 (결과 채점·교훈)</td>
+<td>문성혁</td>
+<td>T+5 생성</td>
+<td>🟢 확정 (#9·#11 · 구현 착수)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="2">2. 공통 규칙<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+<th>상태</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>저장소</td>
+<td><strong>Postgres 1개</strong> — 표들이 FK로 촘촘히 엮여(대부분 tb_daily_pick 조인) 두 DB로 나누면 FK가 깨짐. 시계열(🕐)은 TimescaleDB hypertable 후보. candle은 메모리/CSV 캐시(DB 아님)</td>
+<td>🟢 ✅ 결정 #12</td>
+</tr>
+<tr>
+<td>테이블명</td>
+<td><code>tb_</code> 접두사 (✅ 결정 #1)</td>
+<td>⚠️ <code>_signals</code> 접미사 유무는 미정 — 이 문서는 파이프라인 명세(지현) 이름 기준</td>
+</tr>
+<tr>
+<td>판단 회차 키</td>
+<td><code>cycle_id</code> BIGINT — 오케스트레이터가 발급(팀 확인 중). 상류 테이블은 <code>trade_date</code>/<code>collected_at</code> 키 → <strong>매핑 규칙 미정</strong></td>
+<td>⚠️</td>
+</tr>
+<tr>
+<td>점수 스케일</td>
+<td><strong>신호 점수 0~1</strong> · <strong>conviction·문턱 0~10</strong> (서로 다름 주의!) · 매크로 risk_score만 <strong>0~100</strong> (✅ 결정 #6)</td>
+<td>⚠️ conviction도 0~1로 통일하자는 최신안(v3.0) 확정 대기 → <a href="../../%EC%A7%88%EB%AC%B8/">회의 안건</a></td>
+</tr>
+<tr>
+<td>투자유형</td>
+<td><code>inv_type='공격형'</code> 단일 (✅ 결정 #2)</td>
+<td>🟢</td>
+</tr>
+<tr>
+<td><strong>공통 컬럼</strong></td>
+<td><strong><code>created_at</code>(행 기록 시각) = 전 테이블 필수.</strong> <code>updated_at</code>(행 수정 시각) = <strong>상태가 바뀌는 <code>tb_account</code>·<code>tb_order</code> 2개만</strong> — 나머지는 append-only(덮어쓰기 ❌)라 불필요, 있으면 불변 원칙만 약화 (✅ 결정 #10, #8 변경)</td>
+<td>🟢</td>
+</tr>
+<tr>
+<td>전송 형식</td>
+<td>JSON(<code>model_dump_json()</code>) = DB row 한 줄 · <strong>core/schemas.py Pydantic 모델과 1:1</strong></td>
+<td>🟢</td>
+</tr>
+<tr>
+<td>LLM 모델</td>
+<td>분석가=싼 모델(mini급) · Strategist=상위 제안</td>
+<td>⚠️ 모델명 미정</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="3-01-11">3. 테이블 스키마 레퍼런스 (01 → 11)<a class="headerlink" href="#3-01-11" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>표 안 표기: 🔑 PK(기본키) · 🔗 FK(외래키) · ⭐ = <strong>Strategist가 판단에 쓰는 필수 필드</strong> · 🕐 = 시계열 누적
+<code>created_at</code>은 전 테이블 공통(생략 표기). <code>updated_at</code>은 <code>tb_account</code>·<code>tb_order</code>에만(결정 #10) — 두 표에서 명시.</p>
+</blockquote>
+<h3 id="tb_universe">tb_universe<a class="headerlink" href="#tb_universe" title="Permanent link">&para;</a></h3>
+<p><strong>감시 유니버스 2,000</strong> 🕐
+👤 소유자 <strong>김지현</strong> · 🔁 주1회 갱신 · 🔑 PK <code>(as_of_date, ticker)</code>
+NASDAQ 시총 top 2,000. 1차는 시총 컷만 — 페니주·유동성 컷은 03이 그날 가격으로 판정(그래서 last_price 저장 안 함).</p>
+<table>
+<thead>
+<tr>
+<th>컬럼</th>
+<th>타입</th>
+<th>키</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>as_of_date</td>
+<td>DATE</td>
+<td>🔑</td>
+<td>유니버스 갱신일(주1회)</td>
+</tr>
+<tr>
+<td>ticker</td>
+<td>TEXT</td>
+<td>🔑</td>
+<td>티커 (예: NVDA)</td>
+</tr>
+<tr>
+<td>company_name</td>
+<td>TEXT</td>
+<td></td>
+<td>회사 정식명</td>
+</tr>
+<tr>
+<td>market_cap</td>
+<td>BIGINT</td>
+<td></td>
+<td>시가총액 — top 2,000 정렬 기준(1차에서 쓰는 유일한 컷)</td>
+</tr>
+<tr>
+<td>sector</td>
+<td>TEXT</td>
+<td></td>
+<td>11 GICS 대분류 (국면 파악용, 분산 강제 아님)</td>
+</tr>
+<tr>
+<td>created_at</td>
+<td>TIMESTAMP</td>
+<td></td>
+<td>기록 시각</td>
+</tr>
+</tbody>
+</table>
+<details class="example">
+<summary>샘플 데이터 (이해용 가짜값)</summary>
+<table>
+<thead>
+<tr>
+<th>as_of_date</th>
+<th>ticker</th>
+<th>company_name</th>
+<th>market_cap</th>
+<th>sector</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2026-07-06</td>
+<td>NVDA</td>
+<td>NVIDIA Corporation</td>
+<td>3,200,000,000,000</td>
+<td>IT</td>
+</tr>
+<tr>
+<td>2026-07-06</td>
+<td>AAPL</td>
+<td>Apple Inc.</td>
+<td>3,050,000,000,000</td>
+<td>IT</td>
+</tr>
+<tr>
+<td>2026-07-06</td>
+<td>JPM</td>
+<td>JPMorgan Chase &amp; Co.</td>
+<td>620,000,000,000</td>
+<td>금융</td>
+</tr>
+<tr>
+<td>…</td>
+<td></td>
+<td>주1회 시총 내림차순 top 2,000행</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</details>
+<h3 id="tb_daily_pick">tb_daily_pick<a class="headerlink" href="#tb_daily_pick" title="Permanent link">&para;</a></h3>
+<p><strong>오늘의 50 (선정 결과)</strong> 🕐
+👤 소유자 <strong>김지현</strong> · 🔁 매일 · 🔑 PK <code>(trade_date, ticker)</code> · 🔗 FK→tb_universe
+공통필터 5개 + 5버킷(각 10) + 백필 = 50. "뽑혔다는 사실(버킷·순위)"만 담고, 지표 수치는 tb_technical에(1:1 분리).</p>
+<table>
+<thead>
+<tr>
+<th>컬럼</th>
+<th>타입</th>
+<th>키</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>trade_date</td>
+<td>DATE</td>
+<td>🔑</td>
+<td>선정 날짜</td>
+</tr>
+<tr>
+<td>ticker</td>
+<td>TEXT</td>
+<td>🔑🔗</td>
+<td>→ tb_universe.ticker</td>
+</tr>
+<tr>
+<td>bucket</td>
+<td>TEXT (ENUM 6값)</td>
+<td></td>
+<td>출신 버킷: 추세리더/거래량급증/신고가돌파/눌림목/스퀴즈돌파/백필 — 한 종목 = 한 버킷</td>
+</tr>
+<tr>
+<td>rank</td>
+<td>INT</td>
+<td></td>
+<td>버킷 내 순위 (1~10)</td>
+</tr>
+<tr>
+<td>sector</td>
+<td>TEXT</td>
+<td></td>
+<td>섹터 (tb_universe에서 복사)</td>
+</tr>
+<tr>
+<td>score</td>
+<td>NUMERIC</td>
+<td></td>
+<td>통합 모멘텀 점수(rs_20+vol_ratio+ret_20d) — 백필 정렬용</td>
+</tr>
+<tr>
+<td>created_at</td>
+<td>TIMESTAMP</td>
+<td></td>
+<td>기록 시각</td>
+</tr>
+</tbody>
+</table>
+<details class="example">
+<summary>샘플 데이터</summary>
+<table>
+<thead>
+<tr>
+<th>trade_date</th>
+<th>ticker</th>
+<th>bucket</th>
+<th>rank</th>
+<th>sector</th>
+<th>score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2026-07-06</td>
+<td>NVDA</td>
+<td>추세리더</td>
+<td>1</td>
+<td>IT</td>
+<td>87.3</td>
+</tr>
+<tr>
+<td>2026-07-06</td>
+<td>COIN</td>
+<td>거래량급증</td>
+<td>1</td>
+<td>금융</td>
+<td>82.0</td>
+</tr>
+<tr>
+<td>2026-07-06</td>
+<td>AVGO</td>
+<td>신고가돌파</td>
+<td>1</td>
+<td>IT</td>
+<td>79.9</td>
+</tr>
+<tr>
+<td>…</td>
+<td></td>
+<td>5버킷 × 각 10 + 백필 = 50행</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</details>
+<h3 id="tb_technical">tb_technical<a class="headerlink" href="#tb_technical" title="Permanent link">&para;</a></h3>
+<p><strong>기술 지표 (오늘의 50)</strong> 🕐
+👤 소유자 <strong>김지현</strong> · 🔁 매일 · 🔑 PK <code>(trade_date, ticker)</code> · tb_daily_pick과 <strong>1:1</strong>
+2,000개 캔들을 매일 배치 로드(~4분)해 지표를 한 번에 계산 → 필터·버킷 통과한 <strong>50행만 저장</strong>(나머지 1,950행 버림).</p>
+<table>
+<thead>
+<tr>
+<th>구분</th>
+<th>컬럼</th>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🔑 키</td>
+<td>trade_date · ticker</td>
+<td>DATE·TEXT</td>
+<td>🔑🔗 → tb_daily_pick</td>
+</tr>
+<tr>
+<td>기준가</td>
+<td>close</td>
+<td>NUMERIC</td>
+<td>오늘 종가 — 필터·손절·포지션사이징 기준</td>
+</tr>
+<tr>
+<td>선정용</td>
+<td>rs_20</td>
+<td>NUMERIC</td>
+<td>상대강도: 20일간 종목−S&amp;P500 수익률(%p). 0↑=시장보다 강함</td>
+</tr>
+<tr>
+<td>선정용</td>
+<td>vol_ratio</td>
+<td>NUMERIC</td>
+<td>거래량비: 오늘÷20일 평균 (2.0=평소의 2배)</td>
+</tr>
+<tr>
+<td>선정용</td>
+<td>ret_5d · ret_20d</td>
+<td>NUMERIC</td>
+<td>5일·20일 수익률(%) — 20d&gt;0 = 지속성 게이트</td>
+</tr>
+<tr>
+<td>선정용</td>
+<td>atr_pct</td>
+<td>NUMERIC</td>
+<td>변동성(ATR÷종가 %) — 상한 15%</td>
+</tr>
+<tr>
+<td>선정용</td>
+<td>high_252_ratio</td>
+<td>NUMERIC</td>
+<td>52주 고가 대비(1.0=신고가)</td>
+</tr>
+<tr>
+<td>판단용⭐</td>
+<td>rsi</td>
+<td>NUMERIC</td>
+<td>RSI(14) — 과열 70↑·과매도 30↓</td>
+</tr>
+<tr>
+<td>판단용⭐</td>
+<td>macd</td>
+<td>NUMERIC</td>
+<td>12−26일 이평 차 — +커지면 상승 모멘텀</td>
+</tr>
+<tr>
+<td>판단용⭐</td>
+<td>ma20 · ma50</td>
+<td>NUMERIC</td>
+<td>이동평균 — ma20&gt;ma50 정배열</td>
+</tr>
+<tr>
+<td>판단용⭐</td>
+<td>trend</td>
+<td>TEXT</td>
+<td>추세 라벨: <strong>상승/혼조/하락</strong></td>
+</tr>
+<tr>
+<td>2차</td>
+<td>ml_probs</td>
+<td>JSONB</td>
+<td>상승/보합/하락 확률 — <strong>1차 빈값 <code>{}</code></strong> (ML은 2차)</td>
+</tr>
+<tr>
+<td>공통</td>
+<td>created_at</td>
+<td>TIMESTAMP</td>
+<td>기록 시각</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>선정용 vs 판단용 = <strong>쓰이는 시점</strong> 차이(계산은 2,000행에서 함께). 앞은 종목 고를 때, 뒤는 "살까?" 판단할 때 Strategist·Critic이 씀.</p>
+</blockquote>
+<details class="example">
+<summary>샘플 데이터</summary>
+<table>
+<thead>
+<tr>
+<th>trade_date</th>
+<th>ticker</th>
+<th>close</th>
+<th>rs_20</th>
+<th>vol_ratio</th>
+<th>ret_20d</th>
+<th>atr_pct</th>
+<th>high_252</th>
+<th>rsi</th>
+<th>macd</th>
+<th>trend</th>
+<th>ml_probs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2026-07-06</td>
+<td>NVDA</td>
+<td>128.50</td>
+<td>+7.2</td>
+<td>2.4</td>
+<td>+15.3</td>
+<td>4.8</td>
+<td>0.98</td>
+<td>68</td>
+<td>+1.9</td>
+<td>상승</td>
+<td>{}</td>
+</tr>
+<tr>
+<td>2026-07-06</td>
+<td>MRNA</td>
+<td>92.10</td>
+<td>+5.1</td>
+<td>1.8</td>
+<td>+11.0</td>
+<td>6.2</td>
+<td>0.91</td>
+<td>61</td>
+<td>+0.7</td>
+<td>상승</td>
+<td>{}</td>
+</tr>
+</tbody>
+</table>
+</details>
+<h3 id="tb_macro">tb_macro<a class="headerlink" href="#tb_macro" title="Permanent link">&para;</a></h3>
+<p><strong>시장 국면 (시장 전체 — ticker 없음)</strong> 🕐
+👤 소유자 <strong>김지현</strong> · 🔁 1시간 · 🔑 PK <code>(as_of)</code>
+risk_score(0~100) = <code>0.40×VIX + 0.30×지수등락 + 0.15×금리 + 0.15×달러</code> → 구간으로 regime 판정 (✅ 결정 #6).</p>
+<table>
+<thead>
+<tr>
+<th>컬럼</th>
+<th>타입</th>
+<th>키</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>as_of</td>
+<td>TIMESTAMP</td>
+<td>🔑</td>
+<td>수집 시각(1시간 단위)</td>
+</tr>
+<tr>
+<td>regime ⭐</td>
+<td>TEXT (ENUM)</td>
+<td></td>
+<td>risk_on(≤30) / neutral(30~70) / risk_off(≥70)</td>
+</tr>
+<tr>
+<td>risk_score ⭐</td>
+<td>NUMERIC</td>
+<td></td>
+<td>0~100, 클수록 위험 — 가중합 결과</td>
+</tr>
+<tr>
+<td>vix</td>
+<td>NUMERIC</td>
+<td></td>
+<td>공포지수 원값 (가중 0.40 — 위험을 가장 직접 반영)</td>
+</tr>
+<tr>
+<td>nasdaq_ret · sp500_ret</td>
+<td>NUMERIC</td>
+<td></td>
+<td>지수 등락률(%)</td>
+</tr>
+<tr>
+<td>rate</td>
+<td>NUMERIC</td>
+<td></td>
+<td>미 국채 금리</td>
+</tr>
+<tr>
+<td>dollar</td>
+<td>NUMERIC</td>
+<td></td>
+<td>달러 강세 지표</td>
+</tr>
+<tr>
+<td>created_at</td>
+<td>TIMESTAMP</td>
+<td></td>
+<td>기록 시각</td>
+</tr>
+</tbody>
+</table>
+<details class="example">
+<summary>샘플 데이터 — 11시 VIX 급등 → neutral→risk_off 전환</summary>
+<table>
+<thead>
+<tr>
+<th>as_of</th>
+<th>regime</th>
+<th>risk_score</th>
+<th>vix</th>
+<th>nasdaq_ret</th>
+<th>rate</th>
+<th>dollar</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>07-06 09:00</td>
+<td>neutral</td>
+<td>55</td>
+<td>18.2</td>
+<td>−0.3</td>
+<td>4.30</td>
+<td>104.1</td>
+</tr>
+<tr>
+<td>07-06 10:00</td>
+<td>neutral</td>
+<td>58</td>
+<td>19.0</td>
+<td>−0.6</td>
+<td>4.31</td>
+<td>104.3</td>
+</tr>
+<tr>
+<td>07-06 11:00</td>
+<td><strong>risk_off</strong></td>
+<td><strong>72</strong></td>
+<td>24.5</td>
+<td>−1.8</td>
+<td>4.35</td>
+<td>104.9</td>
+</tr>
+<tr>
+<td>07-06 12:00</td>
+<td>risk_off</td>
+<td>70</td>
+<td>23.8</td>
+<td>−1.6</td>
+<td>4.34</td>
+<td>104.7</td>
+</tr>
+</tbody>
+</table>
+</details>
+<h3 id="tb_disclosure">tb_disclosure<a class="headerlink" href="#tb_disclosure" title="Permanent link">&para;</a></h3>
+<p><strong>공시 분석</strong> 🕐
+👤 소유자 <strong>정창욱</strong> · 🔁 1시간 간격(새 공시만 append) · 🔑 PK <code>(ticker, collected_at)</code> · 🔗 FK→tb_daily_pick
+같은 날 8-K가 여러 건 뜰 수 있어 <strong>덮어쓰기 ❌, 새 공시마다 새 행</strong>(accession 번호로 중복 제거). Strategist는 종목별 <strong>최신 행</strong>을 읽는다.</p>
+<table>
+<thead>
+<tr>
+<th>컬럼</th>
+<th>타입</th>
+<th>키</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ticker</td>
+<td>TEXT</td>
+<td>🔑🔗</td>
+<td>→ tb_daily_pick</td>
+</tr>
+<tr>
+<td>collected_at</td>
+<td>TIMESTAMP</td>
+<td>🔑</td>
+<td>수집(스냅샷) 시각 — 새 공시마다 새 행</td>
+</tr>
+<tr>
+<td>trade_date</td>
+<td>DATE</td>
+<td>🔗</td>
+<td>분석 기준일</td>
+</tr>
+<tr>
+<td>event_type ⭐</td>
+<td>TEXT</td>
+<td></td>
+<td>사건 종류 11종 (§4 온톨로지)</td>
+</tr>
+<tr>
+<td>sentiment_score ⭐</td>
+<td>NUMERIC 0~1</td>
+<td></td>
+<td>호재↔악재 강도 (1=강한 호재)</td>
+</tr>
+<tr>
+<td>importance ⭐</td>
+<td>NUMERIC 0~1</td>
+<td></td>
+<td>얼마나 큰일인가 (1=주가 흔들 대형)</td>
+</tr>
+<tr>
+<td>risk_score</td>
+<td>NUMERIC 0~1</td>
+<td></td>
+<td>위험도 (소송·규제·희석) — 호재/악재와 별개 축</td>
+</tr>
+<tr>
+<td>confidence</td>
+<td>NUMERIC 0~1</td>
+<td></td>
+<td>LLM 자기확신 (신뢰 가중용)</td>
+</tr>
+<tr>
+<td>hard_block ⭐</td>
+<td>INT 0/1</td>
+<td></td>
+<td>🛡️ <strong>1=매수 즉시 차단</strong> (파산·상폐·대규모 희석)</td>
+</tr>
+</tbody>
+</table>
+<details class="example">
+<summary>샘플 데이터 — NVDA는 하루 2건(오전·오후) → 2행</summary>
+<table>
+<thead>
+<tr>
+<th>ticker</th>
+<th>collected_at</th>
+<th>event_type</th>
+<th>sentiment</th>
+<th>importance</th>
+<th>risk</th>
+<th>hard_block</th>
+<th>reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NVDA</td>
+<td>07-02 10:05</td>
+<td>ma</td>
+<td>0.86 호재</td>
+<td>0.80</td>
+<td>0.30</td>
+<td>0</td>
+<td>35% 인수 프리미엄·전액 현금</td>
+</tr>
+<tr>
+<td>XYZ</td>
+<td>07-02 11:30</td>
+<td>delisting_halt</td>
+<td>0.05 악재</td>
+<td>0.90</td>
+<td>0.90</td>
+<td><strong>1</strong></td>
+<td>10-Q에 계속기업 불확실성</td>
+</tr>
+<tr>
+<td>NVDA</td>
+<td>07-02 14:10</td>
+<td>earnings</td>
+<td>0.72 호재</td>
+<td>0.70</td>
+<td>0.20</td>
+<td>0</td>
+<td>실적 컨센서스 상회 (오후 새 공시 → 새 행)</td>
+</tr>
+</tbody>
+</table>
+</details>
+<div class="admonition note">
+<p class="admonition-title">JSON Bundle 협의 (창욱 ↔ 지현)</p>
+<p>창욱 DisclosureBundle 원안 <strong>24필드 → 18필드 감축 제안</strong>: company_name·category(→tb_universe JOIN) · confirmed_score(공시는 항상 1.0) · fact_check·verdict(파생 중복) · ref(accession과 중복) 제거. reason·sentiment 라벨·summary·keywords 등은 유지. → 창욱 협의 후 core/schemas.py PR로 확정.</p>
+</div>
+<h3 id="tb_news">tb_news<a class="headerlink" href="#tb_news" title="Permanent link">&para;</a></h3>
+<p><strong>뉴스 분석</strong> 🕐
+👤 소유자 <strong>정창욱</strong> · 🔁 5분 간격(새 기사만 append) · 🔑 PK <code>(ticker, collected_at)</code> · 🔗 FK→tb_daily_pick
+새 기사가 뜰 때마다 "그 시점까지 오늘 뉴스 전체 재집계" 스냅샷을 append. 기사 없으면 안 씀(공시와 동일 구조, 매크로와 달리 이산적).</p>
+<table>
+<thead>
+<tr>
+<th>컬럼</th>
+<th>타입</th>
+<th>키</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ticker</td>
+<td>TEXT</td>
+<td>🔑🔗</td>
+<td>→ tb_daily_pick</td>
+</tr>
+<tr>
+<td>collected_at</td>
+<td>TIMESTAMP</td>
+<td>🔑</td>
+<td>수집 시각 — 새 기사마다 새 행</td>
+</tr>
+<tr>
+<td>trade_date</td>
+<td>DATE</td>
+<td>🔗</td>
+<td>분석 기준일</td>
+</tr>
+<tr>
+<td>event_type ⭐</td>
+<td>TEXT</td>
+<td></td>
+<td>11종 온톨로지 (공시와 공유)</td>
+</tr>
+<tr>
+<td>sentiment_score ⭐</td>
+<td>NUMERIC 0~1</td>
+<td></td>
+<td>오늘 뉴스 <strong>전체</strong>의 호재↔악재 (여러 건 평균)</td>
+</tr>
+<tr>
+<td>importance ⭐</td>
+<td>NUMERIC 0~1</td>
+<td></td>
+<td>전체 평균 중요도 (+ peak_importance로 대형 1건 방어)</td>
+</tr>
+<tr>
+<td>source_trust ⭐</td>
+<td>NUMERIC 0~1</td>
+<td></td>
+<td>출처 신뢰 — <strong>LLM이 내용까지 보고</strong> 판단 (사후·해석)</td>
+</tr>
+<tr>
+<td>confirmed_score ⭐</td>
+<td>NUMERIC 0~1</td>
+<td></td>
+<td>팩트 확인 비율 (확정÷전체, 예: 2/3=0.67)</td>
+</tr>
+<tr>
+<td>hard_block ⭐</td>
+<td>INT 0/1</td>
+<td></td>
+<td>🛡️ 1=매수 즉시 차단</td>
+</tr>
+</tbody>
+</table>
+<details class="example">
+<summary>샘플 데이터 — XYZ는 source_trust 0.30·confirmed 0 = 루머성</summary>
+<table>
+<thead>
+<tr>
+<th>ticker</th>
+<th>collected_at</th>
+<th>event_type</th>
+<th>sentiment</th>
+<th>importance</th>
+<th>source_trust</th>
+<th>confirmed</th>
+<th>count</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NVDA</td>
+<td>07-02 10:03</td>
+<td>earnings</td>
+<td>0.60 호재</td>
+<td>0.55</td>
+<td>0.88</td>
+<td>0.50</td>
+<td>2 (확정1·루머1)</td>
+</tr>
+<tr>
+<td>MRNA</td>
+<td>07-02 13:46</td>
+<td>regulation_legal</td>
+<td>0.89 호재</td>
+<td>0.90</td>
+<td>0.97</td>
+<td>1.00</td>
+<td>1 (확정1)</td>
+</tr>
+<tr>
+<td>XYZ</td>
+<td>07-02 12:05</td>
+<td>ma</td>
+<td>0.51 중립</td>
+<td>0.53</td>
+<td><strong>0.30</strong></td>
+<td><strong>0.00</strong></td>
+<td>2 (루머2)</td>
+</tr>
+<tr>
+<td>NVDA</td>
+<td>07-02 16:31</td>
+<td>earnings</td>
+<td>0.73 호재</td>
+<td>0.72</td>
+<td>0.91</td>
+<td>0.67</td>
+<td>3 (재집계 → 새 행)</td>
+</tr>
+</tbody>
+</table>
+</details>
+<div class="admonition note">
+<p class="admonition-title">JSON Bundle 협의 (창욱 ↔ 지현) + 필드 2개 축 구분</p>
+<p>NewsBundle 원안 <strong>31필드 → 28필드 감축 제안</strong> (company_name·category·verdict만 제거 — 나머지는 Strategist가 LLM이라 겹쳐 보이는 값도 비교에 유용해 유지).
+<strong>grade_score vs source_trust는 별개 축</strong>: grade=코드가 도메인만 보고 사전 관문(로이터 1.0/미등록 0.6/차단 0.0) · source_trust=LLM이 내용 보고 사후 해석.
+⚠️ 은미가 요청한 <strong>cross_source_confirmed</strong>(교차확인 +0.15)는 Bundle에 없음 → 신설 협의 → <a href="../../%EC%A7%88%EB%AC%B8/">회의 안건</a>.</p>
+</div>
+<h3 id="tb_strategist_signals">tb_strategist_signals<a class="headerlink" href="#tb_strategist_signals" title="Permanent link">&para;</a></h3>
+<p><strong>전략 판단 (매수/보류)</strong>
+👤 소유자 <strong>이은미</strong> · 🔁 장중 상시 · 🔑 PK <code>(id)</code> · 🔗 FK cycle_id · ticker→tb_daily_pick
+5신호 SELECT + 현재 시세 즉석 조회 → 코드게이트+GPT 샌드위치 → 판단 저장. Critic 설득용 payload 포함.</p>
+<table>
+<thead>
+<tr>
+<th>컬럼</th>
+<th>타입</th>
+<th>키</th>
+<th>설명</th>
+<th>예시</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>BIGSERIAL</td>
+<td>🔑</td>
+<td>행 고유번호</td>
+<td>1, 2, 3…</td>
+</tr>
+<tr>
+<td>cycle_id</td>
+<td>BIGINT</td>
+<td>🔗</td>
+<td>판단 사이클 — 원본 신호 연결 열쇠</td>
+<td>123</td>
+</tr>
+<tr>
+<td>ticker</td>
+<td>VARCHAR</td>
+<td>🔗</td>
+<td>종목</td>
+<td>NVDA</td>
+</tr>
+<tr>
+<td>inv_type</td>
+<td>VARCHAR</td>
+<td></td>
+<td>투자유형 (공격형 단일)</td>
+<td>공격형</td>
+</tr>
+<tr>
+<td>side ⭐</td>
+<td>VARCHAR</td>
+<td></td>
+<td>최종 결정</td>
+<td>매수/매도/보류</td>
+</tr>
+<tr>
+<td>conviction ⭐</td>
+<td>NUMERIC(3,1)</td>
+<td></td>
+<td>확신 0~10 (min_conviction 5.0 미달 → 보류 강등)</td>
+<td>8.5</td>
+</tr>
+<tr>
+<td>signal_consensus</td>
+<td>SMALLINT</td>
+<td></td>
+<td>매수 방향 신호 개수 0~4 (필요 합의 2/4)</td>
+<td>4</td>
+</tr>
+<tr>
+<td>summary</td>
+<td>TEXT</td>
+<td></td>
+<td>한 줄 요약 (Critic이 빠르게 파악)</td>
+<td>"4개 전원 매수"</td>
+</tr>
+<tr>
+<td>bull_case</td>
+<td>TEXT</td>
+<td></td>
+<td>매수 근거 상세 (설득 핵심)</td>
+<td>"①인수 ②실적…"</td>
+</tr>
+<tr>
+<td>key_risk</td>
+<td>TEXT</td>
+<td></td>
+<td>스스로 인정한 핵심 위험 (신뢰↑)</td>
+<td>"프리미엄 과다"</td>
+</tr>
+<tr>
+<td>risk_rebuttal</td>
+<td>TEXT</td>
+<td></td>
+<td>그 위험에 대한 반박·방어</td>
+<td>"교차확인+차단없음"</td>
+</tr>
+<tr>
+<td>counter_scenarios</td>
+<td>JSONB</td>
+<td></td>
+<td>틀렸을 때 대응책 (배열)</td>
+<td>["무산 시 -5% 손절"]</td>
+</tr>
+<tr>
+<td>evidence</td>
+<td>JSONB</td>
+<td></td>
+<td>숫자 증거 묶음</td>
+<td>{cross_source_confirmed:1}</td>
+</tr>
+<tr>
+<td>sizing_hint</td>
+<td>JSONB</td>
+<td></td>
+<td>PM에게 주는 크기 제안 (최종은 PM)</td>
+<td>{suggested_weight:0.03}</td>
+</tr>
+<tr>
+<td>persona_notes</td>
+<td>TEXT·null</td>
+<td></td>
+<td>투자 거장 관점 (2차, 지금 null)</td>
+<td>null</td>
+</tr>
+<tr>
+<td>created_at</td>
+<td>TIMESTAMPTZ</td>
+<td></td>
+<td>저장 시각 (타임존 포함)</td>
+<td>07-03 08:30</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="admonition-title">조율 중 (지현 ↔ 은미)</p>
+<p>① <strong>현재 시세</strong> — 은미 문서엔 없음, 즉석 조회 추가 필요("정보 2층 구조": 느린 층=DB, 빠른 층=시세 즉석 1회) · ② 상류 키(trade_date) ↔ cycle_id 매핑 → <a href="../../%EC%A7%88%EB%AC%B8/">회의 안건</a></p>
+</div>
+<h3 id="tb_critic_verdict">tb_critic_verdict<a class="headerlink" href="#tb_critic_verdict" title="Permanent link">&para;</a></h3>
+<p><strong>반박·검증</strong> 🔘 설계 예정
+👤 소유자 <strong>김미연</strong> · 🔁 매일 · 🔑 PK <code>(id)</code> · 🔗 FK→tb_strategist_signals
+한 추천에 반박이 여러 번 쌓일 수 있어 별도 테이블. 1차 = 단일턴(거절 시 스킵) · 2차 = 멀티턴 재제안. 최근 기각 종목은 N일 재제안 억제(쿨다운).</p>
+<table>
+<thead>
+<tr>
+<th>컬럼</th>
+<th>타입</th>
+<th>키</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>BIGINT</td>
+<td>🔑</td>
+<td>검증 고유 id</td>
+</tr>
+<tr>
+<td>signal_id</td>
+<td>BIGINT</td>
+<td>🔗</td>
+<td>→ tb_strategist_signals</td>
+</tr>
+<tr>
+<td>agree</td>
+<td>BOOL</td>
+<td></td>
+<td>추천 동의 여부</td>
+</tr>
+<tr>
+<td>objection</td>
+<td>TEXT</td>
+<td></td>
+<td>반론 내용</td>
+</tr>
+<tr>
+<td>confidence</td>
+<td>NUMERIC</td>
+<td></td>
+<td>반박 확신도</td>
+</tr>
+</tbody>
+</table>
+<h3 id="tb_account-tb_order-tb_fill">tb_account · tb_order · tb_fill<a class="headerlink" href="#tb_account-tb_order-tb_fill" title="Permanent link">&para;</a></h3>
+<p><strong>계좌·주문·체결 (Alpaca 페이퍼)</strong> 🔘 설계 예정 — Alpaca API 연동 후 컬럼 확정
+👤 소유자 <strong>김지현</strong> · 🔁 매일</p>
+<table>
+<thead>
+<tr>
+<th>테이블</th>
+<th>담는 것</th>
+<th>키</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>tb_account</td>
+<td>5인 각 계좌 잔고·보유 (시드 각 1억 상당)</td>
+<td>🔑 id · <strong>+updated_at</strong>(체결마다 잔고 갱신)</td>
+</tr>
+<tr>
+<td>tb_order</td>
+<td>매수/매도 주문 (종목·수량·유형·상태)</td>
+<td>🔑 id · 🔗 tb_strategist_signals·tb_account · <strong>+updated_at</strong>(제출→체결/취소 전이)</td>
+</tr>
+<tr>
+<td>tb_fill</td>
+<td>체결 기록 (체결가·수량·시각)</td>
+<td>🔑 id · 🔗 tb_order (append-only)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="tb_review_price_snapshots">tb_review_price_snapshots<a class="headerlink" href="#tb_review_price_snapshots" title="Permanent link">&para;</a></h3>
+<p><strong>회고용 T+1~5 종가 (중간 테이블)</strong> · 갱신 2026-07-06 (결정 #11)
+👤 소유자 <strong>문성혁</strong> · 🔁 매일 장마감 배치 — 회고 대기 signal의 종가를 하루 1개씩 적재 · 🔑 PK <code>(signal_id, day_offset)</code>
+<strong>왜 별도 테이블인가:</strong> <code>tb_technical.close</code>는 그날 <strong>오늘의 50만</strong> 담는다 → 판단한 종목이 T+1/3/5에 50 밖으로 빠지면 종가를 못 구함. 그래서 Strategist가 실제 판단한 signal만 T+1~5 종가를 따로 추적한다(전체 유니버스 저장 아님).</p>
+<table>
+<thead>
+<tr>
+<th>컬럼</th>
+<th>타입</th>
+<th>키</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>signal_id</td>
+<td>BIGINT</td>
+<td>🔑🔗</td>
+<td>→ tb_strategist_signals.id</td>
+</tr>
+<tr>
+<td>day_offset</td>
+<td>INT</td>
+<td>🔑</td>
+<td>1~5 (판단일 기준 영업일 수)</td>
+</tr>
+<tr>
+<td>price_date</td>
+<td>DATE</td>
+<td></td>
+<td>그 종가의 실제 날짜</td>
+</tr>
+<tr>
+<td>close</td>
+<td>NUMERIC</td>
+<td></td>
+<td>종가</td>
+</tr>
+<tr>
+<td>source</td>
+<td>TEXT</td>
+<td></td>
+<td>출처 (yfinance/Finnhub 등)</td>
+</tr>
+<tr>
+<td>created_at</td>
+<td>TIMESTAMPTZ</td>
+<td></td>
+<td>적재 시각 (idempotent upsert — 같은 날 재실행해도 같은 행만 갱신)</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>적재 배치(매일):</strong> 회고 없는 signal 중 오늘이 T+1~5인 것만 종가 조회 → upsert. LLM·채점 호출 안 함. 5개 다 모이면 그 signal은 회고 가능 상태.</p>
+</blockquote>
+<details class="example">
+<summary>샘플 — signal 987이 T+1~5 쌓이는 모습</summary>
+<table>
+<thead>
+<tr>
+<th>signal_id</th>
+<th>day_offset</th>
+<th>price_date</th>
+<th>close</th>
+<th>source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>987</td>
+<td>1</td>
+<td>2026-07-07</td>
+<td>101.20</td>
+<td>yfinance</td>
+</tr>
+<tr>
+<td>987</td>
+<td>2</td>
+<td>2026-07-08</td>
+<td>99.50</td>
+<td>yfinance</td>
+</tr>
+<tr>
+<td>987</td>
+<td>3</td>
+<td>2026-07-09</td>
+<td>98.00</td>
+<td>yfinance</td>
+</tr>
+<tr>
+<td>987</td>
+<td>4</td>
+<td>2026-07-10</td>
+<td>102.00</td>
+<td>yfinance</td>
+</tr>
+<tr>
+<td>987</td>
+<td>5</td>
+<td>2026-07-13</td>
+<td>103.10</td>
+<td>yfinance</td>
+</tr>
+</tbody>
+</table>
+<p><code>close</code>는 각 날짜의 <strong>실제 종가</strong>(P0 대비 변환값 아님). P0(매수=체결가 $100)는 Scorer가 수익률 계산 때 적용 → ret_5d = (103.10−100)/100 = <strong>+3.1%</strong>.</p>
+</details>
+<h3 id="tb_review">tb_review<a class="headerlink" href="#tb_review" title="Permanent link">&para;</a></h3>
+<p><strong>회고 (결과 채점 + 교훈)</strong> · 갱신 2026-07-06 (담당 확정 · 결정 #9·#11 · 구현 착수)
+👤 소유자 <strong>문성혁</strong> · 🔁 T+5 배치 — snapshot 5개 모인 판단을 확정 채점 · 🔑 PK <code>(id)</code> · 🔗 FK signal_id→tb_strategist_signals
+<strong>판단 데이터는 복사하지 않는다</strong> — signal_id JOIN으로 side·conviction·근거 전부 도달. T+1~5 종가는 <code>tb_review_price_snapshots</code>에서 JOIN. ⑪이 새로 만드는 값(결과·교훈)만 저장. <strong>1차 observe-only.</strong>
+<strong>Critic 미참조</strong> — 최종 판단 책임은 Strategist signal에 있으므로(초안→Critic 반박→Strategist 최종) 회고는 최종 결정만 평가. Critic 품질 평가는 2차 별도 축.</p>
+<table>
+<thead>
+<tr>
+<th>컬럼</th>
+<th>타입</th>
+<th>키</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>BIGSERIAL</td>
+<td>🔑</td>
+<td>회고 고유 id</td>
+</tr>
+<tr>
+<td>signal_id</td>
+<td>BIGINT</td>
+<td>🔗 <strong>UNIQUE</strong></td>
+<td>→ tb_strategist_signals.id — 판단 1건 = 회고 1건 (멱등성)</td>
+</tr>
+<tr>
+<td>ret_1d · ret_3d · ret_5d</td>
+<td>NUMERIC</td>
+<td></td>
+<td>판단 후 전방 수익률(%) — 기준가 P0: 매수=체결가·보류=판단일 종가</td>
+</tr>
+<tr>
+<td>hit</td>
+<td>BOOL</td>
+<td></td>
+<td>방향 적중 — 매수: ret_5d&gt;0 · 보류: ret_5d≤0 ("안 사길 잘했다")</td>
+</tr>
+<tr>
+<td>max_drawdown</td>
+<td>NUMERIC</td>
+<td></td>
+<td>5일 중 최저 종가 기준 최대 낙폭(%) — 손절 −15% 대비 여유</td>
+</tr>
+<tr>
+<td>lesson</td>
+<td>TEXT</td>
+<td></td>
+<td><strong>상세 교훈 3~5문장</strong> — Reflector(LLM) 생성. 판단근거 + T+1/3/5 흐름 + 다음 행동 규칙 포함, 숫자 인용 필수·일반론 금지. (한 줄 아님 — 다음 Strategist가 메모리로 재사용하려면 맥락이 필요)</td>
+</tr>
+<tr>
+<td>created_at</td>
+<td>TIMESTAMPTZ</td>
+<td></td>
+<td>기록 시각 — <strong>완전 insert-once</strong>(Scorer+Reflector 한 배치 완성, 실패 시 통째 재시도)라 updated_at 없음</td>
+</tr>
+</tbody>
+</table>
+<details class="example">
+<summary>샘플 데이터 + lesson 예시 (상세)</summary>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>signal_id</th>
+<th>ret_1d</th>
+<th>ret_3d</th>
+<th>ret_5d</th>
+<th>hit</th>
+<th>max_drawdown</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>41</td>
+<td>987</td>
+<td>+1.2</td>
+<td>−2.0</td>
+<td>+3.1</td>
+<td>true</td>
+<td>−2.0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>lesson (id 41):</strong> "NVDA buy 판단은 T+1 +1.2%, T+3 −2.0%, T+5 +3.1%로 최종 적중. 중간 −2.0% 눌림에도 key_risk였던 단기 과열은 실제 훼손으로 이어지지 않았고, 실적·수급 bull_case가 T+5까지 설명력을 유지했다. 다음 판단에서 실적·수급 근거가 유지되는 buy는 T+3 수준 단기 조정만으로 철회하지 않는다."</p>
+</details>
+<div class="admonition note">
+<p class="admonition-title">남은 확인 (회의)</p>
+<p>은미 소비 스펙 충족 확인(B8) · NO_TRADE 회고 범위·1차 메모리 주입 여부(B11-③④) → <strong><a href="../../%EC%A7%88%EB%AC%B8/">회의 안건</a></strong>. (P0·T+5·Critic 미참조는 #11로 확정)</p>
+</div>
+<h3 id="tb_candle">(확장) tb_candle<a class="headerlink" href="#tb_candle" title="Permanent link">&para;</a></h3>
+<p>대용량 시계열 캔들 🕐 · PK <code>(ts, ticker)</code> · open/high/low/close/volume — <strong>1차엔 DB 저장 안 함</strong>(메모리/CSV 캐시). 확장 시 hypertable 분리 후보.</p>
+<hr />
+<h2 id="4-event_type-11">4. 공유 온톨로지 — event_type 11종 (공시·뉴스 공통 · 👤 소유자 정창욱)<a class="headerlink" href="#4-event_type-11" title="Permanent link">&para;</a></h2>
+<p><code>earnings · guidance_change · ma · capital_raise · management_change · insider_trade · product_deal · analyst_rating · regulation_legal · delisting_halt · other</code></p>
+<blockquote>
+<p>하드리스크(거래정지·파산·상폐·회계문제·희석)는 event_type과 별개로 <strong>hard_block=1</strong>로 강제. Strategist·게이트가 최우선 존중.</p>
+</blockquote>
+<hr />
+<h2 id="5">5. 확정 현황<a class="headerlink" href="#5" title="Permanent link">&para;</a></h2>
+<p>확정된 결정과 이유는 <strong><a href="../%EA%B2%B0%EC%A0%95%EB%A1%9C%EA%B7%B8/">결정 로그</a></strong>, 남은 결정(⚠️ 필드들)의 상세와 논의 배경은 <strong><a href="../../%EC%A7%88%EB%AC%B8/">회의 안건</a></strong> 한 곳에서만 관리한다. 회의에서 남은 항목만 정하면 이 문서가 <strong>완전 확정 데이터 계약</strong>이 된다.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.indexes", "search.highlight", "content.tables.wrap"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\ud074\ub9bd\ubcf4\ub4dc\uc5d0 \ubcf5\uc0ac\ub428", "clipboard.copy": "\ud074\ub9bd\ubcf4\ub4dc\ub85c \ubcf5\uc0ac", "search.result.more.one": "\uc774 \ubb38\uc11c\uc5d0\uc11c 1\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.more.other": "\uc774 \ubb38\uc11c\uc5d0\uc11c #\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.none": "\uac80\uc0c9\uc5b4\uc640 \uc77c\uce58\ud558\ub294 \ubb38\uc11c\uac00 \uc5c6\uc2b5\ub2c8\ub2e4", "search.result.one": "1\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.other": "#\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.placeholder": "\uac80\uc0c9\uc5b4\ub97c \uc785\ub825\ud558\uc138\uc694", "search.result.term.missing": "\ud3ec\ud568\ub418\uc9c0 \uc54a\uc740 \uac80\uc0c9\uc5b4", "select.version": "\ubc84\uc804 \uc120\ud0dd"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
