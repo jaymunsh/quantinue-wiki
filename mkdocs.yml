@@ -21,6 +21,8 @@ theme:
   features:
     - navigation.sections
     - navigation.indexes    # 섹션 제목 클릭 시 개요(index) 페이지 표시
+    - navigation.top
+    - toc.follow
     - search.highlight
     - content.tables.wrap
 
@@ -29,25 +31,34 @@ extra_css:
 
 nav:
   - 🏠 홈: index.md
-  - 프로젝트:
-      - 🔄 파이프라인: facts/파이프라인.md
-      - 🔌 데이터 계약: facts/데이터계약.md
-      - 🎯 MVP 1차 정의: facts/MVP1차.md
-      - 📖 용어 사전: facts/용어.md
-      - 📅 일정: facts/일정.md
-      - 🖥️ 화면: facts/화면.md
-  - 핵심 기능:
-      - 에이전트/index.md
-      - ⚙️ Core · Infra: 에이전트/core.md
-      - 📰 Info Agent: 에이전트/info.md
-      - 🧠 Strategist Agent: 에이전트/strategist.md
-      - ⚖️ Critic Agent: 에이전트/critic.md
-      - 📓 Reviewer Agent: 에이전트/reviewer.md
-  - 협업:
+  - 최종 프로젝트:
+      - 🧭 한눈에 보기: facts/최종프로젝트.md
+      - 🛠️ 개발 시작하기: 개발시작하기.md
+      - 🗺️ 코드맵: 코드맵.md
+      - 🔌 API·화면 계약: API계약.md
+      - 🎬 최종 발표·자료: 최종발표.md
+      - 🗓️ 실제 하루: 실제하루.md
+      - 📈 검증 결과와 한계: 운영검증.md
+  - 시스템:
+      - 🧱 아키텍처 개요: 최종시스템.md
+      - ⚙️ JOB·파이프라인: 파이프라인.md
+      - 🗃️ 데이터 모델·ERD: 데이터모델.md
+      - 📚 전체 데이터 사전: 데이터사전.md
+      - 🎛️ 설정·정책 기준: 설정정책.md
+      - 🛡️ AI 판단·안전장치: AI안전장치.md
+      - 🔗 데이터·판단 계보: 데이터계보.md
+      - 👥 역할·협업 계약: 역할협업계약.md
+  - 운영·인수인계:
+      - 📊 운영 현황: 현황판.md
+      - 📘 운영 가이드: 운영가이드.md
+  - 프로젝트 기록:
+      - 📦 최종 산출물: 산출물.md
+      - ✅ 결정 로그: facts/결정로그.md
       - 🤖 AI 추천 제안: 추천제안.md
-      - ❓ 회의 안건: 질문.md
+      - ❓ 논의 기록: 질문.md
       - 🗣️ 회의록:
           - 목록: 회의록/index.md
+          - 7차 (07-10): 회의록/2026-07-10.md
           - 6차-2 (07-09): 회의록/2026-07-09-2.md
           - 6차 (07-09): 회의록/2026-07-09.md
           - 5차 (07-08): 회의록/2026-07-08.md
@@ -55,13 +66,25 @@ nav:
           - 4차 (07-06): 회의록/2026-07-06.md
           - 3차 (07-03): 회의록/2026-07-03.md
           - 1차 (06-30): 회의록/2026-06-30.md
-      - ✅ 결정 로그: facts/결정로그.md
       - 📜 업데이트 로그: 업데이트로그.md
-      - 📦 산출물 현황: 산출물.md
-  - 운영:
-      - 📊 현황판: 현황판.md
-      - 📘 사용 가이드: 가이드.md
-      - 🛠️ 시스템 설명서: 시스템설명서.md
+      - 📅 프로젝트 일정: facts/일정.md
+  - 아카이브:
+      - MVP 1차 (동결):
+          - 🎯 MVP 1차 정의: facts/MVP1차.md
+          - 🔄 파이프라인 (1차): facts/파이프라인.md
+          - 🔌 데이터 계약 (1차): facts/데이터계약.md
+          - 📖 용어 사전 (1차): facts/용어.md
+          - 🖥️ 화면 (1차): facts/화면.md
+          - 🧩 구성요소 참고 (1차 역할):
+              - 에이전트/index.md
+              - ⚙️ Core · Infra: 에이전트/core.md
+              - 📰 Info Agent: 에이전트/info.md
+              - 🧠 Strategist Agent: 에이전트/strategist.md
+              - ⚖️ Critic Agent: 에이전트/critic.md
+              - 📓 Reviewer Agent: 에이전트/reviewer.md
+  - 위키 운영:
+      - 📘 DocStill 사용 가이드: 가이드.md
+      - 🛠️ DocStill 시스템 설명서: 시스템설명서.md
 
 markdown_extensions:
   - admonition
