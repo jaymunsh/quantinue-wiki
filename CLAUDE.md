@@ -18,7 +18,7 @@ documents/         사이트 노출 = SSOT. STATUS·질문·산출물·홈·회�
 archive/           사이트에 안 보이는 보관물 (briefings, 구자료)
 tools/             증류 엔진. distill_prompt.md = 규칙 소스코드, distill.py = 러너
 wiki/              MkDocs docs_dir — documents/로 향하는 심볼릭 링크만 있음
-mkdocs.yml         nav 3구역: 프로젝트 / 협업 / 운영
+mkdocs.yml         nav = 상단 탭 6개: 홈 / 프로젝트 / 시스템 / 개발·운영 / 기록 / 아카이브
 ```
 
 - `tools/distill.py`는 `documents/`·`archive/` 경로를 하드코딩(DOCS·ARCHIVE 상수) — 파일을 옮기면 여기도 같이 고칠 것.
