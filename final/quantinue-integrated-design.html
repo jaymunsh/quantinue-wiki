@@ -1,0 +1,2359 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quantinue 최종 프로젝트 설계서 · 팀 여름이었다</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="icon" href="assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="assets/quantinue-q-master.svg">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon-180.png">
+<script>/* 초기 테마 (깜빡임 방지) */(function(){try{const t=localStorage.getItem('q-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<style>
+  :root{
+    /* 바탕·잉크 (라이트) */
+    --bg:#FBFBFD; --surface:#FFFFFF; --surface-2:#F4F6F9;
+    --ink:#14181F; --ink-soft:#5A6472; --ink-faint:#8A93A0;
+    --line:#E4E7EC; --line-soft:#EEF1F5;
+    /* 구조·브랜드 */
+    --navy:#07152F; --teal:#0B4DDB; --teal-bright:#2F7BFF; --teal-bg:#E8EFFC;
+    /* 의미 상태색 */
+    --buy:#1A7F4B; --buy-bg:#E4F5EC;
+    --hold:#B7791F; --hold-bg:#FBF1DC;
+    --risk:#C4362F; --risk-bg:#FBE7E6;
+    --info:#2563EB; --info-bg:#E7EEFE;
+    --ai:#7C3AED; --ai-bg:#F1E9FE;
+    /* 치수·글꼴 */
+    --rail:288px; --measure:840px; --radius:14px; --radius-sm:9px;
+    --shadow:0 1px 2px rgba(20,24,31,.04),0 8px 24px rgba(20,24,31,.05);
+    --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",system-ui,sans-serif;
+  }
+  /* ── 다크 토큰 ── */
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+    --bg:#0E1116; --surface:#161B22; --surface-2:#1C232D;
+    --ink:#E6E9EF; --ink-soft:#9AA4B2; --ink-faint:#6E7A8A;
+    --line:#28303B; --line-soft:#1E252F;
+    --navy:#9DB4E8; --teal:#4C8DFF; --teal-bright:#6BA5FF; --teal-bg:#12233F;
+    --buy:#4ADE80; --buy-bg:#122A1E; --hold:#E0B04A; --hold-bg:#2C2510;
+    --risk:#F87171; --risk-bg:#2C1516; --info:#6AA0FF; --info-bg:#16213A;
+    --ai:#B794F6; --ai-bg:#241A38;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);
+  }}
+  :root[data-theme="dark"]{
+    --bg:#0E1116; --surface:#161B22; --surface-2:#1C232D;
+    --ink:#E6E9EF; --ink-soft:#9AA4B2; --ink-faint:#6E7A8A;
+    --line:#28303B; --line-soft:#1E252F;
+    --navy:#9DB4E8; --teal:#4C8DFF; --teal-bright:#6BA5FF; --teal-bg:#12233F;
+    --buy:#4ADE80; --buy-bg:#122A1E; --hold:#E0B04A; --hold-bg:#2C2510;
+    --risk:#F87171; --risk-bg:#2C1516; --info:#6AA0FF; --info-bg:#16213A;
+    --ai:#B794F6; --ai-bg:#241A38;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);
+  }
+  @media (prefers-reduced-motion: reduce){ *{animation:none!important;transition:none!important;scroll-behavior:auto!important} }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth;scroll-padding-top:24px}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+    font-size:15.5px;line-height:1.68;-webkit-font-smoothing:antialiased;word-break:keep-all;overflow-wrap:break-word;
+    transition:background .2s,color .2s}
+  a{color:var(--teal);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .muted{color:var(--ink-faint)}
+  .small{font-size:13px}
+  h1,h2,h3,h4{line-height:1.28;letter-spacing:-.012em;font-weight:700}
+  code,.mono{font-family:var(--mono)}
+  code{background:var(--surface-2);border:1px solid var(--line);border-radius:6px;padding:.06em .38em;font-size:.86em}
+
+  /* ══ 레이아웃 골격 ══ */
+  .shell{display:grid;grid-template-columns:var(--rail) minmax(0,1fr);gap:0;max-width:1440px;margin:0 auto}
+
+  /* ══ 좌측 레일 ══ */
+  .rail{position:sticky;top:0;align-self:start;height:100vh;overflow-y:auto;
+    background:var(--surface);border-right:1px solid var(--line);padding:26px 20px 40px}
+  .brand{display:flex;align-items:center;gap:11px;margin:2px 0 4px}
+  .brand .logo{width:32px;height:32px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+  .brand .logo img{width:100%;height:100%;object-fit:contain;border-radius:9px;display:block}
+  .brand .bt{font-weight:800;font-size:16.5px;letter-spacing:-.02em;line-height:1.15}
+  .brand .bs{font-family:var(--mono);font-size:11px;color:var(--ink-faint);letter-spacing:.02em;line-height:1.3;margin-top:1px}
+  .rail-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:2px}
+  .rail-ver{font-family:var(--mono);font-size:11px;color:var(--teal);background:var(--teal-bg);
+    border-radius:6px;padding:3px 8px;display:inline-block;margin:10px 0 20px}
+  .theme-btn{width:34px;height:34px;border-radius:9px;border:1px solid var(--line);background:var(--surface-2);
+    color:var(--ink-soft);cursor:pointer;font-size:15px;display:grid;place-items:center;flex-shrink:0}
+  .theme-btn:hover{color:var(--ink);border-color:var(--teal)}
+
+  .nav-group{margin:18px 0 6px;font-family:var(--mono);font-size:10.5px;font-weight:700;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);padding-left:6px}
+  .nav a{display:flex;align-items:center;gap:9px;padding:6px 8px;border-radius:8px;
+    color:var(--ink-soft);font-size:13.5px;font-weight:500;transition:background .12s,color .12s}
+  .nav a:hover{background:var(--surface-2);color:var(--ink);text-decoration:none}
+  .nav a.active{background:var(--teal-bg);color:var(--teal);font-weight:700}
+  .nav a .nnum{font-size:8px;color:var(--ink-faint);min-width:14px}
+  .nav a.active .nnum{color:var(--teal)}
+
+  /* JOB 스파인 (12 JOB 중첩 목차) */
+  .spine{position:relative;margin:2px 0 2px 14px;padding-left:16px;border-left:2px solid var(--line-soft)}
+  .spine a{position:relative;padding:5px 8px;font-size:12.5px}
+  .spine a::before{content:"";position:absolute;left:-23px;top:50%;transform:translateY(-50%);
+    width:9px;height:9px;border-radius:50%;background:var(--surface);border:2px solid var(--line)}
+  .spine a:hover::before{border-color:var(--teal)}
+  .spine a.active::before{background:var(--teal);border-color:var(--teal)}
+  .spine a .snum{font-family:var(--mono);font-weight:700;color:var(--ink-faint);font-size:11px;min-width:18px}
+  .spine a.active .snum{color:var(--teal)}
+
+  /* ══ 본문 ══ */
+  .main{min-width:0;padding:0 clamp(20px,4vw,56px)}
+  .wrap{max-width:var(--measure);margin:0 auto;padding:0 0 120px}
+
+  /* 히어로 */
+  .hero{padding:64px 0 40px;border-bottom:1px solid var(--line)}
+  .eyebrow{font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--teal);margin-bottom:18px}
+  .hero h1{font-size:clamp(30px,4.6vw,46px);letter-spacing:-.03em;margin:0 0 20px;line-height:1.14}
+  .hero h1 .hl{color:var(--teal)}
+  .hero .lede{font-size:17px;color:var(--ink-soft);max-width:66ch;margin:0 0 26px}
+  .hero .lede b{color:var(--ink);font-weight:600}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{display:inline-flex;align-items:baseline;gap:7px;font-family:var(--sans);font-size:13px;font-weight:500;color:var(--ink-soft);
+    background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:7px 15px;line-height:1.2}
+  .chip b{color:var(--navy);font-weight:700}
+
+  /* 섹션 */
+  section[id]{scroll-margin-top:20px;padding:52px 0;border-bottom:1px solid var(--line-soft)}
+  .sec-eyebrow{font-family:var(--mono);font-size:11.5px;font-weight:700;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--ink-faint);margin-bottom:10px}
+  section h2{font-size:clamp(23px,3vw,30px);margin:0 0 8px;letter-spacing:-.022em}
+  section h3{font-size:18px;margin:30px 0 10px}
+  section > p{color:var(--ink-soft);max-width:70ch}
+  section > p b{color:var(--ink);font-weight:600}
+  .sec-intro{font-size:16px;color:var(--ink-soft);max-width:70ch;margin:0 0 8px}
+
+  /* 카드·박스 */
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:22px 24px;margin:18px 0}
+  .grid{display:grid;gap:14px}
+  .grid.c2{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .grid.c3{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .grid.c4{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-sm);padding:16px 18px}
+  .stat .k{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint)}
+  .stat .v{font-size:22px;font-weight:800;letter-spacing:-.02em;margin-top:4px}
+  .stat .d{font-size:12.5px;color:var(--ink-soft);margin-top:3px}
+
+  /* 결정 카드 */
+  .dec{display:grid;grid-template-columns:54px 1fr;gap:16px;background:var(--surface);
+    border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:12px 0}
+  .dec .dn{font-family:var(--mono);font-weight:700;font-size:13px;color:var(--teal);
+    background:var(--teal-bg);border-radius:8px;height:30px;display:grid;place-items:center;align-self:start}
+  .dec h3{margin:0 0 6px;font-size:16.5px}
+  .dec p{margin:0;color:var(--ink-soft);font-size:14.5px}
+  .dec .kv2{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+  .dec .kv2 span{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);
+    background:var(--surface-2);border:1px solid var(--line-soft);border-radius:6px;padding:3px 9px}
+  .dec .kv2 span b{color:var(--navy)}
+  @media(max-width:640px){.dec{grid-template-columns:1fr;gap:9px}}
+
+  /* 규칙 리스트 */
+  .rules{list-style:none;counter-reset:r;padding:0;margin:18px 0}
+  .rules li{counter-increment:r;position:relative;padding:13px 0 13px 46px;border-bottom:1px solid var(--line-soft);font-size:14.5px}
+  .rules li::before{content:counter(r,decimal-leading-zero);position:absolute;left:0;top:13px;
+    font-family:var(--mono);font-weight:700;font-size:13px;color:var(--teal)}
+  .rules li:last-child{border-bottom:none}
+  .rules b{font-weight:700}
+
+  /* 입출력 스트립 */
+  .io{display:flex;flex-wrap:wrap;gap:8px;margin-top:13px}
+  .io span{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);
+    background:var(--surface-2);border:1px solid var(--line-soft);border-radius:6px;padding:4px 9px}
+  .io code{background:transparent;border:none;padding:0;color:var(--teal);font-size:inherit}
+
+  /* 콜아웃 */
+  .note{border-left:3px solid var(--info);background:var(--info-bg);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:13px 16px;margin:16px 0;font-size:14.5px}
+  .note.ai{border-color:var(--ai);background:var(--ai-bg)}
+  .note.warn{border-color:var(--hold);background:var(--hold-bg)}
+  .note.good{border-color:var(--buy);background:var(--buy-bg)}
+  .note.bad{border-color:var(--risk);background:var(--risk-bg)}
+  .note b{font-weight:700}
+
+  /* 배지 */
+  .b{display:inline-block;font-family:var(--mono);font-size:11px;font-weight:700;border-radius:6px;padding:2px 8px;vertical-align:1px}
+  .b-teal{background:var(--teal-bg);color:var(--teal)}
+  .b-buy{background:var(--buy-bg);color:var(--buy)}
+  .b-hold{background:var(--hold-bg);color:var(--hold)}
+  .b-risk{background:var(--risk-bg);color:var(--risk)}
+  .b-ai{background:var(--ai-bg);color:var(--ai)}
+  .b-gray{background:var(--surface-2);color:var(--ink-soft)}
+  .b-new{background:var(--buy-bg);color:var(--buy)}
+
+  /* 1차 대비 신규·변경 표 행 구분 */
+  tr.r-new > td{background:var(--buy-bg)}
+  tr.r-chg > td{background:var(--hold-bg)}
+  .r-key{display:flex;gap:14px;flex-wrap:wrap;margin:10px 0 14px;font-size:12.5px;color:var(--ink-soft)}
+  .r-key i{font-style:normal;display:inline-block;width:12px;height:12px;border-radius:3px;
+    vertical-align:-2px;margin-right:5px}
+
+  /* 표 */
+  .twrap{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:var(--radius-sm)}
+  table{border-collapse:collapse;width:100%;font-size:14px}
+  th,td{text-align:left;padding:10px 13px;border-bottom:1px solid var(--line-soft);vertical-align:top}
+  th{background:var(--surface-2);font-family:var(--mono);font-size:11.5px;font-weight:700;
+    letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft);white-space:nowrap}
+  tr:last-child td{border-bottom:none}
+  td .mono,td code,td.mono{font-size:12.5px}
+
+  /* 접이식 명세 */
+  details.schema{border:1px solid var(--line);border-radius:var(--radius-sm);margin:10px 0;background:var(--surface)}
+  details.schema summary{cursor:pointer;padding:11px 16px;font-size:14px;font-weight:600;
+    display:flex;gap:10px;align-items:center;list-style:none;border-radius:var(--radius-sm)}
+  details.schema summary::-webkit-details-marker{display:none}
+  details.schema summary::before{content:"▸";color:var(--teal);font-family:var(--mono);font-size:12px}
+  details.schema[open] summary::before{content:"▾"}
+  details.schema summary:hover{background:var(--surface-2)}
+  details.schema summary .sd{font-weight:400;color:var(--ink-soft);font-size:13px}
+  details.schema summary .cnt{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--ink-faint);white-space:nowrap}
+  details.schema .twrap{margin:0 14px 14px;border-radius:8px}
+  details.schema table{font-size:13px}
+  details.schema td:first-child{font-family:var(--mono);font-size:12.5px;white-space:nowrap;color:var(--teal)}
+  details.schema .inner{padding:0 16px 14px;font-size:14px;color:var(--ink-soft)}
+
+  /* Mermaid 다이어그램 */
+  .mermaid{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    padding:22px;margin:18px 0;overflow-x:auto;text-align:center;line-height:1.4}
+  .mermaid-note{font-family:var(--mono);font-size:11.5px;color:var(--ink-faint);margin:-8px 0 16px}
+
+  /* skip link */
+  .skip{position:fixed;top:10px;left:10px;z-index:200;transform:translateY(-160%);
+    background:var(--navy);color:#fff;border-radius:8px;padding:9px 14px;font-weight:700}
+  .skip:focus{transform:translateY(0)}
+  :focus-visible{outline:3px solid var(--teal);outline-offset:3px;border-radius:4px}
+
+  /* 모바일 상단바 + 목차 서랍 */
+  .topbar{display:none}
+  .hamburger{display:grid;place-items:center;width:36px;height:36px;border-radius:9px;border:1px solid var(--line);
+    background:var(--surface-2);color:var(--ink);cursor:pointer;font-size:17px;flex-shrink:0}
+  .hamburger:hover{border-color:var(--teal)}
+  .rail-backdrop{position:fixed;inset:0;z-index:140;background:rgba(0,0,0,.42);
+    opacity:0;visibility:hidden;transition:opacity .2s;pointer-events:none}
+  .rail-backdrop.open{opacity:1;visibility:visible;pointer-events:auto}
+  @media (max-width:1024px){
+    .shell{grid-template-columns:1fr}
+    .rail{position:fixed;top:0;left:0;height:100vh;width:300px;max-width:84vw;z-index:150;
+      transform:translateX(-100%);transition:transform .22s ease}
+    .rail.open{transform:none;box-shadow:0 0 44px rgba(0,0,0,.28)}
+    .topbar{display:flex;position:sticky;top:0;z-index:100;align-items:center;
+      gap:12px;padding:11px 16px;background:var(--surface);border-bottom:1px solid var(--line)}
+    .topbar .brand{flex:1}
+    .hero{padding:36px 0 30px}
+  }
+  @media (max-width:640px){
+    .grid.c2,.grid.c3,.grid.c4{grid-template-columns:1fr}
+    .main,.wrap,section,details{min-width:0;max-width:100%}
+    details.schema summary{flex-wrap:wrap}
+    details.schema summary::before{align-self:flex-start;margin-top:.28em}
+    details.schema summary > *{min-width:0;max-width:100%}
+    details.schema summary > code,
+    details.schema summary > .mono{
+      flex:1 1 calc(100% - 2rem);
+      overflow-wrap:anywhere
+    }
+    details.schema summary .sd{flex:1 1 12rem}
+    details.schema summary .cnt{margin-left:0;white-space:normal}
+  }
+</style>
+<!-- mermaid는 로컬 벤더링(assets/mermaid.min.js) — 오프라인에서도 다이어그램이 렌더된다 -->
+<script src="assets/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(window.mermaid){mermaid.initialize({startOnLoad:false,theme:'neutral',securityLevel:'loose',flowchart:{useMaxWidth:true,curve:'basis'}});mermaid.run();}});</script>
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+
+<div class="shell">
+
+  <!-- ══════════ 좌측 레일 ══════════ -->
+  <aside class="rail" aria-label="문서 목차">
+    <div class="rail-top">
+      <div class="brand">
+        <div class="logo"><img src="assets/quantinue-q-blue-1024.png" alt="Quantinue" width="32" height="32"></div>
+        <div>
+          <div class="bt">Quantinue</div>
+          <div class="bs">최종 프로젝트 설계서 · 팀 여름이었다</div>
+        </div>
+      </div>
+      <button class="theme-btn" id="themeBtn" type="button" aria-label="다크모드 전환">🌙</button>
+    </div>
+    <span class="rail-ver">v6.5 · 최종 프로젝트</span>
+
+    <nav class="nav" aria-label="주요 섹션">
+      <div class="nav-group">시작</div>
+      <a href="#start"><span class="nnum">●</span> 처음 읽는 분께</a>
+      <a href="#overview"><span class="nnum">●</span> 무엇을 하는 시스템인가</a>
+      <a href="#glossary"><span class="nnum">●</span> 용어 30초 사전</a>
+
+      <div class="nav-group">시스템</div>
+      <a href="#jobs"><span class="nnum">●</span> JOB 체인 12종+1</a>
+      <div class="spine">
+        <a href="#j-collect"><span class="snum">1–6</span> 수집 JOB</a>
+        <a href="#j-decide"><span class="snum">7–10</span> 판단 JOB</a>
+        <a href="#j-act"><span class="snum">11–13</span> 집행·안내 JOB</a>
+      </div>
+      <a href="#intraday"><span class="nnum">●</span> 장중 층 — 방어와 재판단</a>
+      <a href="#jobdetail"><span class="nnum">●</span> JOB별 상세</a>
+      <a href="#judgment"><span class="nnum">●</span> 판단이 만들어지는 과정</a>
+      <a href="#data"><span class="nnum">●</span> 데이터 모델·계보</a>
+      <div class="spine">
+        <a href="#schema-detail"><span class="snum">§</span> 컬럼 명세·ENUM</a>
+      </div>
+      <a href="#screens"><span class="nnum">●</span> 웹 화면·알림</a>
+
+      <div class="nav-group">결정</div>
+      <a href="#decisions"><span class="nnum">●</span> 확정 결정 D1~D8</a>
+      <a href="#notbuilt"><span class="nnum">●</span> 의도적으로 안 만든 것</a>
+      <a href="#limits"><span class="nnum">●</span> 정직한 한계</a>
+
+      <div class="nav-group">부록</div>
+      <a href="#ops"><span class="nnum">●</span> 운영·검증</a>
+      <a href="#changelog"><span class="nnum">●</span> 변경 이력</a>
+      <a href="quantinue-engineering.html"><span class="nnum">↗</span> 기술 부록 — 개발기·코드·결함</a>
+    </nav>
+  </aside>
+
+  <!-- ══════════ 모바일 상단바 ══════════ -->
+  <div class="topbar">
+    <button class="hamburger" id="hamburger" type="button" aria-label="목차 열기" aria-expanded="false">☰</button>
+    <div class="brand" style="margin:0"><div class="logo"><img src="assets/quantinue-q-blue-1024.png" alt="Quantinue" width="32" height="32"></div><div class="bt">Quantinue</div></div>
+    <button class="theme-btn" id="themeBtnM" type="button" aria-label="다크모드 전환">🌙</button>
+  </div>
+  <div class="rail-backdrop" id="railBackdrop" aria-hidden="true"></div>
+
+  <!-- ══════════ 본문 ══════════ -->
+  <main class="main" id="main">
+  <div class="wrap">
+
+  <!-- ── 히어로 ── -->
+  <header class="hero">
+    <div class="eyebrow">Quantinue 최종 프로젝트 · v6.5 · 2026-07-28</div>
+    <h1>매일 아침 스스로 도는<br><span class="hl">AI 모의 운용</span> 시스템</h1>
+    <p class="lede">
+      시세·공시·뉴스는 <b>실물 데이터</b>로 받고, 판단은 <b>LLM 두 성향</b>이 내리고,
+      크리틱이 반박하고, 돈은 <b>모의 계좌</b>에서만 움직인다.
+      사람이 누르는 버튼은 없다 — <b>등록 JOB 14종</b>이 각자의 주기에 맞춰 돌고,
+      모든 판단은 자기 근거를 가리키는 <b>계보(FK)</b>로 원장에 남고, 하루의 결과는
+      <b>텔레그램 한 통</b>으로 온다.
+    </p>
+    <div class="chips">
+      <span class="chip">JOB <b>14종</b> 등록</span>
+      <span class="chip">투자 성향 <b>2종</b> (aggressive · conservative)</span>
+      <span class="chip">체결 <b>MockBroker</b> 시뮬</span>
+      <span class="chip">테스트 <b>799 + 190</b> green</span>
+      <span class="chip">LLM <b>OpenAI</b> · 일 $3 상한</span>
+    </div>
+    <div class="note">
+      <b>2026-07-24 로컬 운영 상태:</b> 일일 체인과 별도로 SEC 30분·뉴스 15분·
+      와이어 10분 증분 수집, 관련 종목의 전략가/critic 재판단, 변경 판단의
+      표적 모의 주문까지 구현·일회용 PostgreSQL에서 검증했다. 운영 기본값은
+      <code>watch=true</code>, <code>rejudge=false</code>,
+      <code>stream=false</code>다. 5445 migration과 현재 HEAD의 8020 OpenAI
+      재기동, poll-only Gate A까지 완료했다. 다음은 clean OpenAI 슬롯,
+      rejudge Gate B, stream 순서다.
+      <div style="margin-top:10px"><b>2026-07-27 대조:</b> 이 설계 서술은 그대로 유효하다 —
+      그 뒤 앱 코드 변경은 없었고, 원장만 <b>07-19 ~ 07-27 · 7슬롯일</b>로 자랐다
+      (판단 342 · 검토 323 · 체결 62 · openai 4일 $0.53). 이 문서에서 07-27 값으로
+      갱신한 곳은 <b>테스트 수(위 칩·§검증 표)와 계보 컬럼 채움률(§데이터 모델)뿐</b>이고,
+      나머지 실측값은 <b>기록 시점 그대로 보존</b>한다.</div>
+    </div>
+  </header>
+
+  <!-- ═══════════════ 0. 처음 읽는 분께 ═══════════════ -->
+  <section id="start">
+    <div class="sec-eyebrow">Getting Oriented</div>
+    <h2>처음 읽는 분께 — 문서 세 개와 읽는 순서</h2>
+    <p class="sec-intro">
+      Quantinue 문서는 3부작이고, 이 문서는 그중 <b>둘째(설계 정본)</b>다.
+      배경지식 없이 처음 접한다면 아래 순서가 가장 빠르다.
+    </p>
+    <div class="twrap"><table>
+      <thead><tr><th>순서</th><th>문서</th><th>무엇을 주나</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">1</td><td><a href="quantinue-day-anatomy.html"><b>하루의 해부</b></a></td>
+          <td><b>여기서 시작할 것.</b> 실제로 돈 하루(2026-07-21)를 체결 하나의 계보로 따라간다 —
+          픽이 되고, LLM이 제안하고, 크리틱이 반박하고, 계좌에 계획이 서고, 체결되기까지.
+          설치·설정 없이 읽기만 하면 되고, 30분이면 시스템의 사고방식이 잡힌다.</td></tr>
+        <tr><td class="mono">2</td><td><b>이 문서</b> (설계 정본)</td>
+          <td>현재 시스템의 <b>계약</b> — JOB 12종+조건부 1이 각각 무엇을 먹고 내놓는지, 데이터 모델이
+          왜 이렇게 생겼는지, 확정 결정 D1~D8과 그 이유, 그리고 의도적으로 안 만든 것.</td></tr>
+        <tr><td class="mono">3</td><td><a href="quantinue-engineering.html"><b>기술 부록</b></a></td>
+          <td><b>과정과 내부</b> — 10일 연대기, 실행에서만 잡힌 결함 27건, 코드 구조 맵,
+          28테이블 ERD. 코드를 열기 전의 지도다.</td></tr>
+      </tbody>
+    </table></div>
+    <div class="note">
+      <b>저장소와 문서의 위치.</b> 소스 전체는
+      <a href="https://github.com/jaymunsh/quantinue"><b>github.com/jaymunsh/quantinue</b></a>에 있고,
+      이 3부작 HTML은 GitHub Pages
+      (<a href="https://jaymunsh.github.io/quantinue/">jaymunsh.github.io/quantinue</a>)로도 서빙된다.
+      본문에서 참조하는 <code>.md</code> 문서·코드 파일은 GitHub로 연결해 뒀다 — HTML만
+      받았어도 링크는 열린다. 특히 <b>켜고·보고·끄는 운영 방법의 정본은
+      <a href="https://github.com/jaymunsh/quantinue/blob/main/docs/operations-runbook.md"><code>docs/operations-runbook.md</code></a></b>이고,
+      이 3부작은 그걸 대신하지 않는다: 여기는 "왜 이렇게 생겼나", 거기는 "어떻게 돌리나"다.
+    </div>
+
+    <h3>직접 띄워 보기 — 키 없이 3분</h3>
+    <p>읽다가 화면이 궁금해지면 바로 띄울 수 있다. <b>기본값이 전부 오프라인</b>이라
+    외부 키·네트워크·과금 없이 뜬다 (Python은 <code>uv</code>가 관리한다):</p>
+    <div class="twrap"><table>
+      <thead><tr><th>무엇을</th><th>어떻게</th><th>결과</th></tr></thead>
+      <tbody>
+        <tr><td>로컬 실행</td><td class="mono">git clone https://github.com/jaymunsh/quantinue.git<br>cd quantinue/app-v2 && cp .env.example .env && uv sync<br>uv run uvicorn quantinue.main:app --reload</td>
+          <td><code>http://localhost:8000</code> — fixture 시세 · 메모리 저장소 · mock LLM · 모의 브로커</td></tr>
+        <tr><td>PostgreSQL까지</td><td class="mono">docker compose up --build --wait</td>
+          <td><code>http://127.0.0.1:8011</code> · DB <code>127.0.0.1:5445</code> (최초 볼륨 생성 시 <code>db/schema.sql</code> 자동 적용)</td></tr>
+      </tbody>
+    </table></div>
+    <p>행동 반경은 <code>.env</code>의 <b>모드 스위치 4개</b>가 정한다 — 전부 안전한 쪽이 기본값이다:</p>
+    <div class="twrap"><table>
+      <thead><tr><th>스위치</th><th>기본</th><th>선택지</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">QUANTINUE_DATA_MODE</td><td class="mono">fixture</td><td><code>fixture</code>(오프라인 고정 데이터) / <code>public</code>(키 없는 공개 소스). 실물 시세·뉴스 수집은 별도의 <code>QUANTINUE_ALPACA_API_KEY</code>가 필요하다</td></tr>
+        <tr><td class="mono">QUANTINUE_DATABASE_MODE</td><td class="mono">memory</td><td><code>memory</code> / <code>postgres</code></td></tr>
+        <tr><td class="mono">QUANTINUE_LLM_MODE</td><td class="mono">mock</td><td><code>mock</code>(결정론 고정값) / <code>local</code>(OpenAI 호환 <code>/v1</code> 서버) / <code>openai</code>(과금 — 요율 미선언 모델은 기동 거부)</td></tr>
+        <tr><td class="mono">QUANTINUE_BROKER_MODE</td><td class="mono">mock</td><td><code>mock</code> / <code>alpaca</code>(<b>페이퍼 전용</b> — live 엔드포인트는 설정 검증이 거부한다). 실제 주문 제출은 <code>QUANTINUE_TRADING_ENABLED=true</code>까지 <b>이중 잠금</b></td></tr>
+      </tbody>
+    </table></div>
+    <p class="mermaid-note">전체 변수 목록과 각 값의 의미는 <a href="https://github.com/jaymunsh/quantinue/blob/main/app-v2/.env.example"><code>app-v2/.env.example</code></a>의 주석이 정본이다.
+    운영 관측 인스턴스(백그라운드 잡·장중 감시)는 일반 <code>uvicorn</code>이 아니라
+    <code>./scripts/run_observation.sh</code>로만 시작한다 — 이 실행기만 잡 소유권을 켜고, 로컬 잠금이 중복 실행을 거부한다.</p>
+  </section>
+
+  <!-- ═══════════════ 1. 무엇을 하는 시스템인가 ═══════════════ -->
+  <section id="overview">
+    <div class="sec-eyebrow">Overview</div>
+    <h2>무엇을 하는 시스템인가</h2>
+    <p class="sec-intro">
+      Quantinue는 <b>미국 주식 모의 운용을 무인으로 돌리는 시스템</b>이다. 매일 뉴욕 세션일에
+      한 번, 시가총액 상위 2,000종목의 세계를 원장(PostgreSQL)에 담고 → 그 원장만 보고
+      오늘 깊이 볼 종목 20여 개를 고르고 → LLM이 성향별로 판단하고 크리틱이 반박하고 →
+      살아남은 판단만 모의 계좌에서 사고판다. 결과는 화면 여섯으로 지켜본다 — 관제실(<code>GET /admin</code>) · 운영 기준(<code>/admin/schedule</code>) · 작동 로그(<code>/admin/logs</code>) · 계좌 관리(<code>/admin/accounts</code>) · 내 계좌(<code>/me</code>) · 로그인(<code>/login</code>). <code>GET /</code>는 역할별 갈림길이다.
+    </p>
+
+    <div class="mermaid">
+flowchart LR
+  A["🌎 세상<br/>시세 · 공시 · 뉴스 · 금리"] --> B["📒 원장<br/>PostgreSQL"]
+  B --> C["🔍 선별<br/>DB 랭킹 → 오늘의 픽"]
+  C --> D["🤖 판단 ×2 성향<br/>LLM 제안 + 크리틱 반박"]
+  D --> E["💰 집행<br/>모의 계좌 매수 · 청산"]
+  E --> B
+    </div>
+    <p class="mermaid-note">30초 요약 — 모든 화살표는 DB를 거친다. JOB끼리 직접 손을 잡지 않는다.</p>
+
+    <h3>1차(MVP-1)와 무엇이 다른가</h3>
+    <p>
+      1차는 <b>종목 하나</b>가 역할 01~11을 순서대로 통과하는 선형 러너였다.
+      최종 프로젝트는 그 러너를 삭제하고(커밋 <code>1a48aea</code>) <b>서로 독립인 등록 JOB 14종</b>으로
+      재편했다. 이 문서에서 <span class="b b-new">2차 신규</span> 배지가 붙은 것은
+      1차에 없던 구성 요소다.
+    </p>
+    <div class="twrap"><table>
+      <thead><tr><th></th><th>1차 (MVP-1)</th><th>최종 프로젝트</th></tr></thead>
+      <tbody>
+        <tr><td><b>실행 단위</b></td><td>종목 1개 × 역할 11단계 선형 런</td><td><b>등록 JOB 14종</b> — 서로 독립, DB로만 통신 <span class="b b-new">2차 신규</span></td></tr>
+        <tr><td><b>실패 반경</b></td><td>한 단계가 죽으면 런 전체 실패</td><td>한 JOB이 죽어도 나머지는 어제 데이터로 돈다</td></tr>
+        <tr><td><b>실행 방식</b></td><td>수동 트리거 + 사이클 스케줄러</td><td><code>mvp2.jobs.enabled=true</code> — 스스로 돈다, 수동 트리거 없음 <span class="b b-new">2차 신규</span></td></tr>
+        <tr><td><b>멱등 축</b></td><td><code>pipeline_runs</code> (run_id · cycle_ts)</td><td><code>tb_job_run</code> PK <code>(job_name, slot_date)</code> = "JOB 하나는 하루 한 번" <span class="b b-new">2차 신규</span></td></tr>
+        <tr><td><b>분석 범위</b></td><td>종목당 API 1콜 → 500종목 캡</td><td>일봉 원장 → <b>전 유니버스 DB 랭킹, API 0콜</b> <span class="b b-new">2차 신규</span></td></tr>
+        <tr><td><b>체결</b></td><td>Alpaca 페이퍼 "무장" 대기</td><td><b>MockBroker 로컬 시뮬이 최종 상태</b> (D1·D2)</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- ═══════════════ 2. 용어 30초 사전 ═══════════════ -->
+  <section id="glossary">
+    <div class="sec-eyebrow">Glossary</div>
+    <h2>용어 30초 사전</h2>
+    <p class="sec-intro">이 문서를 읽는 데 필요한 말은 이게 전부다.</p>
+    <div class="twrap"><table>
+      <thead><tr><th>용어</th><th>뜻</th></tr></thead>
+      <tbody>
+        <tr><td><b>JOB</b></td><td>하루에 한 번 도는 작업 단위. 유니버스 수집, 스크리닝, 분석 같은 것 하나하나가 JOB이다. 서로 독립이고 DB로만 손을 주고받는다.</td></tr>
+        <tr><td><b>슬롯(slot)</b></td><td>JOB이 돈 날짜(<code>slot_date</code>). "JOB 하나는 하루 한 번"의 그 하루. 관제실에서 <code>?slot=YYYY-MM-DD</code>로 과거 슬롯을 볼 수 있다.</td></tr>
+        <tr><td><b>세션(session)</b></td><td>뉴욕 거래일. JOB은 보통 개장 전에 돌므로 <b>직전에 닫힌 세션</b>의 데이터를 본다.</td></tr>
+        <tr><td><b>픽(pick)</b></td><td>오늘 LLM이 깊이 볼 종목. 스크리닝 랭킹 상위 20 + 보유 전부(<code>tb_daily_pick</code>).</td></tr>
+        <tr><td><b>성향(inv_type)</b></td><td>투자 스타일 2종 — <code>aggressive</code>(공격형)·<code>conservative</code>(안전형). 판단·계좌·문턱이 성향별로 갈린다.</td></tr>
+        <tr><td><b>확신도(conviction)</b></td><td>0~1 사이 점수. 여러 근거(스크리닝 점수·LLM 판단·인사이더 표)의 <b>평균</b>. 성향별 문턱을 넘어야 매수 후보가 된다.</td></tr>
+        <tr><td><b>표(vote)</b></td><td>확신도 평균에 참여할 자격. 아무 데이터나 표를 갖지 못한다 — 출처와 내용이 검증된 것만.</td></tr>
+        <tr><td><b>크리틱(critic)</b></td><td>제안(role_07)을 반박하는 둘째 LLM(role_08). 크리틱을 통과(<code>pass</code>)한 판단만 집행된다.</td></tr>
+        <tr><td><b>계보(lineage)</b></td><td>판단이 자기 근거를 FK로 가리키는 것. "이 매수는 어느 픽·어느 공시·어느 국면을 보고 내렸나"를 DB가 강제한다.</td></tr>
+        <tr><td><b>하드 이벤트</b></td><td>상장폐지·거래정지 같은, 판단 없이 즉시 반응해야 하는 사실. 권위 있는 쪽(SEC 폼)만 판정한다.</td></tr>
+        <tr><td><b>출처 등급</b></td><td>뉴스 매체 신뢰도 — <code>allow</code>(0.95) / <code>gray</code>(0.50) / <code>block</code>. 문턱(0.55) 미달이면 투표권이 없다.</td></tr>
+        <tr><td><b>재량 거래</b></td><td>내부자가 <b>스스로 정해서</b> 한 매매(코드 P·S이면서 10b5-1 계획매매가 아닌 것). 보상 지급·계획 매도는 재량이 아니므로 표가 없다.</td></tr>
+        <tr><td><b>MockBroker</b></td><td>체결 시뮬레이터. 외부 호출 0건 — 주문을 받으면 지정가 그대로 체결됐다고 기록한다.</td></tr>
+        <tr><td><b>멱등(idempotent)</b></td><td>같은 날 두 번 돌아도 결과가 한 번 돈 것과 같음. 모든 JOB의 기본 계약.</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- ═══════════════ 3. JOB 체인 12종 ═══════════════ -->
+  <section id="jobs">
+    <div class="sec-eyebrow">Job Chain</div>
+    <h2>JOB 체인 12종 + 조건부 1 <span class="b b-new">2차 신규</span></h2>
+    <p class="sec-intro">
+      하루의 운용은 JOB 12종이 <b>등록 순서대로</b> 도는 것이다. 순서 자체가 계약이다 —
+      수집이 판단보다 앞이라 오늘 시세·공시로 판단하고, 청산이 배분보다 앞이라 판 돈과
+      빈 자리로 산다. 맨 끝에 <b>조건부 13번째</b>가 있다: 일일 안내(<code>daily_summary</code>)는
+      텔레그램 키가 있을 때만 등록된다. 출처: <code>orchestration/job_factory.py</code> <code>build_job_runner()</code>.
+    </p>
+
+    <div class="mermaid">
+flowchart TB
+  subgraph C ["① 수집 — 세상을 원장에 담는다"]
+    direction TB
+    J1["1 · universe<br/>상장 목록 (주 1회)"] --> J2["2 · daily_bars<br/>일봉 — 증분 + 자동 백필"]
+    J2 --> J3["3 · disclosures<br/>SEC 공시 · 전 시장 하루치"]
+    J3 --> J4["4 · news<br/>Alpaca 헤드라인 · 전 시장"]
+    J4 --> J5["5 · news_wire<br/>보도자료 RSS (GNW·PRN)"]
+    J5 --> J6["6 · macro<br/>금리 → 시장 국면"]
+  end
+  subgraph D ["② 판단 — 원장만 보고 고른다"]
+    direction TB
+    J7["7 · screening<br/>전 유니버스 DB 랭킹 · API 0콜"] --> J8["8 · insider_scoring<br/>Form 4 재량 거래 → 표"]
+    J8 --> J9["9 · analysis:aggressive<br/>LLM 판단 + 크리틱"]
+    J9 --> J10["10 · analysis:conservative<br/>LLM 판단 + 크리틱"]
+  end
+  subgraph A ["③ 집행 — 모의 계좌가 움직인다"]
+    direction TB
+    J11["11 · exits<br/>청산 — 손절·익절·시간·매도판단"] --> J12["12 · allocation<br/>배분 — 지갑이 허락할 때까지 산다"]
+    J12 -.-> J13["13 · daily_summary<br/>일일 안내 (텔레그램 키 있을 때만)"]
+  end
+  C --> D --> A
+    </div>
+    <p class="mermaid-note">등록 순서 = 실행 순서 = 데이터 의존성. 한 틱 안에서 순차로 돈다. 점선(13)은 조건부 등록.</p>
+
+    <h3>순서가 계약인 이유</h3>
+    <ul class="rules">
+      <li><b>유니버스가 일봉보다 앞</b> — 그 주에 새로 든 종목이 봉 없이 남지 않는다.</li>
+      <li><b>수집이 판단보다 앞</b> — 분석이 오늘의 증거(시세·공시·국면)를 같은 틱 안에서 읽는다.</li>
+      <li><b>스크리닝이 인사이더채점보다 앞</b> — 픽이 있어야 채점 결과를 붙일 FK 자리가 선다.</li>
+      <li><b>인사이더채점이 분석보다 앞</b> — 한 슬롯 늦게 도착하는 증거는 증거가 아니다.</li>
+      <li><b>분석이 청산보다 앞</b> — 오늘의 매도 판단이 오늘의 청산에 닿는다.</li>
+      <li><b>청산이 배분보다 앞</b> — 판 돈과 빈 자리(보유 수 한도)로 사야 "자리가 없어 못 산다"가 하루 늦지 않는다.</li>
+    </ul>
+
+    <div class="note">
+      <b>실행 계약(<code>tb_job_run</code>)</b> — PK <code>(job_name, slot_date)</code>가
+      "JOB 하나는 하루 한 번"을 DB 수준에서 강제한다. 스케줄러는 60초마다 깨어나지만
+      JOB 본문은 예약에 성공한 틱에서만 돈다. 주기는 <b>요일 고정이 아니라 마지막 성공으로부터의
+      경과일</b>이라, 앱이 꺼져 있던 날은 다음 기동 때 이어서 돈다. 실패한 슬롯만 같은 날 재시도된다.
+      주기 소유자는 <code>config/pipeline.yaml</code>의 <code>mvp2.jobs.cadences</code>(D3) —
+      universe 7일, 나머지는 기본 일 1회.
+    </div>
+
+    <h3 id="j-collect">수집 JOB 6종 — 무엇을 먹고 무엇을 내놓는가</h3>
+    <div class="r-key"><span><i style="background:var(--buy-bg);border:1px solid var(--buy)"></i>1차에 없던 JOB</span></div>
+    <div class="twrap"><table>
+      <thead><tr><th>#</th><th>JOB</th><th>먹는 것 (입력)</th><th>내놓는 것 (출력)</th><th>주기</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>1</td><td class="mono"><b>universe</b></td>
+          <td>NASDAQ 상장 피드 + <b>현재 보유</b></td>
+          <td><code>tb_universe</code> — 시총 상위 2,000 + 상장폐지된 보유의 이월(<code>held_delisted</code>)</td>
+          <td>7일</td>
+        </tr>
+        <tr class="r-new">
+          <td>2</td><td class="mono"><b>daily_bars</b></td>
+          <td>Alpaca 일봉 API (<code>feed=iex</code>, 배치 200종목/콜)</td>
+          <td><code>tb_daily_bar</code> — 원장이 아는 마지막 날부터 직전 세션까지 증분. 첫 실행은 자동 백필(400일 창)</td>
+          <td>1일</td>
+        </tr>
+        <tr class="r-chg">
+          <td>3</td><td class="mono"><b>disclosures</b></td>
+          <td>SEC 데일리 인덱스 — <b>전 시장 하루치를 1콜</b>, 무키</td>
+          <td><code>tb_disclosure_raw</code> — 하드 이벤트(상장폐지·정지) 판정 포함</td>
+          <td>1일</td>
+        </tr>
+        <tr class="r-chg">
+          <td>4</td><td class="mono"><b>news</b></td>
+          <td>Alpaca 뉴스 API — 전 시장, 직전 세션부터 실행 시점까지</td>
+          <td><code>tb_news_raw</code> — 헤드라인만. <b>투표가 아니라 분석의 맥락</b>으로 쓰인다</td>
+          <td>1일</td>
+        </tr>
+        <tr class="r-new">
+          <td>5</td><td class="mono"><b>news_wire</b></td>
+          <td>보도자료 와이어 RSS 2종 (GlobeNewswire·PR Newswire), 무키</td>
+          <td><code>tb_news_raw</code> — <b>수집만 하고 채점은 안 한다</b> (기각 근거는 <a href="#notbuilt">§안 만든 것</a>)</td>
+          <td>1일</td>
+        </tr>
+        <tr>
+          <td>6</td><td class="mono"><b>macro</b></td>
+          <td>FRED 금리(DFF)</td>
+          <td><code>tb_macro</code> — 국면(risk_on/neutral/risk_off)과 risk_score. 없으면 지어내지 않고 빈손으로 끝낸다</td>
+          <td>1일</td>
+        </tr>
+      </tbody>
+    </table></div>
+    <div class="note warn">
+      수집 JOB의 공통 원칙: <b>종목별 폴링을 하지 않는다.</b> 공시·뉴스는 전 시장을 통으로 받는다 —
+      종목별이면 콜 수가 종목 수에 비례하고, 분석 범위 밖 종목(예: 스크리너에서 탈락한 보유 종목의
+      상장폐지 공시)을 영영 못 보기 때문이다. 그래서 원시 원장(<code>tb_*_raw</code>)에는 의도적으로 FK가 없다.
+    </div>
+
+    <h3 id="j-decide">판단 JOB 4종</h3>
+    <div class="twrap"><table>
+      <thead><tr><th>#</th><th>JOB</th><th>먹는 것 (입력)</th><th>내놓는 것 (출력)</th><th>LLM</th></tr></thead>
+      <tbody>
+        <tr class="r-new">
+          <td>7</td><td class="mono"><b>screening</b></td>
+          <td>일봉 원장 전체 (전 유니버스, <b>API 0콜</b>)</td>
+          <td><code>tb_daily_pick</code> — 창 지표(ret_20d·ma20/50·52주고가비·RSI) 랭킹 상위 20 <b>+ 보유 전부</b></td>
+          <td>—</td>
+        </tr>
+        <tr class="r-new">
+          <td>8</td><td class="mono"><b>insider_scoring</b></td>
+          <td>SEC EDGAR Form 4 (픽에 걸린 것만, 무키)</td>
+          <td><code>tb_disclosure_signal</code> — 재량 거래(P·S ∧ ¬10b5-1)만 표: 매수 0.80 / 매도 0.30. 기권은 행을 아예 안 쓴다</td>
+          <td>— (결정론)</td>
+        </tr>
+        <tr class="r-chg">
+          <td>9·10</td><td class="mono"><b>analysis</b> ×2</td>
+          <td>픽 + 기술 지표 + 헤드라인 5건 + 공시 + 국면 + 인사이더 표</td>
+          <td><code>tb_strategist_signals</code>(side·확신도·서사) + <code>tb_critic_verdict</code>(반박 평결). 성향 하나가 JOB 하나</td>
+          <td>성향당 1콜/종목 + 크리틱</td>
+        </tr>
+      </tbody>
+    </table></div>
+
+    <h3 id="j-act">집행 JOB 2종 + 조건부 안내 1</h3>
+    <div class="twrap"><table>
+      <thead><tr><th>#</th><th>JOB</th><th>먹는 것 (입력)</th><th>내놓는 것 (출력)</th></tr></thead>
+      <tbody>
+        <tr class="r-chg">
+          <td>11</td><td class="mono"><b>exits</b></td>
+          <td>보유 종목의 직전 세션 관측 + 오늘의 매도 판단(크리틱 통과분)</td>
+          <td>close 주문·체결 — 손절(−15%)·익절(+20%)·시간 청산(10거래일)·하드 이벤트·매도 판단의 3층 판정. 동시 발동 시 <b>손절 우선</b>(D5)</td>
+        </tr>
+        <tr class="r-new">
+          <td>12</td><td class="mono"><b>allocation</b></td>
+          <td>크리틱 통과한 buy 후보 전체 + 계좌별 지갑</td>
+          <td><code>tb_order</code>(bracket)·<code>tb_fill</code>·<code>tb_order_plan</code> — 후보를 계좌 앞에 놓고 <b>지갑이 허락할 때까지</b> 산다. 못 산 것은 사유와 함께 기록</td>
+        </tr>
+        <tr class="r-new">
+          <td>13</td><td class="mono"><b>daily_summary</b> <span class="b b-gray">조건부</span></td>
+          <td>그날 슬롯의 <code>tb_job_run</code>·체결 요약</td>
+          <td>텔레그램 한 통 — <code>✅ 슬롯 · 잡 12/12 성공 · 신규 매수 3건</code>. 기능이 아니라 <b>멱등 때문에 잡</b>이다: 하루 한 번 보장을 <code>tb_job_run</code> PK가 DB로 강제한다. 키가 없으면 등록 자체가 안 된다 (<a href="#screens">§알림</a>)</td>
+        </tr>
+      </tbody>
+    </table></div>
+
+    <h3>실측 — 이 체인은 실제로 이렇게 돌았다</h3>
+    <div class="grid c3">
+      <div class="stat"><div class="k">일봉 최초 백필</div><div class="v">53.7만 봉</div><div class="d">1,999종목 · 43.6초 · 2회차는 0.7초 (2026-07-19 실측)</div></div>
+      <div class="stat"><div class="k">스크리닝 깔때기</div><div class="v">1,998 → 373 → 20</div><div class="d">이력·가격·거래대금 필터 → 픽. 3.7초 · API 0콜 (<code>724ddc2</code>)</div></div>
+      <div class="stat"><div class="k">배분 실 스모크</div><div class="v">33 매수 · 24 보류</div><div class="d">계좌 10개 · 보류 사유 전부 기록 · 현금 오차 0 (2026-07-20)</div></div>
+    </div>
+    <div class="note good">
+      <b>Alpaca 한도는 확정됐다(2026-07-20).</b> Basic(무료) 플랜은 데이터·트레이딩 <b>각각 분당
+      200요청</b>, 초과 시 429, 실시간 피드는 <code>feed=iex</code> 전용. 우리 최악 피크(최초 백필)는
+      분당 ~75~88콜로 여유 2.3배라 레이트 리미터를 붙이지 않았다 — 안 터지는 것에 방어를 붙이면
+      그게 유령이다. 단, 인트라데이 다회 사이클(로드맵 R3)을 켜면 이 여유가 사라지므로 그때 한도를 먼저 본다.
+    </div>
+  </section>
+
+  <!-- ═══════════════ 3a. 장중 층 ═══════════════ -->
+  <section id="intraday">
+    <div class="sec-eyebrow">Intraday Layer</div>
+    <h2>장중 층 — 1분 방어와 사건 재판단 <span class="b b-new">2차 신규</span></h2>
+    <p class="sec-intro">
+      위의 JOB 체인은 <b>하루 한 번</b> 돈다. 그 아래에 정규장 동안만 도는 층이 하나 더 있다 —
+      2차가 풀려던 문제("아침에 산 종목이 오후에 급락해도 다음 날까지 무방비")의 답이다.
+      담당은 <code>orchestration/watch_runner.py</code>의 WatchRunner이고, 일일 JobRunner와
+      독립적으로 정규장에만 붙는다. 하는 일은 성격이 다른 두 가지다.
+    </p>
+
+    <div class="mermaid">
+flowchart LR
+  T["⏱ 1분 틱<br/>(정규장 전용)"] --> P["🛡 방어선 점검<br/>보유 종목 손절·익절선<br/><b>LLM 0콜</b>"]
+  P -->|발동| X["즉시 모의 청산<br/>(exits와 같은 내구 경로)"]
+  S["📡 사건 증분 수집<br/>SEC 30분 · 뉴스 15분 · 와이어 10분"] --> N["결정론 정규화<br/>tb_normalized_event<br/>(append-only)"]
+  N --> R["관련 종목 라우팅"]
+  R -.->|"rejudge=true일 때만"| J["전략가·크리틱 재호출<br/>→ 변경 판단의 표적 주문<br/><b>여기서만 LLM</b>"]
+    </div>
+    <p class="mermaid-note">위 줄(방어선)은 판단하지 않는다 — 살 때 정한 선을 넘었는지만 본다.
+    아래 줄(재판단)만 LLM을 부르고, 그마저 스위치 뒤에 있다.</p>
+
+    <div class="twrap"><table>
+      <thead><tr><th>갈래</th><th>주기</th><th>하는 일</th><th>LLM</th><th>운영 상태</th></tr></thead>
+      <tbody>
+        <tr><td><b>방어선</b> (watch)</td><td class="mono">1분</td>
+          <td>보유 종목의 손절·익절 브래킷이 발동했는지 점검하고, 발동하면 <code>exits</code>와
+          같은 내구 경로로 <b>즉시 모의 청산</b>한다. 손절선은 이때 정하는 게 아니라
+          <b>매수 시점에 이미 <code>tb_order.stop_price</code>에 적혀 있다.</b></td>
+          <td class="mono"><b>0콜</b></td><td><span class="b b-teal">켜짐</span> <code>watch=true</code></td></tr>
+        <tr><td><b>사건 수집·정규화</b></td><td class="mono">SEC 30분<br>뉴스 15분<br>와이어 10분</td>
+          <td>증분 수집 → 결정론 규칙으로 <code>tb_normalized_event</code>에 정규화(append-only,
+          공급자 순서 UNIQUE) → 관련 종목 라우팅. 여기까지는 판단이 아니라 <b>기록</b>이다.</td>
+          <td class="mono">0콜</td><td><span class="b b-teal">켜짐</span></td></tr>
+        <tr><td><b>재판단</b> (rejudge)</td><td class="mono">사건 시 +<br>NY 10:00·12:45·15:15 스윕</td>
+          <td>±5% 급변(<code>move_trigger_pct</code>)이나 라우팅된 사건이 있으면 그 종목만
+          전략가·크리틱을 재호출하고, 판단이 바뀌면 표적 주문을 낸다. 같은 종목 <b>30분 쿨다운</b>,
+          위급 매도용 <b>예산 20% 예약</b>, 유료 콜은 <code>tb_watch_sweep_item</code>이
+          at-most-once로 펜싱한다(dispatched는 재시도 금지).</td>
+          <td class="mono">여기서만</td><td><span class="b b-hold">꺼짐</span> <code>rejudge=false</code></td></tr>
+        <tr><td><b>실시간 피드</b> (stream)</td><td class="mono">—</td>
+          <td>폴링 대신 실시간 시세 구독(30종목 상한). 켜지면 방어선의 반응이 틱 단위로 빨라진다.</td>
+          <td class="mono">0콜</td><td><span class="b b-hold">꺼짐</span> <code>stream=false</code></td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="note">
+      <b>이 절만은 실측 서사가 아니라 설계 서술이다.</b> 값은 전부
+      <code>config/pipeline.yaml</code>의 <code>watch:</code> 블록 원문이고, 구현·검증은
+      끝났지만(통합 테스트 + 강제 발동 E2E) <b>재판단은 운영에서 아직 켜지 않았다.</b>
+      그래서 원장도 스윕 0건 · 정규화 사건 0건이다(2026-07-27 실측) — 켜지 않은 기능은
+      원장에도 0으로 남는다. 켜는 순서와 조건은 <a href="#ops">§운영·검증</a>의 활성화
+      단계를 따르고, 켜져서 실측이 쌓이면 <a href="quantinue-day-anatomy.html">하루의 해부</a>
+      방식의 장중 편을 따로 쓴다.
+    </div>
+  </section>
+
+  <!-- ═══════════════ 3b. JOB별 상세 ═══════════════ -->
+  <section id="jobdetail">
+    <div class="sec-eyebrow">Job Details</div>
+    <h2>JOB별 상세 — 12종 각각의 계약</h2>
+    <p class="sec-intro">
+      각 JOB이 정확히 무엇을 하고, 무엇이 없으면 어떻게 행동하고, 왜 그렇게 설계했는지.
+      설명의 근거는 <code>orchestration/job_factory.py</code>와 각 잡 모듈의 주석,
+      값은 <code>config/pipeline.yaml</code>이다.
+    </p>
+
+    <details class="schema">
+      <summary><span class="mono">1 · universe</span> <span class="sd">거래 가능한 세계를 다시 그린다</span><span class="cnt">주 1회</span></summary>
+      <div class="inner">
+        <p><b>하는 일:</b> 상장 피드에서 시총 &gt; 0인 종목을 시총 내림차순으로 잘라 상위
+        2,000(<code>universe_size</code>)을 스냅샷으로 저장한다. 정렬을 우리가 다시 하는 이유 —
+        잘릴 때 남는 것이 임의의 조각이 아니라 큰 이름들이어야 한다.</p>
+        <p><b>보유 이월(<code>held_delisted</code>):</b> 거래 가능 범위의 정의는 "상장 피드"가 아니라
+        <b>"상장 피드 ∪ 우리가 든 것"</b>이다. 상장폐지된 보유가 여기서 빠지면
+        <code>tb_daily_pick</code>(FK) → sell 시그널 → close 주문 사슬이 통째로 끊겨
+        <b>팔아야 할 바로 그 종목을 팔 수 없다</b>. 이월은 절단 <b>뒤에</b> 더한다 — 먼저 섞으면
+        시총 낮은 폐지 종목이 절단에 걸려 문제가 되돌아온다. 한 번도 유니버스에 없던 종목은
+        지어내지 않고 스크리닝의 unlisted 보고로 남긴다.</p>
+        <p><b>없으면:</b> 스크리닝이 "no universe snapshot"으로 멈춘다 — 유니버스 없이 고른 상위 N은
+        무엇의 상위인지 알 수 없다.</p>
+        <div class="io"><span>입력 <code>NASDAQ 상장 피드 + 보유</code></span><span>출력 <code>tb_universe</code></span><span>주기 <code>7일</code></span><span>요약 예 <code>2013 members (13 held, delisted)</code></span></div>
+      </div>
+    </details>
+
+    <details class="schema">
+      <summary><span class="mono">2 · daily_bars</span> <span class="sd">원장이 아는 마지막 날부터 직전 세션까지</span><span class="cnt">일 1회</span></summary>
+      <div class="inner">
+        <p><b>하는 일:</b> 보유 + 유니버스 전 종목의 일봉을 Alpaca(<code>feed=iex</code>, 요청당
+        200종목 배치)에서 받아 <code>tb_daily_bar</code>를 채운다. 창을 두 갈래로 나눈다:</p>
+        <ul>
+          <li><b>cold</b>(봉이 하나도 없는 종목): 400일(<code>history_days</code>) 전체 창.
+          랭킹의 가장 긴 지표가 52주 고가비라 그보다 넉넉해야 한다.</li>
+          <li><b>warm</b>(이미 있는 종목): <b>가장 앞선 종목</b>의 다음 날부터. 뒤처진 종목에 맞추면
+          실행마다 수십만 행을 재수신한다(실측: 2회차가 30만 봉 재수신) — 뒤처짐의 원인은 대부분
+          거래소에 봉이 없는 것(폐지·정지)이라 소급해도 채워지지 않는다.</li>
+        </ul>
+        <p><b>백필이 별도 JOB이 아닌 이유:</b> "처음 한 번만 도는 잡"은 실패한 날과 성공한 날의
+        시스템을 서로 다른 물건으로 만든다. 매번 "마지막으로 아는 날부터"를 채우면 첫 실행은
+        백필, 이후는 증분 — 경로가 하나뿐이고 중단된 백필도 다음 실행이 이어받는다.</p>
+        <p><b>수용한 비용:</b> 거래소에 봉이 아예 없는 종목(실측 2,000 중 1개)은 매번 cold로 남아
+        전체 창을 다시 묻는다 — 요청 1건이라 "찾아봤지만 없더라" 기록 자리를 만들지 않았다.</p>
+        <div class="io"><span>입력 <code>Alpaca /v2/stocks/bars</code></span><span>출력 <code>tb_daily_bar</code></span><span>실측 <code>최초 53.7만 봉 / 43.6초</code></span><span>요약 예 <code>1204 bars (1 backfilled, 2012 incremental)</code></span></div>
+      </div>
+    </details>
+
+    <details class="schema">
+      <summary><span class="mono">3 · disclosures</span> <span class="sd">전 시장 하루치 공시를 1콜로</span><span class="cnt">일 1회 · 무키</span></summary>
+      <div class="inner">
+        <p><b>하는 일:</b> SEC 데일리 인덱스에서 직전 세션의 <b>전 시장</b> 공시를 받아
+        <code>tb_disclosure_raw</code>에 적재하고, 하드 이벤트(상장폐지·거래정지)를 플래그한다.</p>
+        <p><b>종목 목록을 받지 않는 유일한 수집 JOB이다</b> — 인덱스가 그날 전부를 주므로 누구를
+        볼지 미리 정할 필요가 없고, 그래서 스크리너에서 탈락한 보유 종목의 상장폐지 공시도
+        자연히 걸린다. 그게 이 JOB의 존재 이유다.</p>
+        <p><b>거래일만 묻는 책임이 이 JOB에 있다:</b> SEC는 없는 날짜의 인덱스에 403을 주는데
+        그것은 User-Agent 정책 차단과 구분되지 않는다. 그래서 어댑터는 아무 에러도 삼키지 않고,
+        JOB이 캘린더로 직전 세션을 계산해서 묻는다.</p>
+        <div class="io"><span>입력 <code>SEC daily index</code></span><span>출력 <code>tb_disclosure_raw</code></span><span>요약 예 <code>2841 filings (2 hard) for 2026-07-17</code></span></div>
+      </div>
+    </details>
+
+    <details class="schema">
+      <summary><span class="mono">4 · news</span> <span class="sd">전 시장 헤드라인 — 투표가 아니라 맥락</span><span class="cnt">일 1회</span></summary>
+      <div class="inner">
+        <p><b>하는 일:</b> Alpaca 뉴스 API에서 직전 세션부터 <b>실행 시점까지</b>의 전 시장
+        헤드라인을 받아 <code>tb_news_raw</code>에 적재한다. 창의 끝이 세션이 아니라 실행일인 이유 —
+        주말·프리마켓 기사를 다음 실행이 다시 줍지 않기 위해서다.</p>
+        <p><b>공시와 같은 자리에 같은 이유로 선다:</b> 종목별 폴링이면 콜 수가 종목 수에 비례해
+        분석 범위 밖 종목을 영영 못 본다.</p>
+        <p><b>여기서 하드 이벤트를 판정하지 않는 것도 의도다</b> — 상장폐지·거래정지는 권위 있는
+        쪽(SEC 폼)이 판정한다. 헤드라인 키워드로 매도를 발동시키면 "Trading Halt" 같은 제목
+        하나가 포지션을 날린다. 수집된 헤드라인은 분석 JOB의 증거 종합 맥락으로만 들어간다
+        (출처 등급 gray 0.50 &lt; 문턱 0.55라 투표권 없음).</p>
+        <div class="io"><span>입력 <code>Alpaca news (limit 50/페이지)</code></span><span>출력 <code>tb_news_raw</code></span><span>실측 <code>767기사 → 1,440행 / 14.5초</code></span><span>요약 예 <code>1440 headlines on 728 tickers since 2026-07-17</code></span></div>
+      </div>
+    </details>
+
+    <details class="schema">
+      <summary><span class="mono">5 · news_wire</span> <span class="sd">보도자료 RSS — 자격 있는 헤드라인의 수집</span> <span class="b b-new">2차 신규</span><span class="cnt">일 1회 · 무키</span></summary>
+      <div class="inner">
+        <p><b>하는 일:</b> GlobeNewswire·PR Newswire RSS에서 보도자료 헤드라인을 받아
+        같은 <code>tb_news_raw</code>에 적재한다(출처 등급 allow 0.95).</p>
+        <p><b>Alpaca 뉴스에 합성하지 않고 별도 JOB인 이유:</b> JOB 격리가 이 시스템의 실패
+        경계라서다. 실측으로 Alpaca 키가 죽은 날에도 allow 등급 헤드라인 수집은 계속되어야 한다.
+        SEC처럼 무키·무비용이라 등록에 조건이 없다.</p>
+        <p><b>채점(2단계)은 하지 않는다</b> — 와이어 뉴스가 픽을 덮지 않는다는 실측으로 기각됐다
+        (<a href="#notbuilt">§안 만든 것</a>). 수집만 유지하는 이유: 비용이 0이고, 커버리지가
+        바뀌면(유니버스 확장 등) 그때 2단계를 재평가할 데이터가 이미 쌓여 있게 된다.</p>
+        <div class="io"><span>입력 <code>GNW·PRN RSS</code></span><span>출력 <code>tb_news_raw</code></span><span>실측 <code>29행 / 24티커</code></span></div>
+      </div>
+    </details>
+
+    <details class="schema">
+      <summary><span class="mono">6 · macro</span> <span class="sd">금리 하나로 시장 국면을 정한다</span><span class="cnt">일 1회</span></summary>
+      <div class="inner">
+        <p><b>하는 일:</b> FRED 금리(DFF)를 받아 <code>regime_from_rate</code>로 국면
+        (risk_on / neutral / risk_off)과 risk_score를 계산해 <code>tb_macro</code>에 upsert한다.
+        분석 JOB이 <code>latest_macro</code>로 읽고, 국면별 확신도 감점
+        (<code>macro_penalty_table</code>)과 위험 국면 행동(<code>risk_off_action</code>)의 입력이 된다.</p>
+        <p><b>없으면 지어내지 않는다:</b> 관측이 비면 중립을 저장하는 대신 빈손으로 끝낸다 —
+        없는 국면을 중립으로 저장하면 그 행이 이틀 동안 "신선한 관측"으로 판단에 들어간다.
+        <code>latest_macro</code>가 None이면 부르는 쪽은 감점도 차단도 하지 않는다.</p>
+        <p><b>멱등:</b> <code>as_of</code>를 자정으로 고정해 같은 날 재실행이 같은 행을 덮어쓴다 —
+        시계에 의존하지 않는다.</p>
+        <div class="io"><span>입력 <code>FRED DFF</code></span><span>출력 <code>tb_macro</code></span><span>실측 <code>neutral / 0.302</code></span><span>요약 예 <code>DFF 4.33% → neutral (0.30)</code></span></div>
+      </div>
+    </details>
+
+    <details class="schema">
+      <summary><span class="mono">7 · screening</span> <span class="sd">전 유니버스 DB 랭킹 — API 0콜</span> <span class="b b-new">2차 신규</span><span class="cnt">일 1회</span></summary>
+      <div class="inner">
+        <p><b>하는 일:</b> 저장된 봉만으로 전 유니버스를 줄 세워 오늘의 분석 범위를
+        <code>tb_daily_pick</code>에 쓴다. 필터: 종가 ≥ $5 · 20일 평균 거래대금 ≥ $20M ·
+        이력 ≥ 60세션(ma50이 의미를 가지려면 50세션은 있어야 하고, 신규 상장은 52주 고가가
+        곧 자기 최고가라 돌파로 오인된다). 지표: <code>ret_20d</code>·<code>ma20/50</code>·
+        <code>high_252_ratio</code>·<code>rsi</code> 등 창 지표.</p>
+        <p><b>범위 = 상위 20(<code>llm_depth</code>) ∪ 보유 전부.</b> 보유가 캡과 무관한 이유는
+        판단이 아니라 구조다 — 시그널이 <code>tb_daily_pick</code>을 FK로 참조하므로, 범위 밖인
+        보유 종목은 청산 시그널을 남길 자리가 없다. 유니버스에 없는 보유(이월도 안 된 것)는
+        픽을 만들 수 없으므로 조용히 지나가지 않고 요약에 남긴다.</p>
+        <p><b>구 방식과의 차이:</b> 구 role_02·03은 지표를 종목당 1콜로 받아 500종목 캡이
+        필요했고 캡 밖은 아무도 못 봤다. 봉이 원장에 앉은 지금은 캡이 근거를 잃었다.</p>
+        <div class="io"><span>입력 <code>tb_daily_bar + tb_universe</code></span><span>출력 <code>tb_daily_pick</code></span><span>실측 <code>1,998 → 373 → 픽 20 / 3.7초</code></span><span>요약 예 <code>21 picks from 373 ranked (skipped 1 unlisted holdings)</code></span></div>
+      </div>
+    </details>
+
+    <details class="schema">
+      <summary><span class="mono">8 · insider_scoring</span> <span class="sd">Form 4 재량 거래 → role_07의 표</span> <span class="b b-new">2차 신규</span><span class="cnt">일 1회 · 무키 · 결정론</span></summary>
+      <div class="inner">
+        <p><b>하는 일:</b> 오늘 픽에 걸린 SEC Form 4를 EDGAR에서 받아 파싱하고, <b>재량 거래
+        (코드 P·S ∧ ¬10b5-1)만</b> 표로 만들어 <code>tb_disclosure_signal</code>에 쓴다
+        (매수 0.80 / 매도 0.30, 소유자 <code>mvp2.insider</code>). 기권(부여 A·세금 F·옵션행사
+        M/C·계획매매)은 행을 아예 쓰지 않는다 — 중립값을 쓰면 그게 표가 되어 확신도를 정보 없이
+        끌어내린다.</p>
+        <p><b>성향 인자가 없는 것이 요점이다</b> — 채점은 "무엇이 사실인가"를 묻고 답이 성향과
+        무관하다. 그래서 페르소나 수만큼 반복하지 않고 한 번만 돌며, 두 분석 JOB이 같은 표를
+        읽는다. LLM도 없다 — 입력이 전부 범주형 사실(거래 코드·10b5-1 플래그)이라 파서는
+        판단하지 않고 낭독한다.</p>
+        <p><b>순서:</b> 스크리닝 <b>뒤</b>(픽이 있어야 FK가 선다), 분석 <b>앞</b>(한 슬롯 늦게
+        도착하는 증거는 증거가 아니다).</p>
+        <div class="io"><span>입력 <code>SEC EDGAR Form 4 XML</code></span><span>출력 <code>tb_disclosure_signal.sentiment_score</code></span><span>실측 <code>TPL 0.80 · PAYX 0.30, 5 기권</code></span><span>요약 예 <code>2 insider votes, 5 abstained (no discretionary trade)</code></span></div>
+      </div>
+    </details>
+
+    <details class="schema">
+      <summary><span class="mono">9·10 · analysis:aggressive · analysis:conservative</span> <span class="sd">성향 하나가 JOB 하나</span><span class="cnt">일 1회 × 2 · LLM</span></summary>
+      <div class="inner">
+        <p><b>하는 일:</b> 오늘의 픽 각각에 대해 — 기술 지표, 최신 헤드라인 5건
+        (<code>headlines_per_ticker</code>), 공시, 국면, 인사이더 표를 증거로 —
+        LLM이 side(buy/sell/hold)·확신도·서사를 내고(<code>tb_strategist_signals</code>),
+        크리틱이 같은 증거로 반박해 평결을 남긴다(<code>tb_critic_verdict</code>).
+        게이트(출처 신뢰·증거 나이·강악재·매크로 감점·과신 상향)는 코드가 강제한다.</p>
+        <p><b>성향이 JOB 축인 이유:</b> 원장의 유일성 축이 <code>inv_type</code>이라 페르소나
+        하나가 JOB 하나다(<code>analysis:aggressive</code>·<code>analysis:conservative</code>).
+        두 페르소나는 서로의 결과를 보지 않는다 — 원장에서 <code>inv_type</code>으로 갈린다.</p>
+        <p><b>실패를 숨기지 않는다:</b> 모델 에러로 건너뛴 종목 수를 요약에 남긴다 — 범위가
+        몇이었는지가 원장에 남아야 한다. 방향은 코드가 정한다: 모델은 문턱을 모른 채 이유를
+        쓰고, <code>StrategyOutput.from_model</code>이 확신도와 성향 문턱을 비교한다.</p>
+        <div class="io"><span>입력 <code>픽+지표+뉴스+공시+국면+표</code></span><span>출력 <code>tb_strategist_signals + tb_critic_verdict</code></span><span>실측 <code>~20초/종목 · 2성향 22종목 ≈ 15분</code></span><span>요약 예 <code>20 analysed (aggressive): buy 18 / sell 0 / hold 2, 7 approved</code></span></div>
+      </div>
+    </details>
+
+    <details class="schema">
+      <summary><span class="mono">11 · exits</span> <span class="sd">보유만 보고, 3층으로 판정한다</span><span class="cnt">일 1회</span></summary>
+      <div class="inner">
+        <p><b>하는 일:</b> 보유 종목마다 관측을 조립해 청산 규칙을 적용하고, 팔아야 하면
+        close 주문·체결을 만든다. 판정은 3층이다: ① 하드 이벤트(상장폐지·정지 — 판단 없이 청산)
+        ② 브래킷·시간(손절 −15% · 익절 +20% · 보유 10거래일, 동시 발동 시 손절 우선 D5)
+        ③ 오늘 분석의 매도 판단(크리틱 통과분, 성향별 <code>sell_signal_profiles</code>).</p>
+        <p><b>관측을 두 날짜에서 조립한다:</b> 시세·하드 이벤트는 <b>직전 세션</b>의 사실이고,
+        매도 판단은 <b>오늘</b> 분석 JOB이 낸 것이다. 분석 → 청산 순서의 이유가 여기 있다.
+        다만 보유일 계산은 오늘 기준이다 — "오늘까지 며칠 들고 있었나"이지 "어제까지"가 아니다.</p>
+        <p><b>판단이 있어도 관측이 없으면 더하지 않는다</b> — 없는 관측을 지어내면 "시세를 못 받은
+        날은 아무것도 하지 않는다"는 규칙이 무력해진다. 수집 실패가 매도로 둔갑하지 않는다.
+        청산은 보유만 본다 — 유니버스까지 넘기면 2,000종목 관측을 읽고 하나도 쓰지 않는다.</p>
+        <div class="io"><span>입력 <code>보유 + tb_daily_bar 관측 + 오늘 판단</code></span><span>출력 <code>tb_order(close) + tb_fill</code></span><span>요약 예 <code>1/12 closed</code></span></div>
+      </div>
+    </details>
+
+    <details class="schema">
+      <summary><span class="mono">12 · allocation</span> <span class="sd">후보 전체를 계좌 앞에 놓고, 지갑이 허락할 때까지 산다</span> <span class="b b-new">2차 신규</span><span class="cnt">일 1회</span></summary>
+      <div class="inner">
+        <p><b>하는 일:</b> 크리틱을 통과한 buy 후보 전체를 계좌마다 순서대로 대보며, 지갑 규칙이
+        허락하는 동안 산다: <code>max_positions</code>(보유 수) · <code>max_weight</code>(종목 비중) ·
+        <code>min_cash_ratio</code>(최소 현금) · <code>daily_loss_limit</code>(당일 손실 —
+        분모는 <code>tb_account_equity_daily</code>의 아침 스냅샷) ·
+        <code>daily_new_order_cap</code>(하루 신규 5건). 매수는 브래킷(진입 + 손절 −15% +
+        익절 +20%)으로 만들어 MockBroker가 체결한다.</p>
+        <p><b>못 산 것도 전부 기록한다:</b> 계좌×후보마다 <code>tb_order_plan</code>에
+        planned(수량 포함) 또는 skipped(사유 필수)가 남는다 — 관제실의 "왜 못 샀나" 순위가
+        여기서 나오고, 문턱 조정의 입력이 된다.</p>
+        <p><b>청산 뒤인 이유:</b> 판 돈과 빈 자리로 사야 "자리가 없어 못 산다"가 하루 늦지 않는다.</p>
+        <p><b>실 스모크(2026-07-20):</b> 계좌 10개에서 33 매수 · 24 보류 — 보류 사유는
+        min_cash 19 · daily_order_cap 3 · insufficient_equity 1 · existing_position 1.
+        매수 후 현금 + 포지션 = 초기 자본, 오차 0.</p>
+        <div class="io"><span>입력 <code>승인 buy 후보 + 계좌 지갑</code></span><span>출력 <code>tb_order(bracket) + tb_fill + tb_order_plan</code></span><span>요약 예 <code>33 bought, 24 skipped</code></span></div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ═══════════════ 4. 판단이 만들어지는 과정 ═══════════════ -->
+  <section id="judgment">
+    <div class="sec-eyebrow">Judgment</div>
+    <h2>판단이 만들어지는 과정</h2>
+    <p class="sec-intro">
+      매수는 세 단계를 통과해야 한다: ① 여러 근거가 <b>확신도 평균</b>으로 합쳐지고,
+      ② 성향별 <b>문턱</b>을 넘고, ③ <b>크리틱의 반박</b>에서 살아남아야 한다.
+      LLM이 검증 없이 돈에 닿는 경로는 0개다.
+    </p>
+
+    <div class="mermaid">
+flowchart TB
+  S["스크리닝 점수<br/>(픽 랭킹 · 실측 0.94 안팎)"] --> V
+  I["인사이더 표<br/>(재량 매수 0.80 · 재량 매도 0.30)<br/>표가 없으면 평균에 안 들어감"] --> V
+  L["LLM 판단<br/>(증거 종합 · 성향별)"] --> V
+  M["매크로 감점<br/>(국면 risk_score 구간별 −0.05~−0.40)"] --> V
+  V{"확신도 = 평균"} --> T{"성향 문턱<br/>aggressive ≥ 0.65<br/>conservative ≥ 0.75"}
+  T -- "미달" --> H["hold — 아무 일도 없다"]
+  T -- "통과" --> CR{"크리틱 반박<br/>승인 ≥ 0.70<br/>(확신 ≥ 0.90이면 ≥ 0.80)"}
+  CR -- "reject" --> H
+  CR -- "pass" --> B["매수 후보 → allocation JOB"]
+    </div>
+    <p class="mermaid-note">뉴스는 이 그림에 없다 — 투표권이 없고, LLM 판단의 참고 맥락으로만 들어간다.</p>
+
+    <h3>실제 숫자로 보는 하루 — 2026-07-20, 실 EDGAR 데이터</h3>
+    <div class="card">
+      <p style="margin-top:0">픽 59종목 중 Form 4가 걸린 7종목을 채점한 날. 5종목은 기권
+      (계획매매·보상 지급 — 재량이 아니므로 표 없음), <b>2종목만 표를 받았다</b>:</p>
+      <div class="twrap"><table>
+        <thead><tr><th>종목</th><th>인사이더 표</th><th>근거</th><th>최종 확신도</th></tr></thead>
+        <tbody>
+          <tr><td>표 없는 종목</td><td class="mono">—</td><td>Form 4 없음 또는 기권</td><td class="mono">~0.87</td></tr>
+          <tr><td><b>TPL</b></td><td class="mono">0.80 (매수)</td><td>10% 보유자의 공개시장 자발 매수(코드 P)</td><td class="mono"><b>0.833</b></td></tr>
+          <tr><td><b>PAYX</b></td><td class="mono">0.30 (매도)</td><td>거래 24건 중 재량 매도 1건 — 나머지는 전부 기계적 거래</td><td class="mono"><b>0.651</b> ↓</td></tr>
+        </tbody>
+      </table></div>
+      <p style="margin-bottom:0" class="small muted">하방 표 하나가 확신도를 0.87 → 0.651로 끌어내렸다.
+      상수가 아니라 방향 있는 분포다 — 이것이 "표"가 하는 일이다. (dev-handoff.md R8 절, 커밋 <code>610bc30</code>)</p>
+    </div>
+
+    <h3>인사이더 채점 — 판단하지 않고 낭독한다 <span class="b b-new">2차 신규</span></h3>
+    <p>
+      Form 4는 구조화 XML이라 <b>LLM 없이 결정론으로</b> 채점한다. 픽에 걸린 Form 4
+      23건·거래 79건을 전수 실측한 분포가 규칙의 근거다:
+    </p>
+    <div class="twrap"><table>
+      <thead><tr><th>거래 코드</th><th>건수</th><th>성격</th><th>표?</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">A (부여)</td><td>26</td><td>보상 — 내부자가 고른 게 아니다</td><td>기권</td></tr>
+        <tr><td class="mono">S (매도)</td><td>38</td><td>큰 묶음은 전부 10b5-1 계획매매</td><td>계획이면 기권, <b>재량이면 0.30</b></td></tr>
+        <tr><td class="mono">F (세금 원천)</td><td>10</td><td>보상의 기계</td><td>기권</td></tr>
+        <tr><td class="mono">M · C (옵션행사)</td><td>4</td><td>보상의 기계</td><td>기권</td></tr>
+        <tr><td class="mono">P (공개시장 매수)</td><td>1</td><td>자기 돈으로 시장에서 샀다</td><td><b>0.80</b></td></tr>
+      </tbody>
+    </table></div>
+    <p>
+      매수 표(0.80)가 매도 표(0.30)보다 강한 이유: 내부자가 파는 이유는 분산·세금·주택 구입 등
+      여럿이지만, <b>자기 돈으로 시장에서 사는 이유는 사실상 하나다.</b> 표에 크기가 없는 이유는
+      정직함이다 — "얼마부터 큰 거래인가"를 잰 데이터가 아직 없다. 기권이 행을 아예 안 쓰는 이유:
+      중립값 0.5를 쓰면 그게 표가 되어 확신도를 정보 없이 끌어내린다(폼종류 채점 기각의 교훈).
+      문턱 소유자는 <code>pipeline.yaml</code>의 <code>mvp2.insider</code>.
+    </p>
+
+    <h3>성향 2종 — 같은 증거, 다른 문턱</h3>
+    <p>
+      성향은 실존 방법론에 정박했다: aggressive는 오닐(CAN SLIM)·미너비니(SEPA)·드러켄밀러,
+      conservative는 하워드 막스(2차적 사고)·리버모어(손절 규율). 버핏·그레이엄류를 뺀 이유는
+      우리 원장에 ROE·FCF·내재가치가 없어서다 — 없는 증거를 지어내게 하지 않는다.
+      값의 소유자는 <code>pipeline.yaml</code>의 <code>mvp2.profiles</code>:
+    </p>
+    <div class="twrap"><table>
+      <thead><tr><th>파라미터</th><th>aggressive</th><th>conservative</th><th>왜 다른가</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">buy_threshold</td><td class="mono">0.65</td><td class="mono">0.75</td><td>안전형은 더 확실해야 산다</td></tr>
+        <tr><td class="mono">sell_threshold</td><td class="mono">0.60</td><td class="mono">0.50</td><td>안전형은 더 빨리 판다 — 확신이 흔들리면 자리를 비운다</td></tr>
+        <tr><td class="mono">risk_off_action</td><td class="mono">penalty</td><td class="mono">no_new_buys</td><td>위험 국면에서 공격형은 감점, 안전형은 신규 매수 중단</td></tr>
+        <tr><td class="mono">max_positions</td><td class="mono">10</td><td class="mono">5</td><td rowspan="4">지갑 규칙 — allocation JOB이 강제</td></tr>
+        <tr><td class="mono">max_weight</td><td class="mono">20%</td><td class="mono">10%</td></tr>
+        <tr><td class="mono">daily_loss_limit</td><td class="mono">4%</td><td class="mono">2%</td></tr>
+        <tr><td class="mono">min_cash_ratio</td><td class="mono">10%</td><td class="mono">30%</td></tr>
+      </tbody>
+    </table></div>
+    <p>
+      매도 문턱이 매수보다 낮은 것은 의도다 — 좋은 종목을 안 사면 기회를 놓칠 뿐이지만,
+      나쁜 종목을 안 팔면 손실이 계속 자란다. 하방(매도) 확신은 별도 축
+      (<code>vote_bearishness</code>)으로, <b>모델 점수만</b> 본다: 스크리닝 점수(늘 높음)를
+      섞으면 픽을 영영 팔 수 없게 되기 때문이다.
+    </p>
+
+    <h3>게이트 — 코드가 막는 것</h3>
+    <div class="twrap"><table>
+      <thead><tr><th>게이트</th><th>값</th><th>하는 일</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">source_trust_min</td><td class="mono">0.55</td><td>이보다 신뢰도 낮은 출처는 투표권 박탈 (benzinga=gray 0.50이 뉴스가 투표 못 하는 이유)</td></tr>
+        <tr><td class="mono">evidence_max_age</td><td class="mono">2,880분</td><td>이보다 오래된 증거로는 매수 불가 (매도는 막지 않는다)</td></tr>
+        <tr><td class="mono">hard_negative_max</td><td class="mono">0.15</td><td>강한 악재가 있으면 확신도와 무관하게 매수 차단</td></tr>
+        <tr><td class="mono">macro_penalty</td><td class="mono">−0.05~−0.40</td><td>국면 risk_score 구간별 확신도 감점 (하방 판단에서는 부호가 뒤집힌다)</td></tr>
+        <tr><td class="mono">critic_approval</td><td class="mono">0.70</td><td>크리틱 승인 문턱. 확신도 ≥0.90이면 0.80으로 상향 — 과신일수록 더 세게 반박당한다</td></tr>
+        <tr><td class="mono">premarket_gap_max</td><td class="mono">0.03 ⏳</td><td>분석 기준가 대비 갭이 3% 넘으면 개장 후 30분까지 신규 매수 보류 (잠정값 — 분포 관측 후 조정)</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- ═══════════════ 5. 데이터 모델 ═══════════════ -->
+  <section id="data">
+    <div class="sec-eyebrow">Data Model</div>
+    <h2>데이터 모델 — 판단이 자기 근거를 가리킨다</h2>
+    <p class="sec-intro">
+      이 시스템의 등뼈는 <b>계보 FK</b>다. 판단 행(<code>tb_strategist_signals</code>)은
+      자기가 본 픽·공시 채점·뉴스 채점·국면을 FK로 가리키고, 주문은 판단을, 체결은 주문을,
+      청산은 자기가 닫는 매수를 가리킨다. "왜 샀나"는 기억이 아니라 조인으로 답한다.
+      출처: <a href="https://github.com/jaymunsh/quantinue/blob/main/app-v2/db/schema.sql"><code>app-v2/db/schema.sql</code></a>.
+    </p>
+
+    <div class="mermaid">
+erDiagram
+  tb_universe ||--o{ tb_daily_pick : "universe_as_of·ticker"
+  tb_daily_pick ||--o{ tb_strategist_signals : "trade_date·ticker"
+  tb_disclosure_signal ||--o{ tb_strategist_signals : "src_disclosure_at"
+  tb_news_signal ||--o{ tb_strategist_signals : "src_news_at"
+  tb_macro ||--o{ tb_strategist_signals : "src_macro_at"
+  tb_strategist_signals ||--|| tb_critic_verdict : "signal_id"
+  tb_strategist_signals ||--o{ tb_order : "signal_id"
+  tb_account ||--o{ tb_order : "account_id"
+  tb_order ||--o{ tb_fill : "order_id"
+  tb_order |o--o{ tb_order : "closes_order_id (청산→매수)"
+  tb_event_raw_document ||--o{ tb_event_raw_version : "document_id"
+  tb_event_raw_version ||--o{ tb_normalized_event : "raw_version_id"
+  tb_normalized_event ||--o{ tb_event_evidence_pack : "event_id"
+  tb_event_raw_version ||--o{ tb_event_evidence_pack : "raw_version_id"
+  tb_event_raw_version ||--o{ tb_event_summary_cache : "version·hash·length"
+  tb_normalized_event ||--o{ tb_event_processing_receipt : "event_id"
+  tb_order |o--o{ tb_event_processing_receipt : "order_id"
+  tb_account ||--o{ tb_account_equity_daily : "account_id"
+  tb_strategist_signals ||--o{ tb_review_price_snapshots : "signal_id"
+  tb_strategist_signals ||--o| tb_review : "signal_id"
+    </div>
+    <p class="mermaid-note">계보의 척추만 그렸다. 원시 원장(tb_*_raw)·운영 로그는 의도적으로 FK 밖에 있다.</p>
+
+    <div class="note">
+      <b>계보 컬럼의 실제 채움률 (2026-07-27 · 운영 5445 실측).</b> 아래 스키마 표는 "이 컬럼이
+      있다"는 <b>정의</b>지 "채워진다"는 <b>주장</b>이 아니다. 감사 가능성을 말할 때 둘을 섞으면
+      질문 하나에 무너지므로, 판단 원장(<code>tb_strategist_signals</code> 342건) 기준 실측을
+      여기 붙여 둔다.
+      <div class="twrap" style="margin-top:10px"><table>
+        <thead><tr><th>컬럼</th><th>채움</th><th>읽는 법</th></tr></thead>
+        <tbody>
+        <tr><td class="mono">model_name · prompt_version · input_hash</td><td class="mono"><b>234 / 342</b></td>
+          <td>기록 배선이 들어간 <b>07-21 이후 구간(240건)에서는 LLM이 판단한 234건 전부</b>에 남는다 — 이 구간의 누락은 <b>0건</b>이다. 남는 6건은 <code>model_provider</code>조차 비어 있는 <b>규칙 기반 자동 청산</b>(손절·익절 매도)이라 애초에 프롬프트가 없다. 07-20 이전 102건은 계보 배선 자체가 없던 구간이다.</td></tr>
+        <tr><td class="mono">policy_version</td><td class="mono"><b>0 / 342</b></td>
+          <td><b>컬럼만 있고 아무도 안 채운다.</b> 정책(config) 버전을 판단 행에 박는 배선이 아직 없다. 재현 검증은 프롬프트·입력 해시까지만 가능하고, "그때 어떤 정책값이었나"는 config 이력으로 따로 봐야 한다.</td></tr>
+        <tr><td class="mono">계보 FK — 픽 (<code>trade_date·ticker</code>)</td><td class="mono"><b>342 / 342</b></td>
+          <td>NOT NULL·FK로 DB가 강제한다. "어느 후보를 보고 내렸나"는 예외 없이 조인으로 답한다.</td></tr>
+        <tr><td class="mono">계보 FK — 국면 (<code>src_macro_at</code>)</td><td class="mono"><b>234 / 342</b></td>
+          <td>위 재현 메타데이터와 같은 구간·같은 배선이다.</td></tr>
+        <tr><td class="mono">계보 FK — 공시·뉴스 (<code>src_disclosure_at</code>·<code>src_news_at</code>)</td><td class="mono"><b>6 / 342 · 0 / 342</b></td>
+          <td><b>NULL은 결손이 아니라 "그 종목·그 슬롯에 채점된 공시·뉴스가 없었다"는 뜻</b>이다(nullable FK). 실제로 <code>tb_disclosure_signal</code> 8행 · <code>tb_news_signal</code> 5행뿐이라, 채점 채널이 판단에 닿은 사례가 아직 거의 없다. <b>구조는 뚫려 있고 실적이 얕은 자리</b>로 말해야 정확하다.</td></tr>
+        </tbody>
+      </table></div>
+      즉 정확한 한 문장은 <b>"픽 근거는 전건, 재현 메타데이터는 LLM 판단 전건"</b>이다.
+      <code>policy_version</code>과 <b>공시·뉴스 계보</b>는 <b>미배선·미적재로 남은 항목</b>으로 말한다.
+    </div>
+
+    <h3>테이블 한눈에</h3>
+    <div class="r-key">
+      <span><i style="background:var(--buy-bg);border:1px solid var(--buy)"></i>2차 신규</span>
+      <span><i style="background:var(--hold-bg);border:1px solid var(--hold)"></i>1차에서 역할 변경</span>
+    </div>
+    <div class="twrap"><table>
+      <thead><tr><th>그룹</th><th>테이블</th><th>무엇이 담기나</th><th>핵심 제약</th></tr></thead>
+      <tbody>
+        <tr><td rowspan="3">세계</td><td class="mono">tb_universe</td><td>주간 유니버스 스냅샷 (2,000 + 이월 보유)</td><td class="mono">listing_status: listed·held_delisted</td></tr>
+        <tr class="r-new"><td class="mono">tb_daily_bar</td><td>일봉 원장 — 랭킹·청산 판정·시가평가의 원천</td><td class="mono">PK(trade_date,ticker) · OHLC 정합 CHECK</td></tr>
+        <tr><td class="mono">tb_macro</td><td>시장 국면 (regime · risk_score)</td><td class="mono">PK(as_of)</td></tr>
+        <tr><td rowspan="2">원시 원장</td><td class="mono r-new" style="background:var(--buy-bg)">tb_disclosure_raw</td><td>전 시장 공시 + 하드 이벤트 플래그</td><td>FK 없음 — 분석 범위 <b>밖</b>을 담는 게 존재 이유</td></tr>
+        <tr class="r-new"><td class="mono">tb_news_raw</td><td>전 시장 헤드라인 (Alpaca + 와이어 RSS)</td><td class="mono">PK(article_id,ticker) · FK 없음</td></tr>
+        <tr class="r-new"><td class="mono">tb_event_source_cursor</td><td>소스별 증분 수집 체크포인트</td><td class="mono">PK(source_name) · 빈 cursor 금지</td></tr>
+        <tr class="r-new"><td class="mono">tb_event_raw_document</td><td>공급자 문서의 안정 식별자</td><td class="mono">UNIQUE(source_name,source_document_id) · UPDATE/DELETE 거부</td></tr>
+        <tr class="r-new"><td class="mono">tb_event_raw_version</td><td>원문·정규화 본문의 불변 버전</td><td class="mono">UPDATE/DELETE 거부 · 문서별 version/hash UNIQUE</td></tr>
+        <tr class="r-new"><td class="mono">tb_normalized_event</td><td>결정론적 장중 사건과 공급자 순서</td><td class="mono">source=raw document · event/source order UNIQUE · append-only</td></tr>
+        <tr class="r-new"><td class="mono">tb_event_evidence_pack</td><td>사건 판단의 불변 원문 span</td><td class="mono">raw version=event version · end≤본문 길이 · append-only</td></tr>
+        <tr class="r-new"><td class="mono">tb_event_summary_cache</td><td>12,000자 초과 문서의 모델 요약 캐시</td><td class="mono">UNIQUE(hash,model,prompt) · length &gt; 12000 · append-only</td></tr>
+        <tr class="r-new"><td class="mono">tb_event_processing_receipt</td><td>사건·종목·성향별 처리/주문 영수증</td><td class="mono">UNIQUE(event,ticker,persona) · FK → order</td></tr>
+        <tr><td rowspan="2">선별</td><td class="mono">tb_daily_pick</td><td>오늘의 분석 범위 (랭킹 상위 + 보유)</td><td class="mono">FK → tb_universe · rank 상한 없음</td></tr>
+        <tr class="r-chg"><td class="mono">tb_disclosure_signal</td><td>공시 채점 — 현행은 <b>인사이더 표</b>가 여기 앉는다 (<code>sentiment_score</code>)</td><td class="mono">UNIQUE(ticker,cycle_ts) · FK → pick</td></tr>
+        <tr><td rowspan="3">판단</td><td class="mono">tb_strategist_signals</td><td>성향별 판단 (side·확신도·서사·증거)</td><td class="mono">UNIQUE(ticker,cycle_ts,inv_type) + 계보 FK 4개</td></tr>
+        <tr><td class="mono">tb_critic_verdict</td><td>크리틱 평결 (pass·reject + 반박문)</td><td class="mono">signal_id UNIQUE — 판단당 평결 하나</td></tr>
+        <tr><td class="mono">tb_news_signal</td><td>뉴스 채점 (맥락용 — 투표권 없음)</td><td class="mono">FK → pick·tb_news</td></tr>
+        <tr><td rowspan="4">집행</td><td class="mono">tb_account</td><td>모의 계좌 (성향·현금·평가액)</td><td class="mono">inv_type CHECK</td></tr>
+        <tr class="r-chg"><td class="mono">tb_order</td><td>주문 — 매수(bracket)와 청산(close)이 별도 행 (D7)</td><td class="mono">bracket 삼중 CHECK · close는 closes_order_id 필수</td></tr>
+        <tr><td class="mono">tb_fill</td><td>체결</td><td class="mono">FK → tb_order</td></tr>
+        <tr class="r-new"><td class="mono">tb_order_plan</td><td>배분의 관측 로그 — 샀으면 수량, <b>못 샀으면 사유</b></td><td class="mono">planned XOR skipped CHECK</td></tr>
+        <tr><td rowspan="4">운영</td><td class="mono r-new" style="background:var(--buy-bg)">tb_job_run</td><td>JOB 실행 원장 — 멱등의 근거</td><td class="mono">PK(job_name,slot_date) · running=미종료 CHECK</td></tr>
+        <tr class="r-new"><td class="mono">tb_watch_sweep</td><td>장중 정기 재판단 실행 원장 — 재시작·재시도 멱등의 근거</td><td class="mono">PK(sweep_at) · attempts 세대 펜싱 · running=미종료 CHECK</td></tr>
+        <tr class="r-new"><td class="mono">tb_watch_sweep_item</td><td>유료 재판단 디스패치 원장 — 불확실한 호출의 중복 차단</td><td class="mono">PK(sweep_at,ticker,persona) · dispatched는 재시도 금지</td></tr>
+        <tr class="r-new"><td class="mono">tb_account_equity_daily</td><td>당일 시작 평가액 — daily_loss_limit의 분모</td><td>하루 첫 기록이 이긴다 (ON CONFLICT DO NOTHING)</td></tr>
+        <tr><td rowspan="2">회고</td><td class="mono">tb_review_price_snapshots</td><td>판단 후 T+1~5 가격 추적</td><td class="mono">FK → signals</td></tr>
+        <tr><td class="mono">tb_review</td><td>판단 채점 (적중 여부 · 교훈)</td><td class="mono">PK = signal_id</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3 id="schema-detail">컬럼 명세 — <code>schema.sql</code> 현행 원문 + 컬럼별 설명</h3>
+    <p class="small muted">정의는 <code>app-v2/db/schema.sql</code>에서 기계 추출(2026-07-20, 커밋 <code>bd287f3</code> 시점). 설명은 v5.3 문서의 컬럼 명세를 현행 스키마에 병합하고, 이후 추가된 컬럼만 코드에서 확인해 채웠다.</p>
+    <h4 style="margin:22px 0 6px;font-size:15px;color:var(--ink-soft)">세계 — 시장이 어떤 모습인가</h4>
+    <details class="schema">
+      <summary><code>tb_universe</code> <span class="sd">주간 유니버스 스냅샷 (2,000 + 이월 보유)</span><span class="cnt">6 컬럼</span></summary>
+      <div class="inner"><p class="small" style="margin:6px 0">거래 가능 범위는 상장 피드가 아니라 "상장 피드 ∪ 우리가 든 것"이다. 상장이 폐지된 보유가 여기서 빠지면 tb_daily_pick 행을 못 만들고(FK) → sell 시그널을 못 남기고 → close 주문을 못 만든다. 팔아야 할 바로 그 종목이 영구히 열린 채 남는다. 불리언이 아닌 이유: suspended·pending_delisting이 생겨도 CHECK만 늘리면 된다.</p></div>
+      <div class="twrap"><table>
+        <thead><tr><th>컬럼</th><th>정의 (DDL 원문)</th><th>설명</th></tr></thead><tbody>
+        <tr><td>as_of_date</td><td class="mono">DATE NOT NULL</td><td>스냅샷 주차 날짜 — 매주 앨범처럼 누적 (생존편향 방지)</td></tr>
+        <tr><td>ticker</td><td class="mono">TEXT NOT NULL</td><td>종목 코드</td></tr>
+        <tr><td>company_name</td><td class="mono">TEXT NOT NULL</td><td>회사명</td></tr>
+        <tr><td>market_cap</td><td class="mono">BIGINT NOT NULL CHECK (market_cap &gt;= 0)</td><td>시가총액 — 상위 2,000 선정 기준. 이월분은 마지막 관측값</td></tr>
+        <tr><td>listing_status</td><td class="mono">TEXT NOT NULL DEFAULT 'listed' CHECK (listing_status IN ('listed','held_delisted'))</td><td>'listed'(피드에 있음) / 'held_delisted'(피드에서 사라졌지만 보유 중이라 이월) — 폐지된 보유를 팔 수 있게 하는 열쇠</td></tr>
+        <tr><td>created_at</td><td class="mono">TIMESTAMPTZ NOT NULL DEFAULT now()</td><td>DB 저장 시각 (기록용)</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">PRIMARY KEY (as_of_date, ticker)</td></tr>
+        </tbody></table></div>
+    </details>
+    <details class="schema">
+      <summary><code>tb_daily_bar</code> <span class="b b-new">2차 신규</span> <span class="sd">일봉 원장 — 랭킹·청산 판정·시가평가의 원천</span><span class="cnt">9 컬럼</span></summary>
+      <div class="inner"><p class="small" style="margin:6px 0">일봉 원장. 스크리닝 랭킹·브래킷 발동 판정·시가평가가 전부 여기서 온다. 종목당 1콜로 받던 것을 배치 1콜로 바꾸는 근거이자, 같은 날을 두 번 받아도 값이 흔들리지 않게 하는 자리다(PK로 하루 1행 고정).</p></div>
+      <div class="twrap"><table>
+        <thead><tr><th>컬럼</th><th>정의 (DDL 원문)</th><th>설명</th></tr></thead><tbody>
+        <tr><td>trade_date</td><td class="mono">DATE NOT NULL</td><td>세션일 — PK가 하루 1행을 고정해 재적재로 값이 흔들리지 않게 한다</td></tr>
+        <tr><td>ticker</td><td class="mono">TEXT NOT NULL</td><td>종목</td></tr>
+        <tr><td>open</td><td class="mono">NUMERIC NOT NULL CHECK (open &gt; 0)</td><td>시가</td></tr>
+        <tr><td>high</td><td class="mono">NUMERIC NOT NULL CHECK (high &gt; 0)</td><td>고가 — 브래킷(익절선) 발동 판정의 입력</td></tr>
+        <tr><td>low</td><td class="mono">NUMERIC NOT NULL CHECK (low &gt; 0)</td><td>저가 — 브래킷(손절선) 발동 판정의 입력, 동시 발동 시 손절 우선(D5)</td></tr>
+        <tr><td>close</td><td class="mono">NUMERIC NOT NULL CHECK (close &gt; 0)</td><td>종가 — 랭킹 지표·시가평가(D8)·매도 판단의 기준가</td></tr>
+        <tr><td>volume</td><td class="mono">BIGINT NOT NULL CHECK (volume &gt;= 0)</td><td>거래량</td></tr>
+        <tr><td>source</td><td class="mono">TEXT NOT NULL</td><td>수집 출처(alpaca-iex 등) — 폴백 체인 중 어느 소스가 준 값인지</td></tr>
+        <tr><td>created_at</td><td class="mono">TIMESTAMPTZ NOT NULL DEFAULT now()</td><td>적재 시각</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">PRIMARY KEY (trade_date, ticker)</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">CHECK (low &lt;= open AND open &lt;= high)</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">CHECK (low &lt;= close AND close &lt;= high)</td></tr>
+        </tbody></table></div>
+    </details>
+    <details class="schema">
+      <summary><code>tb_macro</code> <span class="sd">시장 국면 (regime · risk_score)</span><span class="cnt">9 컬럼</span></summary>
+      <div class="twrap"><table>
+        <thead><tr><th>컬럼</th><th>정의 (DDL 원문)</th><th>설명</th></tr></thead><tbody>
+        <tr><td>as_of</td><td class="mono">TIMESTAMPTZ PRIMARY KEY</td><td>사이클 슬롯 시각 (cycle_ts 역할 — 규칙 8 위반 아님)</td></tr>
+        <tr><td>regime</td><td class="mono">TEXT NOT NULL CHECK (regime IN ('risk_on','neutral','risk_off'))</td><td>국면 (경계 risk_score 0.30 / 0.70)</td></tr>
+        <tr><td>risk_score</td><td class="mono">NUMERIC(4,3) NOT NULL CHECK (risk_score BETWEEN 0 AND 1)</td><td>위험 점수 — 07 감점표의 입력</td></tr>
+        <tr><td>vix</td><td class="mono">NUMERIC NOT NULL</td><td>변동성 지수</td></tr>
+        <tr><td>nasdaq_ret</td><td class="mono">NUMERIC NOT NULL</td><td>나스닥 수익률</td></tr>
+        <tr><td>sp500_ret</td><td class="mono">NUMERIC NOT NULL</td><td>S&amp;P500 수익률</td></tr>
+        <tr><td>rate</td><td class="mono">NUMERIC NOT NULL</td><td>금리</td></tr>
+        <tr><td>dollar</td><td class="mono">NUMERIC NOT NULL</td><td>달러 인덱스</td></tr>
+        <tr><td>created_at</td><td class="mono">TIMESTAMPTZ NOT NULL DEFAULT now()</td><td>기록 시각</td></tr>
+        </tbody></table></div>
+    </details>
+    <h4 style="margin:22px 0 6px;font-size:15px;color:var(--ink-soft)">원시 원장 — 전 시장을 통으로</h4>
+    <details class="schema">
+      <summary><code>tb_disclosure_raw</code> <span class="b b-new">2차 신규</span> <span class="sd">전 시장 공시 + 하드 이벤트 플래그</span><span class="cnt">10 컬럼</span></summary>
+      <div class="inner"><p class="small" style="margin:6px 0">공시 원시 원장. tb_disclosure(채점 결과)와 따로 두는 이유는 FK다 — 그쪽은 (trade_date, ticker) → tb_daily_pick을 걸어 그날 분석 대상이 아닌 종목에는 행을 넣을 수 없는데, 일괄 수집이 노리는 것이 정확히 그 바깥이다(스크리너에서 탈락한 보유 종목의 상장폐지 공시). 그래서 여기엔 FK를 걸지 않는다.</p></div>
+      <div class="twrap"><table>
+        <thead><tr><th>컬럼</th><th>정의 (DDL 원문)</th><th>설명</th></tr></thead><tbody>
+        <tr><td>filing_no</td><td class="mono">TEXT NOT NULL</td><td>EDGAR 접수번호. 같은 날 같은 종목이 여러 건을 낼 수 있어 (날짜,티커)로는 행을 못 가른다</td></tr>
+        <tr><td>trade_date</td><td class="mono">DATE NOT NULL</td><td>제출 세션일</td></tr>
+        <tr><td>ticker</td><td class="mono">TEXT NOT NULL</td><td>공시 주체에 매핑된 종목</td></tr>
+        <tr><td>cik</td><td class="mono">TEXT NOT NULL</td><td>SEC 회사 식별자(CIK) — Form 4 수신(EDGAR 조회)의 열쇠</td></tr>
+        <tr><td>form_type</td><td class="mono">TEXT NOT NULL</td><td>SEC 폼 타입(25-NSE·8-K …)</td></tr>
+        <tr><td>company_name</td><td class="mono">TEXT NOT NULL</td><td>공시 주체 회사명</td></tr>
+        <tr><td>source_ref</td><td class="mono">TEXT NOT NULL</td><td>EDGAR 원문 경로 — 증거의 출처를 되짚는 참조</td></tr>
+        <tr><td>event_type</td><td class="mono">TEXT</td><td>ontology.EventType. 규칙 기반 판정 — LLM 없이 폼 타입으로만 정한다</td></tr>
+        <tr><td>is_hard_event</td><td class="mono">BOOLEAN NOT NULL DEFAULT false</td><td>상장폐지·등록말소(25·25-NSE·15-12B/G·15-15D) → 즉시 청산 대상</td></tr>
+        <tr><td>created_at</td><td class="mono">TIMESTAMPTZ NOT NULL DEFAULT now()</td><td>적재 시각</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">PRIMARY KEY (filing_no)</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">CHECK (is_hard_event = false OR event_type IS NOT NULL)</td></tr>
+        </tbody></table></div>
+    </details>
+    <details class="schema">
+      <summary><code>tb_news_raw</code> <span class="b b-new">2차 신규</span> <span class="sd">전 시장 헤드라인 (Alpaca + 와이어 RSS)</span><span class="cnt">8 컬럼</span></summary>
+      <div class="inner"><p class="small" style="margin:6px 0">Phase 3: 뉴스 원시 원장. 공시(tb_disclosure_raw)와 같은 이유로 FK가 없다 — tb_news(채점 결과)는 (trade_date, ticker) → tb_daily_pick을 걸어 그날 분석 대상이 아닌 종목에 행을 넣을 수 없는데, 일괄 수집이 노리는 것이 그 바깥이다. PK가 (기사, 티커)인 이유: 기사 하나가 여러 종목을 언급하고, 소비는 종목 단위다. 겹치는 창을 다시 받아도 이 키가 중복을 흡수한다.</p></div>
+      <div class="twrap"><table>
+        <thead><tr><th>컬럼</th><th>정의 (DDL 원문)</th><th>설명</th></tr></thead><tbody>
+        <tr><td>article_id</td><td class="mono">BIGINT NOT NULL</td><td>기사 식별자(PK 절반) — 기사 하나가 여러 종목을 언급해도 (기사,종목)으로 유일</td></tr>
+        <tr><td>ticker</td><td class="mono">TEXT NOT NULL</td><td>기사가 언급한 종목(PK 절반) — 소비는 종목 단위</td></tr>
+        <tr><td>trade_date</td><td class="mono">DATE NOT NULL</td><td>이 헤드라인이 어느 세션의 증거인가 — 공시와 같은 축으로 읽히기 위한 키</td></tr>
+        <tr><td>headline</td><td class="mono">TEXT NOT NULL</td><td>제목. 분석 잡의 증거 종합 프롬프트에 종목당 news.headlines_per_ticker건까지 들어간다</td></tr>
+        <tr><td>source</td><td class="mono">TEXT NOT NULL</td><td>매체명 (Alpaca 뉴스는 실측 전건 benzinga, 와이어는 GNW·PRN)</td></tr>
+        <tr><td>url</td><td class="mono">TEXT NOT NULL</td><td>기사 원문 링크</td></tr>
+        <tr><td>published_at</td><td class="mono">TIMESTAMPTZ NOT NULL</td><td>발행 시각. 예산(N건)에 걸려 잘리는 것이 오래된 쪽이 되도록 정렬 키</td></tr>
+        <tr><td>created_at</td><td class="mono">TIMESTAMPTZ NOT NULL DEFAULT now()</td><td>적재 시각</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">PRIMARY KEY (article_id, ticker)</td></tr>
+        </tbody></table></div>
+    </details>
+    <h4 style="margin:22px 0 6px;font-size:15px;color:var(--ink-soft)">선별·채점</h4>
+    <details class="schema">
+      <summary><code>tb_daily_pick</code> <span class="sd">오늘의 분석 범위 (랭킹 상위 + 보유)</span><span class="cnt">8 컬럼</span></summary>
+      <div class="inner"><p class="small" style="margin:6px 0">상한 없음(의도): 하루의 분석 범위는 상위 screening.llm_depth 에 보유 전부를 더한 크기라 config와 보유 수가 정한다. 50은 구 스크리너가 종목당 1콜을 쓰던 시절의 흔적이고, 상한에 걸리면 보유가 범위 밖으로 밀려 청산이 막힌다.</p></div>
+      <div class="twrap"><table>
+        <thead><tr><th>컬럼</th><th>정의 (DDL 원문)</th><th>설명</th></tr></thead><tbody>
+        <tr><td>trade_date</td><td class="mono">DATE NOT NULL</td><td>거래일 (뉴욕 영업일)</td></tr>
+        <tr><td>ticker</td><td class="mono">TEXT NOT NULL</td><td>종목 — FK(universe_as_of, ticker) → tb_universe</td></tr>
+        <tr><td>universe_as_of</td><td class="mono">DATE NOT NULL</td><td>몇 주차 유니버스 출신인지</td></tr>
+        <tr><td>bucket</td><td class="mono">TEXT NOT NULL CHECK (bucket IN ('trend_leader','volume_surge','high_52w_breakout','pullback','squeeze_breakout','backfill'))</td><td>선정 버킷</td></tr>
+        <tr><td>rank</td><td class="mono">INT NOT NULL CHECK (rank &gt;= 1)</td><td>당일 순위</td></tr>
+        <tr><td>sector</td><td class="mono">TEXT NOT NULL</td><td>섹터</td></tr>
+        <tr><td>score</td><td class="mono">NUMERIC NOT NULL</td><td>버킷 스코어 (픽 게이트 0.70)</td></tr>
+        <tr><td>created_at</td><td class="mono">TIMESTAMPTZ NOT NULL DEFAULT now()</td><td>기록 시각</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">PRIMARY KEY (trade_date, ticker)</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">FOREIGN KEY (universe_as_of, ticker) REFERENCES tb_universe(as_of_date, ticker)</td></tr>
+        </tbody></table></div>
+    </details>
+    <details class="schema">
+      <summary><code>tb_disclosure</code> <span class="sd">공시 채점 원장 (구 role_05 산출 — 픽 범위 내)</span><span class="cnt">27 컬럼</span></summary>
+      <div class="twrap"><table>
+        <thead><tr><th>컬럼</th><th>정의 (DDL 원문)</th><th>설명</th></tr></thead><tbody>
+        <tr><td>id</td><td class="mono">BIGSERIAL PRIMARY KEY</td><td>대리키</td></tr>
+        <tr><td>ticker</td><td class="mono">TEXT NOT NULL</td><td>종목 — FK(trade_date, ticker) → tb_daily_pick</td></tr>
+        <tr><td>trade_date</td><td class="mono">DATE NOT NULL</td><td>거래일</td></tr>
+        <tr><td>filing_no</td><td class="mono">TEXT NOT NULL UNIQUE</td><td>공시 고유번호 — 역추적 키</td></tr>
+        <tr><td>form_type</td><td class="mono">TEXT NOT NULL</td><td>공시 종류 (8-K·10-Q·Form 4…)</td></tr>
+        <tr><td>filing_title</td><td class="mono">TEXT NOT NULL</td><td>공시 제목</td></tr>
+        <tr><td>filed_at</td><td class="mono">TIMESTAMPTZ NOT NULL</td><td>공시 발생 시각 (사건 시각)</td></tr>
+        <tr><td>event_type</td><td class="mono">TEXT NOT NULL</td><td>사건 분류 (정본 ontology.py)</td></tr>
+        <tr><td>sentiment_score</td><td class="mono">NUMERIC NOT NULL CHECK (sentiment_score BETWEEN 0 AND 1)</td><td>호·악재 (점수 눈금 가이드 기준)</td></tr>
+        <tr><td>importance</td><td class="mono">NUMERIC NOT NULL CHECK (importance BETWEEN 0 AND 1)</td><td>중요도</td></tr>
+        <tr><td>risk_score</td><td class="mono">NUMERIC NOT NULL CHECK (risk_score BETWEEN 0 AND 1)</td><td>위험</td></tr>
+        <tr><td>confidence</td><td class="mono">NUMERIC NOT NULL CHECK (confidence BETWEEN 0 AND 1)</td><td>확신</td></tr>
+        <tr><td>reason</td><td class="mono">JSONB NOT NULL DEFAULT '{}'</td><td>점수별 근거 객체 — 키=점수 컬럼명 4종</td></tr>
+        <tr><td>summary</td><td class="mono">TEXT NOT NULL</td><td>무슨 일인지 요약 (reason=왜 이 점수)</td></tr>
+        <tr><td>source</td><td class="mono">TEXT NOT NULL</td><td>(계보) 데이터 출처 어댑터 (sec·rss·fixture…)</td></tr>
+        <tr><td>source_ref</td><td class="mono">TEXT NOT NULL</td><td>(계보) 출처 상세 참조 — URL·경로</td></tr>
+        <tr><td>captured_at</td><td class="mono">TIMESTAMPTZ NOT NULL</td><td>(계보) 수집 시각</td></tr>
+        <tr><td>evidence_id</td><td class="mono">TEXT NOT NULL</td><td>(계보) 증거 고유 id — run:역할:종류</td></tr>
+        <tr><td>parent_evidence_ids</td><td class="mono">JSONB NOT NULL DEFAULT '[]'</td><td>(계보) 상위 증거 연결 (증거 사슬)</td></tr>
+        <tr><td>model_provider</td><td class="mono">TEXT NOT NULL</td><td>(계보) LLM 제공자</td></tr>
+        <tr><td>model_name</td><td class="mono">TEXT</td><td>(계보) 모델명</td></tr>
+        <tr><td>prompt_version</td><td class="mono">TEXT</td><td>(계보) 프롬프트 버전</td></tr>
+        <tr><td>policy_version</td><td class="mono">TEXT</td><td>(계보) 정책(config) 버전</td></tr>
+        <tr><td>input_hash</td><td class="mono">TEXT</td><td>(계보) 입력 해시 — 같은 입력 재현 검증</td></tr>
+        <tr><td>keywords</td><td class="mono">TEXT[] NOT NULL DEFAULT '{}'</td><td>검색용 키워드</td></tr>
+        <tr><td>permission</td><td class="mono">TEXT NOT NULL CHECK (permission IN ('block','block_buy','trade_eligible'))</td><td>허용 단계</td></tr>
+        <tr><td>created_at</td><td class="mono">TIMESTAMPTZ NOT NULL DEFAULT now()</td><td>기록 시각</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">FOREIGN KEY (trade_date, ticker) REFERENCES tb_daily_pick(trade_date, ticker)</td></tr>
+        </tbody></table></div>
+    </details>
+    <details class="schema">
+      <summary><code>tb_disclosure_signal</code> <span class="sd">공시 채점 집계 — 현행은 인사이더 표가 여기 앉는다</span><span class="cnt">30 컬럼</span></summary>
+      <div class="twrap"><table>
+        <thead><tr><th>컬럼</th><th>정의 (DDL 원문)</th><th>설명</th></tr></thead><tbody>
+        <tr><td>tds_id</td><td class="mono">BIGSERIAL PRIMARY KEY</td><td>대리키 (규칙 8)</td></tr>
+        <tr><td>cycle_ts</td><td class="mono">TIMESTAMPTZ NOT NULL</td><td>슬롯 시각 — UNIQUE(ticker, cycle_ts) 멱등</td></tr>
+        <tr><td>ticker</td><td class="mono">TEXT NOT NULL</td><td>종목</td></tr>
+        <tr><td>created_at</td><td class="mono">TIMESTAMPTZ NOT NULL DEFAULT now()</td><td>기록 시각</td></tr>
+        <tr><td>trade_date</td><td class="mono">DATE NOT NULL</td><td>거래일 — FK → tb_daily_pick</td></tr>
+        <tr><td>has_signal</td><td class="mono">BOOLEAN NOT NULL</td><td>이 사이클에 공시 신호가 있는가</td></tr>
+        <tr><td>filing_title</td><td class="mono">TEXT</td><td>대표 공시 제목 (얼굴 필드)</td></tr>
+        <tr><td>filing_no</td><td class="mono">TEXT</td><td>대표 공시 번호 (원본 역추적)</td></tr>
+        <tr><td>filed_at</td><td class="mono">TIMESTAMPTZ</td><td>대표 공시 발생 시각</td></tr>
+        <tr><td>event_type</td><td class="mono">TEXT</td><td>대표 사건 분류</td></tr>
+        <tr><td>importance</td><td class="mono">NUMERIC CHECK (importance BETWEEN 0 AND 1)</td><td>집계 중요도 (최댓값 규칙)</td></tr>
+        <tr><td>risk_score</td><td class="mono">NUMERIC CHECK (risk_score BETWEEN 0 AND 1)</td><td>집계 위험 (최댓값 규칙)</td></tr>
+        <tr><td>sentiment_score</td><td class="mono">NUMERIC CHECK (sentiment_score BETWEEN 0 AND 1)</td><td>집계 호악재 (강악재 ≤0.15는 최솟값 채택)</td></tr>
+        <tr><td>reason</td><td class="mono">JSONB</td><td>집계 근거 — 코드 조립 (LLM 재호출 0)</td></tr>
+        <tr><td>is_hard_blocked</td><td class="mono">BOOLEAN NOT NULL DEFAULT false</td><td>하드 차단 여부</td></tr>
+        <tr><td>disclosure_count</td><td class="mono">SMALLINT NOT NULL DEFAULT 0 CHECK (disclosure_count &gt;= 0)</td><td>이 사이클 집계된 공시 건수</td></tr>
+        <tr><td>top_evidence</td><td class="mono">TEXT[] NOT NULL DEFAULT '{}'</td><td>importance 상위 근거 (뉴스 대칭)</td></tr>
+        <tr><td>hard_block_reason</td><td class="mono">TEXT</td><td>차단 사유</td></tr>
+        <tr><td>confidence</td><td class="mono">NUMERIC CHECK (confidence BETWEEN 0 AND 1)</td><td>집계 확신</td></tr>
+        <tr><td>summary</td><td class="mono">TEXT</td><td>"○○ 외 N건" 코드 조립</td></tr>
+        <tr><td>source</td><td class="mono">TEXT NOT NULL</td><td>(계보) 데이터 출처 어댑터 (sec·rss·fixture…)</td></tr>
+        <tr><td>source_ref</td><td class="mono">TEXT NOT NULL</td><td>(계보) 출처 상세 참조 — URL·경로</td></tr>
+        <tr><td>captured_at</td><td class="mono">TIMESTAMPTZ NOT NULL</td><td>(계보) 수집 시각</td></tr>
+        <tr><td>evidence_id</td><td class="mono">TEXT NOT NULL</td><td>(계보) 증거 고유 id — run:역할:종류</td></tr>
+        <tr><td>parent_evidence_ids</td><td class="mono">JSONB NOT NULL DEFAULT '[]'</td><td>(계보) 상위 증거 연결 (증거 사슬)</td></tr>
+        <tr><td>model_provider</td><td class="mono">TEXT NOT NULL</td><td>(계보) LLM 제공자</td></tr>
+        <tr><td>model_name</td><td class="mono">TEXT</td><td>(계보) 모델명</td></tr>
+        <tr><td>prompt_version</td><td class="mono">TEXT</td><td>(계보) 프롬프트 버전</td></tr>
+        <tr><td>policy_version</td><td class="mono">TEXT</td><td>(계보) 정책(config) 버전</td></tr>
+        <tr><td>input_hash</td><td class="mono">TEXT</td><td>(계보) 입력 해시 — 같은 입력 재현 검증</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">UNIQUE (ticker, cycle_ts)</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">FOREIGN KEY (trade_date, ticker) REFERENCES tb_daily_pick(trade_date, ticker)</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">FOREIGN KEY (filing_no) REFERENCES tb_disclosure(filing_no)</td></tr>
+        </tbody></table></div>
+    </details>
+    <details class="schema">
+      <summary><code>tb_news</code> <span class="sd">뉴스 채점 원장 (픽 범위 내)</span><span class="cnt">32 컬럼</span></summary>
+      <div class="twrap"><table>
+        <thead><tr><th>컬럼</th><th>정의 (DDL 원문)</th><th>설명</th></tr></thead><tbody>
+        <tr><td>id</td><td class="mono">BIGSERIAL PRIMARY KEY</td><td>대리키 — 대표 기사 동률 최종 타이브레이커</td></tr>
+        <tr><td>ticker</td><td class="mono">TEXT NOT NULL</td><td>종목 — UNIQUE(news_key, ticker)</td></tr>
+        <tr><td>trade_date</td><td class="mono">DATE NOT NULL</td><td>거래일 — FK → tb_daily_pick</td></tr>
+        <tr><td>news_key</td><td class="mono">TEXT NOT NULL</td><td>정규화 URL 키 (중복 수집 방지)</td></tr>
+        <tr><td>title</td><td class="mono">TEXT NOT NULL</td><td>기사 제목</td></tr>
+        <tr><td>source</td><td class="mono">TEXT NOT NULL</td><td>매체명 (계보 source 겸용)</td></tr>
+        <tr><td>url</td><td class="mono">TEXT NOT NULL</td><td>기사 링크</td></tr>
+        <tr><td>published_at</td><td class="mono">TIMESTAMPTZ NOT NULL</td><td>발행 시각 (사건 시각) — 동률 1차 타이브레이커</td></tr>
+        <tr><td>grade</td><td class="mono">TEXT NOT NULL CHECK (grade IN ('allow','gray','block'))</td><td>출처등급 (block = LLM 도달 전 drop)</td></tr>
+        <tr><td>is_dropped</td><td class="mono">BOOLEAN NOT NULL</td><td>사전 차단 여부 (기록은 보존)</td></tr>
+        <tr><td>drop_reason</td><td class="mono">TEXT</td><td>차단 사유</td></tr>
+        <tr><td>event_type</td><td class="mono">TEXT</td><td>사건 분류</td></tr>
+        <tr><td>sentiment_score</td><td class="mono">NUMERIC CHECK (sentiment_score BETWEEN 0 AND 1)</td><td>호·악재</td></tr>
+        <tr><td>importance</td><td class="mono">NUMERIC CHECK (importance BETWEEN 0 AND 1)</td><td>중요도</td></tr>
+        <tr><td>risk_score</td><td class="mono">NUMERIC CHECK (risk_score BETWEEN 0 AND 1)</td><td>위험</td></tr>
+        <tr><td>source_trust</td><td class="mono">NUMERIC CHECK (source_trust BETWEEN 0 AND 1)</td><td>내용 기반 신뢰 (LLM 채점)</td></tr>
+        <tr><td>confidence</td><td class="mono">NUMERIC CHECK (confidence BETWEEN 0 AND 1)</td><td>확신</td></tr>
+        <tr><td>is_confirmed</td><td class="mono">BOOLEAN</td><td>확정 사실 vs 소문 (신뢰무게 확인계수)</td></tr>
+        <tr><td>reason</td><td class="mono">JSONB</td><td>점수별 근거 객체 (+source_trust 키 포함 5종)</td></tr>
+        <tr><td>summary</td><td class="mono">TEXT</td><td>요약</td></tr>
+        <tr><td>source_ref</td><td class="mono">TEXT NOT NULL</td><td>(계보) 출처 상세 참조 — URL·경로</td></tr>
+        <tr><td>captured_at</td><td class="mono">TIMESTAMPTZ NOT NULL</td><td>(계보) 수집 시각</td></tr>
+        <tr><td>evidence_id</td><td class="mono">TEXT NOT NULL</td><td>(계보) 증거 고유 id — run:역할:종류</td></tr>
+        <tr><td>parent_evidence_ids</td><td class="mono">JSONB NOT NULL DEFAULT '[]'</td><td>(계보) 상위 증거 연결 (증거 사슬)</td></tr>
+        <tr><td>model_provider</td><td class="mono">TEXT NOT NULL</td><td>(계보) LLM 제공자</td></tr>
+        <tr><td>model_name</td><td class="mono">TEXT</td><td>(계보) 모델명</td></tr>
+        <tr><td>prompt_version</td><td class="mono">TEXT</td><td>(계보) 프롬프트 버전</td></tr>
+        <tr><td>policy_version</td><td class="mono">TEXT</td><td>(계보) 정책(config) 버전</td></tr>
+        <tr><td>input_hash</td><td class="mono">TEXT</td><td>(계보) 입력 해시 — 같은 입력 재현 검증</td></tr>
+        <tr><td>keywords</td><td class="mono">TEXT[] NOT NULL DEFAULT '{}'</td><td>검색용 키워드</td></tr>
+        <tr><td>permission</td><td class="mono">TEXT CHECK (permission IN ('block','block_buy','trade_eligible'))</td><td>허용 단계</td></tr>
+        <tr><td>created_at</td><td class="mono">TIMESTAMPTZ NOT NULL DEFAULT now()</td><td>기록 시각</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">UNIQUE (news_key, ticker)</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">FOREIGN KEY (trade_date, ticker) REFERENCES tb_daily_pick(trade_date, ticker)</td></tr>
+        </tbody></table></div>
+    </details>
+    <details class="schema">
+      <summary><code>tb_news_signal</code> <span class="sd">뉴스 채점 집계 (맥락용 — 투표권 없음)</span><span class="cnt">35 컬럼</span></summary>
+      <div class="twrap"><table>
+        <thead><tr><th>컬럼</th><th>정의 (DDL 원문)</th><th>설명</th></tr></thead><tbody>
+        <tr><td>tns_id</td><td class="mono">BIGSERIAL PRIMARY KEY</td><td>대리키 — UNIQUE(ticker, cycle_ts) 멱등</td></tr>
+        <tr><td>cycle_ts</td><td class="mono">TIMESTAMPTZ NOT NULL</td><td>슬롯 시각</td></tr>
+        <tr><td>ticker</td><td class="mono">TEXT NOT NULL</td><td>종목</td></tr>
+        <tr><td>created_at</td><td class="mono">TIMESTAMPTZ NOT NULL DEFAULT now()</td><td>기록 시각</td></tr>
+        <tr><td>trade_date</td><td class="mono">DATE NOT NULL</td><td>거래일 — FK → tb_daily_pick</td></tr>
+        <tr><td>has_signal</td><td class="mono">BOOLEAN NOT NULL</td><td>이 사이클 뉴스 신호 유무</td></tr>
+        <tr><td>rep_news_id</td><td class="mono">BIGINT</td><td>대표 기사 역추적 (관련성 필터 → importance×신뢰무게 최상위 1건)</td></tr>
+        <tr><td>news_title</td><td class="mono">TEXT</td><td>대표 기사 제목 (얼굴 필드)</td></tr>
+        <tr><td>source</td><td class="mono">TEXT</td><td>대표 기사 매체</td></tr>
+        <tr><td>published_at</td><td class="mono">TIMESTAMPTZ</td><td>대표 기사 발행 시각 — Critic 신선도 기준</td></tr>
+        <tr><td>ref</td><td class="mono">TEXT</td><td>대표 기사 참조 (URL)</td></tr>
+        <tr><td>event_type</td><td class="mono">TEXT</td><td>대표 사건 분류</td></tr>
+        <tr><td>disclosure_ref</td><td class="mono">TEXT</td><td>연관 공시 매칭 — 같은 ticker·event_type·|filed_at−published_at|≤72h 중 최신</td></tr>
+        <tr><td>reason</td><td class="mono">JSONB</td><td>집계 근거 — 코드 조립</td></tr>
+        <tr><td>summary</td><td class="mono">TEXT</td><td>집계 요약</td></tr>
+        <tr><td>news_count</td><td class="mono">INT NOT NULL DEFAULT 0 CHECK (news_count &gt;= 0)</td><td>집계된 기사 수</td></tr>
+        <tr><td>importance</td><td class="mono">NUMERIC CHECK (importance BETWEEN 0 AND 1)</td><td>신뢰가중 평균 (대세)</td></tr>
+        <tr><td>peak_importance</td><td class="mono">NUMERIC CHECK (peak_importance BETWEEN 0 AND 1)</td><td>신뢰 검증분 최댓값 (한 방) — 해석 가이드 v3.7</td></tr>
+        <tr><td>risk_score</td><td class="mono">NUMERIC CHECK (risk_score BETWEEN 0 AND 1)</td><td>집계 위험</td></tr>
+        <tr><td>sentiment_score</td><td class="mono">NUMERIC CHECK (sentiment_score BETWEEN 0 AND 1)</td><td>집계 호악재</td></tr>
+        <tr><td>source_trust</td><td class="mono">NUMERIC CHECK (source_trust BETWEEN 0 AND 1)</td><td>내용 기반 신뢰 — 07 게이트 0.55의 입력</td></tr>
+        <tr><td>grade_score</td><td class="mono">NUMERIC CHECK (grade_score BETWEEN 0 AND 1)</td><td>매체 등급 기반 신뢰 (allow 1.0 · gray 0.6)</td></tr>
+        <tr><td>confidence</td><td class="mono">NUMERIC CHECK (confidence BETWEEN 0 AND 1)</td><td>집계 확신</td></tr>
+        <tr><td>is_hard_blocked</td><td class="mono">BOOLEAN NOT NULL DEFAULT false</td><td>하드 차단 여부</td></tr>
+        <tr><td>hard_block_reason</td><td class="mono">TEXT</td><td>차단 사유</td></tr>
+        <tr><td>top_evidence</td><td class="mono">TEXT[] NOT NULL DEFAULT '{}'</td><td>상위 근거 기사 3건</td></tr>
+        <tr><td>source_ref</td><td class="mono">TEXT NOT NULL</td><td>(계보) 출처 상세 참조 — URL·경로</td></tr>
+        <tr><td>captured_at</td><td class="mono">TIMESTAMPTZ NOT NULL</td><td>(계보) 수집 시각</td></tr>
+        <tr><td>evidence_id</td><td class="mono">TEXT NOT NULL</td><td>(계보) 증거 고유 id — run:역할:종류</td></tr>
+        <tr><td>parent_evidence_ids</td><td class="mono">JSONB NOT NULL DEFAULT '[]'</td><td>(계보) 상위 증거 연결 (증거 사슬)</td></tr>
+        <tr><td>model_provider</td><td class="mono">TEXT NOT NULL</td><td>(계보) LLM 제공자</td></tr>
+        <tr><td>model_name</td><td class="mono">TEXT</td><td>(계보) 모델명</td></tr>
+        <tr><td>prompt_version</td><td class="mono">TEXT</td><td>(계보) 프롬프트 버전</td></tr>
+        <tr><td>policy_version</td><td class="mono">TEXT</td><td>(계보) 정책(config) 버전</td></tr>
+        <tr><td>input_hash</td><td class="mono">TEXT</td><td>(계보) 입력 해시 — 같은 입력 재현 검증</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">UNIQUE (ticker, cycle_ts)</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">FOREIGN KEY (trade_date, ticker) REFERENCES tb_daily_pick(trade_date, ticker)</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">FOREIGN KEY (rep_news_id) REFERENCES tb_news(id)</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">FOREIGN KEY (disclosure_ref) REFERENCES tb_disclosure(filing_no)</td></tr>
+        </tbody></table></div>
+    </details>
+    <h4 style="margin:22px 0 6px;font-size:15px;color:var(--ink-soft)">판단</h4>
+    <details class="schema">
+      <summary><code>tb_strategist_signals</code> <span class="sd">성향별 판단 — 계보 FK 4개의 주인</span><span class="cnt">39 컬럼</span></summary>
+      <div class="twrap"><table>
+        <thead><tr><th>컬럼</th><th>정의 (DDL 원문)</th><th>설명</th></tr></thead><tbody>
+        <tr><td>id</td><td class="mono">BIGSERIAL PRIMARY KEY</td><td>대리키 — UNIQUE(ticker, cycle_ts, inv_type)</td></tr>
+        <tr><td>trade_date</td><td class="mono">DATE NOT NULL</td><td>거래일 — FK → tb_daily_pick</td></tr>
+        <tr><td>ticker</td><td class="mono">TEXT NOT NULL</td><td>종목</td></tr>
+        <tr><td>cycle_ts</td><td class="mono">TIMESTAMPTZ NOT NULL</td><td>슬롯 시각</td></tr>
+        <tr><td>src_disclosure_at</td><td class="mono">TIMESTAMPTZ</td><td>읽은 공시 스냅샷의 cycle_ts 복사 (시점 참조)</td></tr>
+        <tr><td>src_news_at</td><td class="mono">TIMESTAMPTZ</td><td>읽은 뉴스 스냅샷의 cycle_ts 복사</td></tr>
+        <tr><td>src_macro_at</td><td class="mono">TIMESTAMPTZ</td><td>읽은 매크로 스냅샷 시각</td></tr>
+        <tr><td>inv_type</td><td class="mono">TEXT NOT NULL CHECK (inv_type IN ('aggressive','conservative'))</td><td>투자 성향</td></tr>
+        <tr><td>side</td><td class="mono">TEXT NOT NULL CHECK (side IN ('buy','hold','sell'))</td><td>판단 방향</td></tr>
+        <tr><td>conviction</td><td class="mono">NUMERIC(4,3) NOT NULL CHECK (conviction BETWEEN 0 AND 1)</td><td>확신도 — 매수 문턱 0.65/0.75 · 과신 0.90</td></tr>
+        <tr><td>signal_consensus</td><td class="mono">SMALLINT NOT NULL CHECK (signal_consensus BETWEEN 0 AND 4)</td><td>방향이 일치한 신호원 수(0~4) — 설명용이며 게이트가 아니다(결정 로그: 게이트화는 '좁은 깔때기' 재발)</td></tr>
+        <tr><td>summary</td><td class="mono">TEXT NOT NULL</td><td>판단 요약</td></tr>
+        <tr><td>bull_case</td><td class="mono">TEXT</td><td>매수 논리</td></tr>
+        <tr><td>key_risk</td><td class="mono">TEXT</td><td>핵심 위험 1개 — buy면 필수 (Critic 통과 조건)</td></tr>
+        <tr><td>risk_rebuttal</td><td class="mono">TEXT</td><td>위험 반박</td></tr>
+        <tr><td>counter_scenarios</td><td class="mono">JSONB</td><td>반대 시나리오</td></tr>
+        <tr><td>evidence</td><td class="mono">JSONB NOT NULL</td><td>근거 목록</td></tr>
+        <tr><td>sizing_hint</td><td class="mono">JSONB NOT NULL</td><td>비중 힌트</td></tr>
+        <tr><td>persona_notes</td><td class="mono">TEXT</td><td>성향 페르소나 메모</td></tr>
+        <tr><td>decision_close</td><td class="mono">NUMERIC NOT NULL CHECK (decision_close &gt; 0)</td><td>판단 기준가 — 회고 수익률의 기준</td></tr>
+        <tr><td>current_price</td><td class="mono">NUMERIC NOT NULL CHECK (current_price &gt; 0)</td><td>판단 시점 현재가 (박제 snapshot)</td></tr>
+        <tr><td>day_high</td><td class="mono">NUMERIC NOT NULL</td><td>당일 고가 (박제)</td></tr>
+        <tr><td>day_low</td><td class="mono">NUMERIC NOT NULL</td><td>당일 저가 (박제)</td></tr>
+        <tr><td>close_prev</td><td class="mono">NUMERIC NOT NULL</td><td>전일 종가 (박제) — 08 허용오차 2% 검증 기준</td></tr>
+        <tr><td>volume</td><td class="mono">BIGINT NOT NULL</td><td>거래량</td></tr>
+        <tr><td>turnover</td><td class="mono">NUMERIC NOT NULL</td><td>거래대금</td></tr>
+        <tr><td>high_52w</td><td class="mono">NUMERIC NOT NULL</td><td>52주 고가</td></tr>
+        <tr><td>low_52w</td><td class="mono">NUMERIC NOT NULL</td><td>52주 저가</td></tr>
+        <tr><td>source</td><td class="mono">TEXT</td><td>(계보) 판단 실행 컨텍스트 출처</td></tr>
+        <tr><td>source_ref</td><td class="mono">TEXT</td><td>(계보) 실행 참조 (run_id 등)</td></tr>
+        <tr><td>captured_at</td><td class="mono">TIMESTAMPTZ</td><td>(계보) 판단 생성 시각</td></tr>
+        <tr><td>evidence_id</td><td class="mono">TEXT</td><td>(계보) 증거 고유 id</td></tr>
+        <tr><td>parent_evidence_ids</td><td class="mono">JSONB NOT NULL DEFAULT '[]'</td><td>(계보) 읽은 신호 증거 연결 (증거 사슬)</td></tr>
+        <tr><td>model_provider</td><td class="mono">TEXT</td><td>(계보) 이 판단을 만든 LLM 제공자</td></tr>
+        <tr><td>model_name</td><td class="mono">TEXT</td><td>(계보) 모델명 (07만 상위 모델 가능)</td></tr>
+        <tr><td>prompt_version</td><td class="mono">TEXT</td><td>(계보) 판단 프롬프트 버전 — 회고 귀책 구분의 핵심</td></tr>
+        <tr><td>policy_version</td><td class="mono">TEXT</td><td>(계보) 게이트·문턱 config 버전</td></tr>
+        <tr><td>input_hash</td><td class="mono">TEXT</td><td>(계보) 입력 해시 — 같은 입력 재현 검증</td></tr>
+        <tr><td>created_at</td><td class="mono">TIMESTAMPTZ NOT NULL DEFAULT now()</td><td>기록 시각</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">UNIQUE (ticker, cycle_ts, inv_type)</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">FOREIGN KEY (trade_date, ticker) REFERENCES tb_daily_pick(trade_date, ticker)</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">FOREIGN KEY (ticker, src_disclosure_at) REFERENCES tb_disclosure_signal(ticker, cycle_ts)</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">FOREIGN KEY (ticker, src_news_at) REFERENCES tb_news_signal(ticker, cycle_ts)</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">FOREIGN KEY (src_macro_at) REFERENCES tb_macro(as_of)</td></tr>
+        </tbody></table></div>
+    </details>
+    <details class="schema">
+      <summary><code>tb_critic_verdict</code> <span class="sd">크리틱 평결 (pass·reject + 반박문)</span><span class="cnt">22 컬럼</span></summary>
+      <div class="twrap"><table>
+        <thead><tr><th>컬럼</th><th>정의 (DDL 원문)</th><th>설명</th></tr></thead><tbody>
+        <tr><td>id</td><td class="mono">BIGSERIAL PRIMARY KEY</td><td>대리키</td></tr>
+        <tr><td>signal_id</td><td class="mono">BIGINT NOT NULL UNIQUE REFERENCES tb_strategist_signals(id)</td><td>판단당 판정 1개</td></tr>
+        <tr><td>ticker</td><td class="mono">TEXT NOT NULL</td><td>종목</td></tr>
+        <tr><td>decision</td><td class="mono">TEXT NOT NULL CHECK (decision IN ('pass','reject','hold'))</td><td>판정</td></tr>
+        <tr><td>is_agreed</td><td class="mono">BOOLEAN</td><td>전략과 동의 여부</td></tr>
+        <tr><td>category</td><td class="mono">TEXT NOT NULL</td><td>반박 분류</td></tr>
+        <tr><td>objection</td><td class="mono">TEXT NOT NULL</td><td>반박 내용</td></tr>
+        <tr><td>confidence</td><td class="mono">NUMERIC(4,3) NOT NULL CHECK (confidence BETWEEN 0 AND 1)</td><td>판정 확신 (승인 문턱 0.70 · 과신 시 0.80)</td></tr>
+        <tr><td>decided_layer</td><td class="mono">TEXT NOT NULL CHECK (decided_layer IN ('quality_gate','hard_rule','llm','gate'))</td><td>어느 층에서 결정됐나</td></tr>
+        <tr><td>verdict_source</td><td class="mono">TEXT NOT NULL CHECK (verdict_source IN ('fresh','cache','cooldown'))</td><td>평결의 출처 — fresh(새 평결) / cache(캐시 재사용) / cooldown(쿨다운 중 재사용)</td></tr>
+        <tr><td>skipped_rules</td><td class="mono">JSONB NOT NULL DEFAULT '[]'</td><td>건너뛴 규칙 기록</td></tr>
+        <tr><td>source</td><td class="mono">TEXT</td><td>(계보) 판단 실행 컨텍스트 출처</td></tr>
+        <tr><td>source_ref</td><td class="mono">TEXT</td><td>(계보) 실행 참조 (run_id 등)</td></tr>
+        <tr><td>captured_at</td><td class="mono">TIMESTAMPTZ</td><td>(계보) 판단 생성 시각</td></tr>
+        <tr><td>evidence_id</td><td class="mono">TEXT</td><td>(계보) 증거 고유 id</td></tr>
+        <tr><td>parent_evidence_ids</td><td class="mono">JSONB NOT NULL DEFAULT '[]'</td><td>(계보) 읽은 신호 증거 연결 (증거 사슬)</td></tr>
+        <tr><td>model_provider</td><td class="mono">TEXT</td><td>(계보) 이 판단을 만든 LLM 제공자</td></tr>
+        <tr><td>model_name</td><td class="mono">TEXT</td><td>(계보) 모델명 (07만 상위 모델 가능)</td></tr>
+        <tr><td>prompt_version</td><td class="mono">TEXT</td><td>(계보) 판단 프롬프트 버전 — 회고 귀책 구분의 핵심</td></tr>
+        <tr><td>policy_version</td><td class="mono">TEXT</td><td>(계보) 게이트·문턱 config 버전</td></tr>
+        <tr><td>input_hash</td><td class="mono">TEXT</td><td>(계보) 입력 해시 — 같은 입력 재현 검증</td></tr>
+        <tr><td>created_at</td><td class="mono">TIMESTAMPTZ NOT NULL DEFAULT now()</td><td>기록 시각</td></tr>
+        </tbody></table></div>
+    </details>
+    <h4 style="margin:22px 0 6px;font-size:15px;color:var(--ink-soft)">집행</h4>
+    <details class="schema">
+      <summary><code>tb_account</code> <span class="sd">모의 계좌 (성향·현금·평가액)</span><span class="cnt">12 컬럼</span></summary>
+      <div class="twrap"><table>
+        <thead><tr><th>컬럼</th><th>정의 (DDL 원문)</th><th>설명</th></tr></thead><tbody>
+        <tr><td>id</td><td class="mono">BIGSERIAL PRIMARY KEY</td><td>대리키</td></tr>
+        <tr><td>broker_account_id</td><td class="mono">TEXT NOT NULL UNIQUE</td><td>브로커/시뮬 계좌 id</td></tr>
+        <tr><td>currency</td><td class="mono">TEXT NOT NULL DEFAULT 'USD'</td><td>통화</td></tr>
+        <tr><td>cash</td><td class="mono">NUMERIC NOT NULL CHECK (cash &gt;= 0)</td><td>현금</td></tr>
+        <tr><td>equity</td><td class="mono">NUMERIC NOT NULL CHECK (equity &gt;= 0)</td><td>평가액</td></tr>
+        <tr><td>buying_power</td><td class="mono">NUMERIC NOT NULL CHECK (buying_power &gt;= 0)</td><td>주문 가능 금액</td></tr>
+        <tr><td>is_paper</td><td class="mono">BOOLEAN NOT NULL DEFAULT true</td><td>페이퍼 여부 (2차는 전부 true)</td></tr>
+        <tr><td>user_id</td><td class="mono">BIGINT REFERENCES tb_user(user_id)</td><td>1유저=1계좌 — <code>UNIQUE INDEX ... WHERE user_id IS NOT NULL</code>이 DB로 강제한다. NULL은 소유자 없는 테스트 계좌</td></tr>
+        <tr><td>inv_type</td><td class="mono">TEXT CHECK (inv_type IN ('aggressive','conservative'))</td><td>계좌 성향</td></tr>
+        <tr><td>status</td><td class="mono">TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active','paused','closed'))</td><td>계좌 상태</td></tr>
+        <tr><td>created_at</td><td class="mono">TIMESTAMPTZ NOT NULL DEFAULT now()</td><td>생성 시각</td></tr>
+        <tr><td>updated_at</td><td class="mono">TIMESTAMPTZ NOT NULL DEFAULT now()</td><td>갱신 시각 (upsert 테이블)</td></tr>
+        </tbody></table></div>
+    </details>
+    <details class="schema">
+      <summary><code>tb_order</code> <span class="sd">주문 — 매수(bracket)와 청산(close)이 별도 행</span><span class="cnt">18 컬럼</span></summary>
+      <div class="inner"><p class="small" style="margin:6px 0">두 제약에 이름을 명시하는 이유: 익명 CHECK는 Postgres가 tb_order_check, tb_order_check1처럼 **선언 순서로** 이름을 짓는다. 마이그레이션은 ALTER ... ADD CONSTRAINT라 이름을 직접 대므로, 신규 설치와 마이그레이션의 카탈로그가 정의는 같은데 이름만 갈렸다. 순서에 기대지 않게 못 박는다.  브래킷 삼중 제약은 매수에만 해당한다. 청산에는 손절·익절이 없으므로 더미 값을 채우는 대신 컬럼을 비운다. 청산은 반드시 어느 매수를 닫는지 가리켜야 한다(실현손익의 짝).</p></div>
+      <div class="twrap"><table>
+        <thead><tr><th>컬럼</th><th>정의 (DDL 원문)</th><th>설명</th></tr></thead><tbody>
+        <tr><td>id</td><td class="mono">BIGSERIAL PRIMARY KEY</td><td>대리키 — UNIQUE(account_id, signal_id)</td></tr>
+        <tr><td>signal_id</td><td class="mono">BIGINT NOT NULL REFERENCES tb_strategist_signals(id)</td><td>어느 판단의 주문인지 (재현 사슬)</td></tr>
+        <tr><td>account_id</td><td class="mono">BIGINT NOT NULL REFERENCES tb_account(id)</td><td>어느 계좌의 주문인지</td></tr>
+        <tr><td>ticker</td><td class="mono">TEXT NOT NULL</td><td>종목</td></tr>
+        <tr><td>quantity</td><td class="mono">INT NOT NULL CHECK (quantity &gt; 0)</td><td>수량</td></tr>
+        <tr><td>entry_price</td><td class="mono">NUMERIC NOT NULL CHECK (entry_price &gt; 0)</td><td>진입가 — MockBroker는 이 지정가 그대로 체결(슬리피지 0, 한계는 R7)</td></tr>
+        <tr><td>stop_price</td><td class="mono">NUMERIC CHECK (stop_price &gt; 0)</td><td>손절가(진입가 −15%) — bracket이면 필수, close면 NULL</td></tr>
+        <tr><td>take_profit_price</td><td class="mono">NUMERIC CHECK (take_profit_price &gt; 0)</td><td>익절가(진입가 +20%) — bracket이면 필수, close면 NULL</td></tr>
+        <tr><td>order_type</td><td class="mono">TEXT NOT NULL DEFAULT 'bracket' CHECK (order_type IN ('bracket','close'))</td><td>'bracket'(매수·3중 가격 필수) / 'close'(청산·가격 레그 없음) — D7</td></tr>
+        <tr><td>closes_order_id</td><td class="mono">BIGINT REFERENCES tb_order(id)</td><td>청산이 닫는 매수 행(자기참조) — 실현손익의 짝, close면 필수(CHECK)</td></tr>
+        <tr><td>status</td><td class="mono">TEXT NOT NULL CHECK (status IN ('planned','submitted','filled','failed','canceled'))</td><td>주문 상태</td></tr>
+        <tr><td>idempotency_key</td><td class="mono">TEXT NOT NULL UNIQUE</td><td>중복 주문 차단 멱등키</td></tr>
+        <tr><td>broker_order_id</td><td class="mono">TEXT UNIQUE</td><td>브로커 측 주문 id</td></tr>
+        <tr><td>created_at</td><td class="mono">TIMESTAMPTZ NOT NULL DEFAULT now()</td><td>생성 시각</td></tr>
+        <tr><td>parent_order_id</td><td class="mono">TEXT</td><td>브로커 측 부모 주문 id (Alpaca 브래킷 대비 — mock에선 미사용)</td></tr>
+        <tr><td>stop_leg_order_id</td><td class="mono">TEXT</td><td>브로커 측 손절 레그 주문 id</td></tr>
+        <tr><td>take_profit_leg_order_id</td><td class="mono">TEXT</td><td>브로커 측 익절 레그 주문 id</td></tr>
+        <tr><td>updated_at</td><td class="mono">TIMESTAMPTZ NOT NULL DEFAULT now()</td><td>상태 갱신 시각(UTC)</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">UNIQUE (account_id, signal_id)</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">CONSTRAINT tb_order_check CHECK (order_type &lt;&gt; 'bracket' OR ( stop_price IS NOT NULL AND take_profit_price IS NOT NULL AND stop_price &lt; entry_price AND entry_price &lt; take_profit_price))</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">CONSTRAINT tb_order_close_target_check CHECK (order_type &lt;&gt; 'close' OR closes_order_id IS NOT NULL)</td></tr>
+        </tbody></table></div>
+    </details>
+    <details class="schema">
+      <summary><code>tb_fill</code> <span class="sd">체결</span><span class="cnt">8 컬럼</span></summary>
+      <div class="twrap"><table>
+        <thead><tr><th>컬럼</th><th>정의 (DDL 원문)</th><th>설명</th></tr></thead><tbody>
+        <tr><td>id</td><td class="mono">BIGSERIAL PRIMARY KEY</td><td>대리키</td></tr>
+        <tr><td>order_id</td><td class="mono">BIGINT NOT NULL REFERENCES tb_order(id)</td><td>주문 연결 (signal→order→fill 재현 사슬)</td></tr>
+        <tr><td>side</td><td class="mono">TEXT NOT NULL CHECK (side IN ('buy','sell'))</td><td>체결 방향</td></tr>
+        <tr><td>quantity</td><td class="mono">INT NOT NULL CHECK (quantity &gt; 0)</td><td>체결 수량</td></tr>
+        <tr><td>price</td><td class="mono">NUMERIC NOT NULL CHECK (price &gt; 0)</td><td>체결 가격</td></tr>
+        <tr><td>filled_at</td><td class="mono">TIMESTAMPTZ NOT NULL</td><td>체결 시각</td></tr>
+        <tr><td>broker_fill_id</td><td class="mono">TEXT UNIQUE</td><td>브로커 체결 id (중복 수신 방지)</td></tr>
+        <tr><td>created_at</td><td class="mono">TIMESTAMPTZ NOT NULL DEFAULT now()</td><td>기록 시각</td></tr>
+        </tbody></table></div>
+    </details>
+    <details class="schema">
+      <summary><code>tb_order_plan</code> <span class="b b-new">2차 신규</span> <span class="sd">배분의 관측 로그 — 샀으면 수량, 못 샀으면 사유</span><span class="cnt">14 컬럼</span></summary>
+      <div class="inner"><p class="small" style="margin:6px 0">Operational tables are execution logs, never domain FK parents.</p></div>
+      <div class="twrap"><table>
+        <thead><tr><th>컬럼</th><th>정의 (DDL 원문)</th><th>설명</th></tr></thead><tbody>
+        <tr><td>id</td><td class="mono">BIGSERIAL PRIMARY KEY</td><td>행 식별자</td></tr>
+        <tr><td>run_id</td><td class="mono">TEXT NOT NULL</td><td>배분 실행 묶음 식별자 — 같은 날 배분이 남긴 행들을 한 줄로 꿴다</td></tr>
+        <tr><td>ticker</td><td class="mono">TEXT NOT NULL</td><td>어느 종목의 계획인가</td></tr>
+        <tr><td>cycle_ts</td><td class="mono">TIMESTAMPTZ NOT NULL</td><td>어느 슬롯의 계획인가</td></tr>
+        <tr><td>trade_date</td><td class="mono">DATE NOT NULL</td><td>거래일</td></tr>
+        <tr><td>account_id</td><td class="mono">BIGINT</td><td>어느 계좌 앞에 놓았나 (운영 로그라 FK 없음)</td></tr>
+        <tr><td>signal_id</td><td class="mono">BIGINT</td><td>근거가 된 판단 (운영 로그라 FK 없음)</td></tr>
+        <tr><td>decision</td><td class="mono">TEXT NOT NULL CHECK (decision IN ('planned','skipped'))</td><td>planned(샀다) / skipped(못 샀다)</td></tr>
+        <tr><td>skipped_reason</td><td class="mono">TEXT</td><td>못 산 사유(min_cash·daily_order_cap…) — 관제실 보류 순위의 원천. skipped면 필수</td></tr>
+        <tr><td>quantity</td><td class="mono">INT NOT NULL CHECK (quantity &gt;= 0)</td><td>계획 수량 — skipped면 0 (CHECK로 강제)</td></tr>
+        <tr><td>entry_price</td><td class="mono">NUMERIC</td><td>계획 진입가</td></tr>
+        <tr><td>stop_price</td><td class="mono">NUMERIC</td><td>계획 손절가</td></tr>
+        <tr><td>take_profit_price</td><td class="mono">NUMERIC</td><td>계획 익절가</td></tr>
+        <tr><td>created_at</td><td class="mono">TIMESTAMPTZ NOT NULL DEFAULT now()</td><td>기록 시각(UTC)</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">UNIQUE (ticker, cycle_ts, account_id)</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">CHECK ((decision = 'planned' AND skipped_reason IS NULL AND quantity &gt; 0) OR (decision = 'skipped' AND skipped_reason IS NOT NULL AND quantity = 0))</td></tr>
+        </tbody></table></div>
+    </details>
+    <details class="schema">
+      <summary><code>tb_account_equity_daily</code> <span class="b b-new">2차 신규</span> <span class="sd">당일 시작 평가액 — daily_loss_limit의 분모</span><span class="cnt">4 컬럼</span></summary>
+      <div class="inner"><p class="small" style="margin:6px 0">Phase 4: 당일 시작 equity 스냅샷 — daily_loss_limit의 분모. 하루 첫 기록이 이긴다(잡의 INSERT는 ON CONFLICT DO NOTHING). 재실행이 아침 값을 덮으면 '당일 시작 대비'라는 정의 자체가 거짓이 된다.</p></div>
+      <div class="twrap"><table>
+        <thead><tr><th>컬럼</th><th>정의 (DDL 원문)</th><th>설명</th></tr></thead><tbody>
+        <tr><td>account_id</td><td class="mono">BIGINT NOT NULL REFERENCES tb_account(id)</td><td>계좌(PK 절반)</td></tr>
+        <tr><td>trade_date</td><td class="mono">DATE NOT NULL</td><td>거래일(PK 절반) — 하루 첫 기록이 이긴다</td></tr>
+        <tr><td>equity</td><td class="mono">NUMERIC NOT NULL CHECK (equity &gt;= 0)</td><td>그날 첫 배분 잡이 관측한 시가평가(D8: 현금 + 보유×직전 종가). 첫 기록이 이긴다 — INSERT가 ON CONFLICT DO NOTHING이라 재실행이 아침 값을 덮지 않는다. 덮으면 '당일 시작 대비'라는 정의가 거짓이 된다</td></tr>
+        <tr><td>created_at</td><td class="mono">TIMESTAMPTZ NOT NULL DEFAULT now()</td><td>적재 시각</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">PRIMARY KEY (account_id, trade_date)</td></tr>
+        </tbody></table></div>
+    </details>
+    <h4 style="margin:22px 0 6px;font-size:15px;color:var(--ink-soft)">회고</h4>
+    <details class="schema">
+      <summary><code>tb_review_price_snapshots</code> <span class="sd">판단 후 T+1~5 가격 추적</span><span class="cnt">18 컬럼</span></summary>
+      <div class="twrap"><table>
+        <thead><tr><th>컬럼</th><th>정의 (DDL 원문)</th><th>설명</th></tr></thead><tbody>
+        <tr><td>signal_id</td><td class="mono">BIGINT NOT NULL REFERENCES tb_strategist_signals(id)</td><td>판단 연결</td></tr>
+        <tr><td>day_offset</td><td class="mono">SMALLINT NOT NULL CHECK (day_offset BETWEEN 1 AND 5)</td><td>T+며칠인지</td></tr>
+        <tr><td>price_date</td><td class="mono">DATE NOT NULL</td><td>기준일</td></tr>
+        <tr><td>close</td><td class="mono">NUMERIC NOT NULL CHECK (close &gt; 0)</td><td>종가</td></tr>
+        <tr><td>source</td><td class="mono">TEXT NOT NULL CHECK (source IN ('fixture','market_data'))</td><td>가격 출처</td></tr>
+        <tr><td>source_ref</td><td class="mono">TEXT NOT NULL</td><td>(계보) 출처 상세 참조 — URL·경로</td></tr>
+        <tr><td>observed_at</td><td class="mono">TIMESTAMPTZ NOT NULL</td><td>(계보) 관측 시각</td></tr>
+        <tr><td>captured_at</td><td class="mono">TIMESTAMPTZ NOT NULL</td><td>(계보) 수집 시각</td></tr>
+        <tr><td>confidence</td><td class="mono">NUMERIC NOT NULL CHECK (confidence BETWEEN 0 AND 1)</td><td>관측 신뢰</td></tr>
+        <tr><td>evidence_id</td><td class="mono">TEXT NOT NULL</td><td>(계보) 증거 고유 id — run:역할:종류</td></tr>
+        <tr><td>parent_evidence_ids</td><td class="mono">JSONB NOT NULL DEFAULT '[]'</td><td>(계보) 상위 증거 연결 (증거 사슬)</td></tr>
+        <tr><td>model_provider</td><td class="mono">TEXT</td><td>(계보) LLM 제공자</td></tr>
+        <tr><td>model_name</td><td class="mono">TEXT</td><td>(계보) 모델명</td></tr>
+        <tr><td>prompt_version</td><td class="mono">TEXT</td><td>(계보) 프롬프트 버전</td></tr>
+        <tr><td>policy_version</td><td class="mono">TEXT</td><td>(계보) 정책(config) 버전</td></tr>
+        <tr><td>input_hash</td><td class="mono">TEXT</td><td>(계보) 입력 해시 — 같은 입력 재현 검증</td></tr>
+        <tr><td>created_at</td><td class="mono">TIMESTAMPTZ NOT NULL DEFAULT now()</td><td>생성 시각</td></tr>
+        <tr><td>updated_at</td><td class="mono">TIMESTAMPTZ NOT NULL DEFAULT now()</td><td>갱신 시각 (upsert)</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">PRIMARY KEY (signal_id, day_offset)</td></tr>
+        </tbody></table></div>
+    </details>
+    <details class="schema">
+      <summary><code>tb_review</code> <span class="sd">판단 채점 (적중 여부 · 교훈)</span><span class="cnt">9 컬럼</span></summary>
+      <div class="twrap"><table>
+        <thead><tr><th>컬럼</th><th>정의 (DDL 원문)</th><th>설명</th></tr></thead><tbody>
+        <tr><td>signal_id</td><td class="mono">BIGINT PRIMARY KEY REFERENCES tb_strategist_signals(id)</td><td>판단당 회고 1개</td></tr>
+        <tr><td>ret_1d</td><td class="mono">NUMERIC NOT NULL</td><td>T+1 수익률 (기준가 decision_close 대비)</td></tr>
+        <tr><td>ret_3d</td><td class="mono">NUMERIC NOT NULL</td><td>T+3 수익률</td></tr>
+        <tr><td>ret_5d</td><td class="mono">NUMERIC NOT NULL</td><td>T+5 수익률</td></tr>
+        <tr><td>is_hit</td><td class="mono">BOOLEAN NOT NULL</td><td>판단 적중 여부</td></tr>
+        <tr><td>max_drawdown</td><td class="mono">NUMERIC NOT NULL CHECK (max_drawdown &lt;= 0)</td><td>보유 중 최대 낙폭</td></tr>
+        <tr><td>lesson</td><td class="mono">TEXT NOT NULL</td><td>교훈 1~2문장 — 07 프롬프트로 되먹임 (메모리)</td></tr>
+        <tr><td>created_at</td><td class="mono">TIMESTAMPTZ NOT NULL DEFAULT now()</td><td>생성 시각</td></tr>
+        <tr><td>updated_at</td><td class="mono">TIMESTAMPTZ NOT NULL DEFAULT now()</td><td>갱신 시각 (upsert)</td></tr>
+        </tbody></table></div>
+    </details>
+    <h4 style="margin:22px 0 6px;font-size:15px;color:var(--ink-soft)">장중 사건 내구 원장</h4>
+    <div class="inner"><p class="small" style="margin:6px 0">마이그레이션은 7개 사건 테이블의 전체 컬럼 타입·nullability·기본값과 PK/UNIQUE/FK/CHECK/trigger 카탈로그를 canonical 신규 설치와 대조한다. 부분 스키마나 예상 밖 제약은 트랜잭션 전체를 실패시킨다. 불변 trigger를 설치하기 전에는 기존 사건의 source와 raw document source, evidence와 event의 raw version, evidence 끝 위치와 정규화 본문 길이를 감사한다. 모순된 기존 행도 자동 보정하거나 불변화하지 않고 원자적으로 실패시켜 운영자 정정 후 재실행하게 한다.</p></div>
+    <details class="schema">
+      <summary><code>tb_event_source_cursor</code> <span class="b b-new">신규</span> <span class="sd">소스별 증분 수집 체크포인트</span><span class="cnt">4 컬럼</span></summary>
+      <div class="twrap"><table><thead><tr><th>컬럼</th><th>정의</th><th>소비자</th></tr></thead><tbody>
+        <tr><td>source_name</td><td class="mono">TEXT PRIMARY KEY · non-empty</td><td>어댑터 라우팅 키</td></tr>
+        <tr><td>cursor_value</td><td class="mono">TEXT NOT NULL · non-empty</td><td>다음 페이지/시간창 시작점</td></tr>
+        <tr><td>checkpoint_at</td><td class="mono">TIMESTAMPTZ NOT NULL</td><td>마지막 성공 배치 경계</td></tr>
+        <tr><td>updated_at</td><td class="mono">TIMESTAMPTZ NOT NULL DEFAULT now()</td><td>stale 체크포인트 관측</td></tr>
+      </tbody></table></div>
+    </details>
+    <details class="schema">
+      <summary><code>tb_event_raw_document</code> <span class="b b-new">신규</span> <span class="sd">공급자 문서의 안정 식별자</span><span class="cnt">6 컬럼</span></summary>
+      <div class="twrap"><table><thead><tr><th>컬럼</th><th>정의</th><th>소비자</th></tr></thead><tbody>
+        <tr><td>document_id</td><td class="mono">BIGSERIAL PRIMARY KEY</td><td>버전 FK</td></tr>
+        <tr><td>source_name</td><td class="mono">TEXT NOT NULL · non-empty</td><td>소스 어댑터</td></tr>
+        <tr><td>source_document_id</td><td class="mono">TEXT NOT NULL · non-empty</td><td>공급자 중복 제거</td></tr>
+        <tr><td>source_url</td><td class="mono">TEXT NOT NULL</td><td>출처 감사 링크</td></tr>
+        <tr><td>published_at</td><td class="mono">TIMESTAMPTZ NOT NULL</td><td>사건 시간 정규화</td></tr>
+        <tr><td>first_seen_at</td><td class="mono">TIMESTAMPTZ NOT NULL DEFAULT now()</td><td>수집 지연 관측</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">UNIQUE(source_name, source_document_id) · UPDATE/DELETE 거부</td></tr>
+      </tbody></table></div>
+    </details>
+    <details class="schema">
+      <summary><code>tb_event_raw_version</code> <span class="b b-new">신규</span> <span class="sd">원문·정규화 본문의 불변 버전</span><span class="cnt">8 컬럼</span></summary>
+      <div class="inner"><p class="small">외부 원문은 지시가 아니라 비신뢰 데이터로만 저장한다. 정정은 새 version/hash 행이며 UPDATE·DELETE trigger가 과거 내용을 보존한다.</p></div>
+      <div class="twrap"><table><thead><tr><th>컬럼</th><th>정의</th><th>소비자</th></tr></thead><tbody>
+        <tr><td>raw_version_id</td><td class="mono">BIGSERIAL PRIMARY KEY</td><td>사건·근거·요약 FK</td></tr>
+        <tr><td>document_id</td><td class="mono">BIGINT NOT NULL REFERENCES tb_event_raw_document</td><td>정정 문서 묶음</td></tr>
+        <tr><td>version_no</td><td class="mono">INT NOT NULL CHECK (&gt; 0)</td><td>정정 순서</td></tr>
+        <tr><td>content_hash</td><td class="mono">TEXT NOT NULL · non-empty</td><td>내용 중복 제거·요약 키</td></tr>
+        <tr><td>raw_text</td><td class="mono">TEXT NOT NULL</td><td>감사 원문(실행 금지)</td></tr>
+        <tr><td>normalized_text</td><td class="mono">TEXT NOT NULL</td><td>정규화·span·요약 입력</td></tr>
+        <tr><td>normalized_length</td><td class="mono">INT = char_length(normalized_text)</td><td>12,000자 요약 게이트</td></tr>
+        <tr><td>captured_at</td><td class="mono">TIMESTAMPTZ NOT NULL DEFAULT now()</td><td>수집 시각</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">UNIQUE(document_id,version_no) · UNIQUE(document_id,content_hash) · UPDATE/DELETE 거부</td></tr>
+      </tbody></table></div>
+    </details>
+    <details class="schema">
+      <summary><code>tb_normalized_event</code> <span class="b b-new">신규</span> <span class="sd">결정론적 장중 사건</span><span class="cnt">9 컬럼</span></summary>
+      <div class="twrap"><table><thead><tr><th>컬럼</th><th>정의</th><th>소비자</th></tr></thead><tbody>
+        <tr><td>event_id</td><td class="mono">BIGSERIAL PRIMARY KEY</td><td>근거·처리 영수증 FK</td></tr>
+        <tr><td>raw_version_id</td><td class="mono">BIGINT NOT NULL REFERENCES tb_event_raw_version</td><td>원문 계보</td></tr>
+        <tr><td>event_key</td><td class="mono">TEXT NOT NULL UNIQUE · non-empty</td><td>겹친 창 사건 dedupe</td></tr>
+        <tr><td>source_name</td><td class="mono">TEXT NOT NULL · non-empty · raw document와 일치</td><td>소스 라우팅과 원문 계보 일치 검증</td></tr>
+        <tr><td>source_sequence</td><td class="mono">TEXT NOT NULL · non-empty</td><td>공급자 순서 계보</td></tr>
+        <tr><td>event_type</td><td class="mono">TEXT NOT NULL · non-empty</td><td>materiality 라우팅</td></tr>
+        <tr><td>occurred_at</td><td class="mono">TIMESTAMPTZ NOT NULL</td><td>장중 시간순 처리</td></tr>
+        <tr><td>payload</td><td class="mono">JSONB NOT NULL</td><td>정규화 필드 소비자</td></tr>
+        <tr><td>created_at</td><td class="mono">TIMESTAMPTZ NOT NULL DEFAULT now()</td><td>처리 지연 관측</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">UNIQUE(event_key) · UNIQUE(source_name,source_sequence) · UPDATE/DELETE 거부</td></tr>
+      </tbody></table></div>
+    </details>
+    <details class="schema">
+      <summary><code>tb_event_evidence_pack</code> <span class="b b-new">신규</span> <span class="sd">불변 원문 근거 span</span><span class="cnt">7 컬럼</span></summary>
+      <div class="twrap"><table><thead><tr><th>컬럼</th><th>정의</th><th>소비자</th></tr></thead><tbody>
+        <tr><td>evidence_id</td><td class="mono">BIGSERIAL PRIMARY KEY</td><td>판단 근거 식별자</td></tr>
+        <tr><td>event_id</td><td class="mono">BIGINT NOT NULL REFERENCES tb_normalized_event</td><td>사건 근거 묶음</td></tr>
+        <tr><td>raw_version_id</td><td class="mono">BIGINT NOT NULL REFERENCES tb_event_raw_version · event 버전과 일치</td><td>사건이 실제 사용한 불변 원문 버전</td></tr>
+        <tr><td>start_offset</td><td class="mono">INT NOT NULL CHECK (&gt;= 0)</td><td>근거 시작 위치</td></tr>
+        <tr><td>end_offset</td><td class="mono">INT NOT NULL CHECK (&gt; start) · normalized_length 이하</td><td>본문 범위를 넘지 않는 근거 끝 위치</td></tr>
+        <tr><td>quote_hash</td><td class="mono">TEXT NOT NULL · non-empty</td><td>span 변조 검증</td></tr>
+        <tr><td>created_at</td><td class="mono">TIMESTAMPTZ NOT NULL DEFAULT now()</td><td>근거 생성 시각</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">event.raw_version_id 일치 · end_offset ≤ normalized_length · UPDATE/DELETE 거부</td></tr>
+      </tbody></table></div>
+    </details>
+    <details class="schema">
+      <summary><code>tb_event_summary_cache</code> <span class="b b-new">신규</span> <span class="sd">장문 모델 요약 캐시</span><span class="cnt">8 컬럼</span></summary>
+      <div class="twrap"><table><thead><tr><th>컬럼</th><th>정의</th><th>소비자</th></tr></thead><tbody>
+        <tr><td>summary_id</td><td class="mono">BIGSERIAL PRIMARY KEY</td><td>요약 식별자</td></tr>
+        <tr><td>raw_version_id</td><td class="mono">BIGINT NOT NULL</td><td>불변 버전 계보</td></tr>
+        <tr><td>content_hash</td><td class="mono">TEXT NOT NULL · non-empty</td><td>내용 기반 캐시 키</td></tr>
+        <tr><td>normalized_length</td><td class="mono">INT NOT NULL CHECK (&gt; 12000)</td><td>장문 전용 게이트</td></tr>
+        <tr><td>model</td><td class="mono">TEXT NOT NULL · non-empty</td><td>모델별 캐시 분리</td></tr>
+        <tr><td>prompt_version</td><td class="mono">TEXT NOT NULL · non-empty</td><td>프롬프트별 캐시 무효화</td></tr>
+        <tr><td>summary_text</td><td class="mono">TEXT NOT NULL · non-empty</td><td>후속 사건 분석 입력</td></tr>
+        <tr><td>created_at</td><td class="mono">TIMESTAMPTZ NOT NULL DEFAULT now()</td><td>캐시 생성 시각</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">FK(version,hash,length) · UNIQUE(content_hash,model,prompt_version) · UPDATE/DELETE 거부</td></tr>
+      </tbody></table></div>
+    </details>
+    <details class="schema">
+      <summary><code>tb_event_processing_receipt</code> <span class="b b-new">신규</span> <span class="sd">처리·주문 멱등 영수증</span><span class="cnt">8 컬럼</span></summary>
+      <div class="twrap"><table><thead><tr><th>컬럼</th><th>정의</th><th>소비자</th></tr></thead><tbody>
+        <tr><td>receipt_id</td><td class="mono">BIGSERIAL PRIMARY KEY</td><td>처리 영수증 식별자</td></tr>
+        <tr><td>event_id</td><td class="mono">BIGINT NOT NULL REFERENCES tb_normalized_event</td><td>사건 계보</td></tr>
+        <tr><td>ticker</td><td class="mono">TEXT NOT NULL · non-empty</td><td>보유/오늘 픽 대상</td></tr>
+        <tr><td>persona</td><td class="mono">TEXT NOT NULL · non-empty</td><td>성향별 판단 분리</td></tr>
+        <tr><td>status</td><td class="mono">claimed·processed·skipped·ordered</td><td>재시도 상태 머신</td></tr>
+        <tr><td>order_id</td><td class="mono">BIGINT REFERENCES tb_order</td><td>ordered 효과 계보</td></tr>
+        <tr><td>claimed_at</td><td class="mono">TIMESTAMPTZ NOT NULL DEFAULT now()</td><td>claim 시각</td></tr>
+        <tr><td>completed_at</td><td class="mono">TIMESTAMPTZ</td><td>종료 시각</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">UNIQUE(event_id,ticker,persona) · ordered iff order_id IS NOT NULL</td></tr>
+      </tbody></table></div>
+    </details>
+    <h4 style="margin:22px 0 6px;font-size:15px;color:var(--ink-soft)">운영</h4>
+    <details class="schema">
+      <summary><code>tb_job_run</code> <span class="b b-new">2차 신규</span> <span class="sd">JOB 실행 원장 — 멱등의 근거</span><span class="cnt">6 컬럼</span></summary>
+      <div class="inner"><p class="small" style="margin:6px 0">잡 실행 원장. PK가 "잡 하나는 하루 한 번"을 DB 수준에서 강제한다 — 스케줄러가 60초마다 깨어나도 잡 본문은 예약에 성공한 틱에서만 돈다. 예약(running)과 성공(succeeded)을 구분하는 이유: 예약만 하고 죽은 실행을 성공으로 세면 그 주기를 통째로 잃는다(주간 잡이면 한 주).</p></div>
+      <div class="twrap"><table>
+        <thead><tr><th>컬럼</th><th>정의 (DDL 원문)</th><th>설명</th></tr></thead><tbody>
+        <tr><td>job_name</td><td class="mono">TEXT NOT NULL</td><td>잡 이름(universe·daily_bars·exits …)</td></tr>
+        <tr><td>slot_date</td><td class="mono">DATE NOT NULL</td><td>실행 슬롯(하루). 스케줄러가 60초마다 깨어나도 예약에 성공한 틱에서만 본문이 돈다</td></tr>
+        <tr><td>status</td><td class="mono">TEXT NOT NULL CHECK (status IN ('running','succeeded','failed'))</td><td>running·succeeded·failed. 예약만 하고 죽은 실행을 성공으로 세면 그 주기를 통째로 잃는다</td></tr>
+        <tr><td>detail</td><td class="mono">TEXT</td><td>실패 사유 또는 실행 요약</td></tr>
+        <tr><td>started_at</td><td class="mono">TIMESTAMPTZ NOT NULL DEFAULT now()</td><td>실행 시작 시각</td></tr>
+        <tr><td>finished_at</td><td class="mono">TIMESTAMPTZ</td><td>실행 종료 시각 — running이면 NULL(CHECK로 강제)</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">PRIMARY KEY (job_name, slot_date)</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">CHECK ((status = 'running') = (finished_at IS NULL))</td></tr>
+        </tbody></table></div>
+    </details>
+    <details class="schema">
+      <summary><code>tb_watch_sweep</code> <span class="b b-new">2차 신규</span> <span class="sd">장중 정기 재판단 실행 원장</span><span class="cnt">7 컬럼</span></summary>
+      <div class="inner"><p class="small" style="margin:6px 0">뉴욕 현지 시각의 정기 sweep 하나를 UTC <code>sweep_at</code>으로 정규화해 한 행으로 예약한다. 실패한 실행과 30분 넘게 갱신되지 않은 running 실행만 재예약하며, 재예약 때 <code>attempts</code>가 증가한다. 종료 갱신은 PK와 현재 attempt가 모두 일치해야 하므로 회수된 옛 실행은 새 실행의 결과를 덮지 못한다.</p></div>
+      <div class="twrap"><table>
+        <thead><tr><th>컬럼</th><th>정의 (DDL 원문)</th><th>설명</th></tr></thead><tbody>
+        <tr><td>sweep_at</td><td class="mono">TIMESTAMPTZ PRIMARY KEY</td><td>뉴욕 정기 시각을 UTC로 정규화한 논리 sweep 식별자</td></tr>
+        <tr><td>status</td><td class="mono">TEXT NOT NULL CHECK (status IN ('running','succeeded','failed'))</td><td>현재 시도의 실행·성공·재시도 가능 실패 상태</td></tr>
+        <tr><td>attempts</td><td class="mono">INT NOT NULL DEFAULT 1 CHECK (attempts &gt; 0)</td><td>소유권 세대. stale 회수 또는 failed 재시도마다 증가</td></tr>
+        <tr><td>started_at</td><td class="mono">TIMESTAMPTZ NOT NULL</td><td>현재 attempt가 소유권을 얻은 시각</td></tr>
+        <tr><td>finished_at</td><td class="mono">TIMESTAMPTZ</td><td>현재 attempt 종료 시각 — running이면 NULL</td></tr>
+        <tr><td>updated_at</td><td class="mono">TIMESTAMPTZ NOT NULL</td><td>lease stale 판정에 쓰는 현재 attempt의 마지막 갱신 시각</td></tr>
+        <tr><td>detail</td><td class="mono">TEXT</td><td>대상 수·청산 수 또는 실패 요약</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">PRIMARY KEY (sweep_at)</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">CHECK ((status = 'running') = (finished_at IS NULL))</td></tr>
+        </tbody></table></div>
+    </details>
+    <details class="schema">
+      <summary><code>tb_watch_sweep_item</code> <span class="b b-new">2차 신규</span> <span class="sd">유료 재판단 디스패치 원장</span><span class="cnt">9 컬럼</span></summary>
+      <div class="inner"><p class="small" style="margin:6px 0">종목·성향별 provider 호출 직전에 <code>dispatched</code>를 먼저 기록한다. 호출 도중 lease를 잃으면 결과는 버리되 이 상태는 되돌리지 않아, 회수한 다음 attempt가 비용과 주문 효과를 중복 생성하지 않는다. provider를 부르기 전 취소된 <code>claimed</code>만 삭제해 재시도할 수 있다.</p></div>
+      <div class="twrap"><table>
+        <thead><tr><th>컬럼</th><th>정의 (DDL 원문)</th><th>설명</th></tr></thead><tbody>
+        <tr><td>sweep_at</td><td class="mono">TIMESTAMPTZ NOT NULL REFERENCES tb_watch_sweep(sweep_at)</td><td>부모 정기 sweep</td></tr>
+        <tr><td>ticker</td><td class="mono">TEXT NOT NULL</td><td>재판단 종목</td></tr>
+        <tr><td>persona</td><td class="mono">TEXT NOT NULL</td><td>투자 성향</td></tr>
+        <tr><td>status</td><td class="mono">TEXT NOT NULL CHECK (status IN ('claimed','dispatched','completed'))</td><td>호출 전 예약·호출 불확실 경계·로컬 완료</td></tr>
+        <tr><td>attempt</td><td class="mono">INT NOT NULL CHECK (attempt &gt; 0)</td><td>이 항목을 처음 소유한 sweep 세대</td></tr>
+        <tr><td>claimed_at</td><td class="mono">TIMESTAMPTZ NOT NULL</td><td>호출 전 예약 시각</td></tr>
+        <tr><td>dispatched_at</td><td class="mono">TIMESTAMPTZ</td><td>provider 호출 직전 영속화한 시각</td></tr>
+        <tr><td>completed_at</td><td class="mono">TIMESTAMPTZ</td><td>판단 저장 완료 시각</td></tr>
+        <tr><td>updated_at</td><td class="mono">TIMESTAMPTZ NOT NULL</td><td>마지막 상태 전이 시각</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">PRIMARY KEY (sweep_at, ticker, persona)</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">CHECK ((status = 'claimed') = (dispatched_at IS NULL))</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">CHECK ((status = 'completed') = (completed_at IS NOT NULL))</td></tr>
+        </tbody></table></div>
+    </details>
+    <details class="schema">
+      <summary><code>tb_llm_usage</code> <span class="b b-new">2차 신규</span> <span class="sd">LLM 호출 기록 (소비자 0 — 배선 미착수)</span><span class="cnt">8 컬럼</span></summary>
+      <div class="twrap"><table>
+        <thead><tr><th>컬럼</th><th>정의 (DDL 원문)</th><th>설명</th></tr></thead><tbody>
+        <tr><td>id</td><td class="mono">BIGSERIAL PRIMARY KEY</td><td>대리키</td></tr>
+        <tr><td>called_at</td><td class="mono">TIMESTAMPTZ NOT NULL</td><td>호출 시각</td></tr>
+        <tr><td>task</td><td class="mono">TEXT NOT NULL</td><td>호출처 (disclosure·news·strategy·critic·review)</td></tr>
+        <tr><td>model</td><td class="mono">TEXT NOT NULL</td><td>모델명</td></tr>
+        <tr><td>prompt_tokens</td><td class="mono">INT NOT NULL CHECK (prompt_tokens &gt;= 0)</td><td>입력 토큰</td></tr>
+        <tr><td>completion_tokens</td><td class="mono">INT NOT NULL CHECK (completion_tokens &gt;= 0)</td><td>출력 토큰</td></tr>
+        <tr><td>est_cost_usd</td><td class="mono">NUMERIC NOT NULL CHECK (est_cost_usd &gt;= 0)</td><td>추정 비용 — 대시보드·일일 예산 가드의 데이터원</td></tr>
+        <tr><td>run_id</td><td class="mono">TEXT</td><td>실행 연결</td></tr>
+        </tbody></table></div>
+    </details>
+    <details class="schema">
+      <summary><code>tb_benchmark_price</code> <span class="b b-new">2차 신규</span> <span class="sd">벤치마크(SPY) 종가</span><span class="cnt">3 컬럼</span></summary>
+      <div class="twrap"><table>
+        <thead><tr><th>컬럼</th><th>정의 (DDL 원문)</th><th>설명</th></tr></thead><tbody>
+        <tr><td>price_date</td><td class="mono">DATE NOT NULL</td><td>기준일</td></tr>
+        <tr><td>ticker</td><td class="mono">TEXT NOT NULL</td><td>벤치마크 티커 (SPY)</td></tr>
+        <tr><td>close</td><td class="mono">NUMERIC NOT NULL CHECK (close &gt; 0)</td><td>종가 — 상대 성과 기준</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">PRIMARY KEY (price_date, ticker)</td></tr>
+        </tbody></table></div>
+    </details>
+    <details class="schema">
+      <summary><code>tb_user</code> <span class="b b-new">2차 신규</span> <span class="sd">사용자 — 웹 W1이 첫 소비자</span><span class="cnt">8 컬럼</span></summary>
+      <div class="twrap"><table>
+        <thead><tr><th>컬럼</th><th>정의 (DDL 원문)</th><th>설명</th></tr></thead><tbody>
+        <tr><td>user_id</td><td class="mono">BIGSERIAL PRIMARY KEY</td><td>대리키</td></tr>
+        <tr><td>login_id</td><td class="mono">TEXT NOT NULL UNIQUE</td><td>로그인 id</td></tr>
+        <tr><td>display_name</td><td class="mono">TEXT NOT NULL</td><td>표시 이름</td></tr>
+        <tr><td>role</td><td class="mono">TEXT NOT NULL CHECK (role IN ('admin','user'))</td><td>권한</td></tr>
+        <tr><td>password_hash</td><td class="mono">TEXT</td><td>비밀번호 해시(argon2). 평문은 어디에도 없다. nullable — 해시가 없는 행은 "로그인할 수 없는 계정"이다</td></tr>
+        <tr><td>otp_secret</td><td class="mono">TEXT</td><td>OTP(TOTP) 시크릿 — 인증 2단계(W-D1, R1 전 게이트)</td></tr>
+        <tr><td>is_active</td><td class="mono">BOOLEAN NOT NULL DEFAULT true</td><td>활성 여부</td></tr>
+        <tr><td>created_at</td><td class="mono">TIMESTAMPTZ NOT NULL DEFAULT now()</td><td>생성 시각 — 계정은 관리자만 생성</td></tr>
+        </tbody></table></div>
+    </details>
+    <h4 style="margin:22px 0 6px;font-size:15px;color:var(--ink-soft)">구 러너 유물 — 현행 미사용</h4>
+    <details class="schema">
+      <summary><code>tb_technical</code> <span class="b b-gray">유물</span> <span class="sd">구 스크리너 지표 — 현행 랭킹과 컬럼 불일치로 미사용</span><span class="cnt">16 컬럼</span></summary>
+      <div class="twrap"><table>
+        <thead><tr><th>컬럼</th><th>정의 (DDL 원문)</th><th>설명</th></tr></thead><tbody>
+        <tr><td>trade_date</td><td class="mono">DATE NOT NULL</td><td>거래일 — FK(trade_date, ticker) → tb_daily_pick</td></tr>
+        <tr><td>ticker</td><td class="mono">TEXT NOT NULL</td><td>종목</td></tr>
+        <tr><td>close</td><td class="mono">NUMERIC NOT NULL CHECK (close &gt; 0)</td><td>종가</td></tr>
+        <tr><td>rs_20</td><td class="mono">NUMERIC NOT NULL</td><td>20일 상대강도</td></tr>
+        <tr><td>vol_ratio</td><td class="mono">NUMERIC NOT NULL</td><td>거래량 비율 (평균 대비)</td></tr>
+        <tr><td>ret_5d</td><td class="mono">NUMERIC NOT NULL</td><td>5일 수익률 — late_entry 컷 재료</td></tr>
+        <tr><td>ret_20d</td><td class="mono">NUMERIC NOT NULL</td><td>20일 수익률</td></tr>
+        <tr><td>atr_pct</td><td class="mono">NUMERIC NOT NULL</td><td>변동폭(ATR) 비율</td></tr>
+        <tr><td>high_252_ratio</td><td class="mono">NUMERIC NOT NULL</td><td>52주 고가 대비 현재가</td></tr>
+        <tr><td>rsi</td><td class="mono">NUMERIC NOT NULL</td><td>RSI 모멘텀</td></tr>
+        <tr><td>macd</td><td class="mono">NUMERIC NOT NULL</td><td>MACD</td></tr>
+        <tr><td>ma20</td><td class="mono">NUMERIC NOT NULL</td><td>20일 이동평균</td></tr>
+        <tr><td>ma50</td><td class="mono">NUMERIC NOT NULL</td><td>50일 이동평균</td></tr>
+        <tr><td>trend</td><td class="mono">TEXT NOT NULL CHECK (trend IN ('up','mixed','down','no_data'))</td><td>추세 분류</td></tr>
+        <tr><td>ml_probs</td><td class="mono">JSONB NOT NULL DEFAULT '{}'</td><td>ML 확률 (확장용)</td></tr>
+        <tr><td>created_at</td><td class="mono">TIMESTAMPTZ NOT NULL DEFAULT now()</td><td>기록 시각</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">PRIMARY KEY (trade_date, ticker)</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">FOREIGN KEY (trade_date, ticker) REFERENCES tb_daily_pick(trade_date, ticker)</td></tr>
+        </tbody></table></div>
+    </details>
+    <details class="schema">
+      <summary><code>pipeline_runs</code> <span class="b b-gray">유물</span> <span class="sd">구 11단계 러너의 런 로그</span><span class="cnt">10 컬럼</span></summary>
+      <div class="twrap"><table>
+        <thead><tr><th>컬럼</th><th>정의 (DDL 원문)</th><th>설명</th></tr></thead><tbody>
+        <tr><td>run_id</td><td class="mono">TEXT PRIMARY KEY</td><td>실행 고유 id</td></tr>
+        <tr><td>idempotency_key</td><td class="mono">TEXT NOT NULL UNIQUE</td><td>실행 멱등키</td></tr>
+        <tr><td>ticker</td><td class="mono">TEXT NOT NULL</td><td>대상 종목</td></tr>
+        <tr><td>cycle_ts</td><td class="mono">TIMESTAMPTZ NOT NULL</td><td>슬롯 시각 — 인덱스 (ticker, cycle_ts DESC)</td></tr>
+        <tr><td>status</td><td class="mono">TEXT NOT NULL CHECK (status IN ('pending','running','completed','failed','timed_out'))</td><td>실행 상태</td></tr>
+        <tr><td>payload</td><td class="mono">JSONB NOT NULL DEFAULT '{}'</td><td>실행 컨텍스트</td></tr>
+        <tr><td>started_at</td><td class="mono">TIMESTAMPTZ</td><td>시작 시각</td></tr>
+        <tr><td>finished_at</td><td class="mono">TIMESTAMPTZ</td><td>종료 시각</td></tr>
+        <tr><td>created_at</td><td class="mono">TIMESTAMPTZ NOT NULL DEFAULT now()</td><td>생성 시각</td></tr>
+        <tr><td>updated_at</td><td class="mono">TIMESTAMPTZ NOT NULL DEFAULT now()</td><td>갱신 시각</td></tr>
+        </tbody></table></div>
+    </details>
+    <details class="schema">
+      <summary><code>pipeline_stage_attempts</code> <span class="b b-gray">유물</span> <span class="sd">구 러너의 단계 시도 로그</span><span class="cnt">10 컬럼</span></summary>
+      <div class="twrap"><table>
+        <thead><tr><th>컬럼</th><th>정의 (DDL 원문)</th><th>설명</th></tr></thead><tbody>
+        <tr><td>attempt_id</td><td class="mono">BIGSERIAL PRIMARY KEY</td><td>대리키 — UNIQUE(run_id, component, attempt_no)</td></tr>
+        <tr><td>run_id</td><td class="mono">TEXT NOT NULL REFERENCES pipeline_runs(run_id)</td><td>실행 연결</td></tr>
+        <tr><td>component</td><td class="mono">TEXT NOT NULL</td><td>역할 (01~11)</td></tr>
+        <tr><td>attempt_no</td><td class="mono">INT NOT NULL CHECK (attempt_no &gt; 0)</td><td>시도 번호</td></tr>
+        <tr><td>status</td><td class="mono">TEXT NOT NULL CHECK (status IN ('pending','running','retrying','completed','failed','timed_out'))</td><td>시도 상태</td></tr>
+        <tr><td>started_at</td><td class="mono">TIMESTAMPTZ NOT NULL</td><td>시작 시각</td></tr>
+        <tr><td>finished_at</td><td class="mono">TIMESTAMPTZ</td><td>종료 시각</td></tr>
+        <tr><td>error_code</td><td class="mono">TEXT</td><td>오류 코드</td></tr>
+        <tr><td>error_message</td><td class="mono">TEXT</td><td>오류 메시지</td></tr>
+        <tr><td>created_at</td><td class="mono">TIMESTAMPTZ NOT NULL DEFAULT now()</td><td>기록 시각</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">UNIQUE (run_id, component, attempt_no)</td></tr>
+        </tbody></table></div>
+    </details>
+    <details class="schema">
+      <summary><code>pipeline_checkpoints</code> <span class="b b-gray">유물</span> <span class="sd">구 러너의 체크포인트</span><span class="cnt">6 컬럼</span></summary>
+      <div class="twrap"><table>
+        <thead><tr><th>컬럼</th><th>정의 (DDL 원문)</th><th>설명</th></tr></thead><tbody>
+        <tr><td>checkpoint_id</td><td class="mono">BIGSERIAL PRIMARY KEY</td><td>대리키 — UNIQUE(run_id, component)</td></tr>
+        <tr><td>run_id</td><td class="mono">TEXT NOT NULL REFERENCES pipeline_runs(run_id)</td><td>실행 연결</td></tr>
+        <tr><td>component</td><td class="mono">TEXT NOT NULL</td><td>역할</td></tr>
+        <tr><td>payload</td><td class="mono">JSONB NOT NULL</td><td>저장점 데이터 — 실패 지점부터 재개</td></tr>
+        <tr><td>payload_hash</td><td class="mono">TEXT NOT NULL</td><td>저장점 무결성 해시</td></tr>
+        <tr><td>created_at</td><td class="mono">TIMESTAMPTZ NOT NULL DEFAULT now()</td><td>기록 시각</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">UNIQUE (run_id, component)</td></tr>
+        </tbody></table></div>
+    </details>
+    <details class="schema">
+      <summary><code>order_submissions</code> <span class="b b-gray">유물</span> <span class="sd">구 러너의 주문 제출 상태기계</span><span class="cnt">13 컬럼</span></summary>
+      <div class="twrap"><table>
+        <thead><tr><th>컬럼</th><th>정의 (DDL 원문)</th><th>설명</th></tr></thead><tbody>
+        <tr><td>submission_id</td><td class="mono">BIGSERIAL PRIMARY KEY</td><td>대리키</td></tr>
+        <tr><td>client_order_id</td><td class="mono">TEXT NOT NULL UNIQUE</td><td>결정적 주문 id — q-a{계좌}-s{신호}</td></tr>
+        <tr><td>state</td><td class="mono">TEXT NOT NULL CHECK (state IN ('claimed','submitted','completed','failed'))</td><td>제출 상태</td></tr>
+        <tr><td>owner_token</td><td class="mono">TEXT NOT NULL</td><td>claim 소유 토큰</td></tr>
+        <tr><td>claimed_at</td><td class="mono">TIMESTAMPTZ NOT NULL</td><td>claim 시각 — CHECK stale_after &gt; claimed_at</td></tr>
+        <tr><td>stale_after</td><td class="mono">TIMESTAMPTZ NOT NULL</td><td>claim 만료 시각</td></tr>
+        <tr><td>run_id</td><td class="mono">TEXT REFERENCES pipeline_runs(run_id)</td><td>실행 연결</td></tr>
+        <tr><td>order_id</td><td class="mono">BIGINT REFERENCES tb_order(id)</td><td>주문 연결</td></tr>
+        <tr><td>broker_order_id</td><td class="mono">TEXT</td><td>브로커 주문 id</td></tr>
+        <tr><td>result_payload</td><td class="mono">JSONB</td><td>제출 결과</td></tr>
+        <tr><td>last_error</td><td class="mono">TEXT</td><td>마지막 오류</td></tr>
+        <tr><td>created_at</td><td class="mono">TIMESTAMPTZ NOT NULL DEFAULT now()</td><td>생성 시각</td></tr>
+        <tr><td>updated_at</td><td class="mono">TIMESTAMPTZ NOT NULL DEFAULT now()</td><td>갱신 시각</td></tr>
+        <tr><td class="muted">제약</td><td class="mono" colspan="2">CHECK (stale_after &gt; claimed_at)</td></tr>
+        </tbody></table></div>
+    </details>
+    <details class="schema">
+      <summary>ENUM 사전 — TEXT + CHECK로 강제되는 논리 열거형 <span class="cnt">24종</span></summary>
+      <div class="inner"><p class="small" style="margin:6px 0">이 스키마는 Postgres ENUM 타입 대신 TEXT + CHECK를 쓴다 — 값이 늘 때 타입 마이그레이션 없이 CHECK만 고치면 된다.</p></div>
+      <div class="twrap"><table>
+        <thead><tr><th>테이블</th><th>컬럼</th><th>허용 값</th></tr></thead><tbody>
+        <tr><td class="mono">tb_universe</td><td class="mono">listing_status</td><td class="mono">'listed','held_delisted'</td></tr>
+        <tr><td class="mono">tb_daily_pick</td><td class="mono">bucket</td><td class="mono">'trend_leader','volume_surge','high_52w_breakout','pullback','squeeze_breakout','backfill'</td></tr>
+        <tr><td class="mono">tb_technical</td><td class="mono">trend</td><td class="mono">'up','mixed','down','no_data'</td></tr>
+        <tr><td class="mono">tb_macro</td><td class="mono">regime</td><td class="mono">'risk_on','neutral','risk_off'</td></tr>
+        <tr><td class="mono">tb_disclosure</td><td class="mono">permission</td><td class="mono">'block','block_buy','trade_eligible'</td></tr>
+        <tr><td class="mono">tb_news</td><td class="mono">grade</td><td class="mono">'allow','gray','block'</td></tr>
+        <tr><td class="mono">tb_news</td><td class="mono">permission</td><td class="mono">'block','block_buy','trade_eligible'</td></tr>
+        <tr><td class="mono">tb_strategist_signals</td><td class="mono">inv_type</td><td class="mono">'aggressive','conservative'</td></tr>
+        <tr><td class="mono">tb_strategist_signals</td><td class="mono">side</td><td class="mono">'buy','hold','sell'</td></tr>
+        <tr><td class="mono">tb_critic_verdict</td><td class="mono">decision</td><td class="mono">'pass','reject','hold'</td></tr>
+        <tr><td class="mono">tb_critic_verdict</td><td class="mono">decided_layer</td><td class="mono">'quality_gate','hard_rule','llm','gate'</td></tr>
+        <tr><td class="mono">tb_critic_verdict</td><td class="mono">verdict_source</td><td class="mono">'fresh','cache','cooldown'</td></tr>
+        <tr><td class="mono">tb_user</td><td class="mono">role</td><td class="mono">'admin','user'</td></tr>
+        <tr><td class="mono">tb_account</td><td class="mono">inv_type</td><td class="mono">'aggressive','conservative'</td></tr>
+        <tr><td class="mono">tb_account</td><td class="mono">status</td><td class="mono">'active','paused','closed'</td></tr>
+        <tr><td class="mono">tb_order</td><td class="mono">order_type</td><td class="mono">'bracket','close'</td></tr>
+        <tr><td class="mono">tb_order</td><td class="mono">status</td><td class="mono">'planned','submitted','filled','failed','canceled'</td></tr>
+        <tr><td class="mono">tb_fill</td><td class="mono">side</td><td class="mono">'buy','sell'</td></tr>
+        <tr><td class="mono">tb_review_price_snapshots</td><td class="mono">source</td><td class="mono">'fixture','market_data'</td></tr>
+        <tr><td class="mono">tb_order_plan</td><td class="mono">decision</td><td class="mono">'planned','skipped'</td></tr>
+        <tr><td class="mono">pipeline_runs</td><td class="mono">status</td><td class="mono">'pending','running','completed','failed','timed_out'</td></tr>
+        <tr><td class="mono">pipeline_stage_attempts</td><td class="mono">status</td><td class="mono">'pending','running','retrying','completed','failed','timed_out'</td></tr>
+        <tr><td class="mono">order_submissions</td><td class="mono">state</td><td class="mono">'claimed','submitted','completed','failed'</td></tr>
+        <tr><td class="mono">tb_job_run</td><td class="mono">status</td><td class="mono">'running','succeeded','failed'</td></tr>
+        <tr><td class="mono">tb_watch_sweep</td><td class="mono">status</td><td class="mono">'running','succeeded','failed'</td></tr>
+        <tr><td class="mono">tb_watch_sweep_item</td><td class="mono">status</td><td class="mono">'claimed','dispatched','completed'</td></tr>
+        <tr><td class="mono">tb_event_processing_receipt</td><td class="mono">status</td><td class="mono">'claimed','processed','skipped','ordered'</td></tr>
+        </tbody></table></div>
+    </details>
+
+    <details class="schema">
+      <summary>정직한 각주 — 스키마에 있지만 현행이 안 쓰는 테이블 <span class="cnt">6종</span></summary>
+      <div class="inner">
+        <p>지우지 않고 남긴 데는 이유가 있다. 문서는 그 사실을 숨기지 않는다:</p>
+        <ul>
+          <li><code>pipeline_runs</code> · <code>pipeline_stage_attempts</code> · <code>pipeline_checkpoints</code> ·
+          <code>order_submissions</code> — 구 11단계 러너의 실행 로그. 러너는 삭제됐고(<code>1a48aea</code>)
+          런 모양 저장소의 죽은 절반도 분리됐다(<code>aa15d74</code>). 리뷰 화면의 레거시 외부 조인 1개만 남아 무해.</li>
+          <li><code>tb_technical</code> — 구 스크리너의 지표 테이블. 현행 랭킹이 계산하지 않는 컬럼(<code>atr_pct</code>·<code>macd</code> 등)이
+          NOT NULL이라 재사용하면 값을 지어내야 한다. 그래서 안 쓴다.</li>
+          <li><code>tb_llm_usage</code> — 소비자 0 (<code>tb_user</code>는 웹 W1에서 해소). LLM 예산 상한(<code>budget.daily_llm_usd</code> 3.0)은
+          선언만 있고 기록·강제 배선은 미착수다(<a href="#limits">§한계</a>).</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ═══════════════ 6. 관제실 ═══════════════ -->
+  <section id="screens">
+    <div class="sec-eyebrow">Control Room</div>
+    <h2>웹 — 화면 여섯, 유저의 쓰기는 0 <span class="b b-new">v6.2 갱신</span></h2>
+    <p class="sec-intro">
+      화면은 여섯이고 <code>/</code>는 역할별 갈림길이다(admin → <code>/admin</code>, user → <code>/me</code>,
+      익명 → <code>/login</code>). 가드는 라우트가 아니라 <b>미들웨어</b>에 있고, 구역 밖은 403이 아니라
+      <b>404</b>다 — 경로의 존재 자체를 확인해 주지 않는다. 유저 role의 쓰기 엔드포인트는 0개이고
+      이는 <code>test_route_audit.py</code>가 동적으로 강제한다.
+    </p>
+    <div class="twrap"><table>
+      <thead><tr><th>화면</th><th>경로</th><th>누가</th><th>무엇</th></tr></thead>
+      <tbody>
+        <tr><td>로그인</td><td class="mono">/login</td><td>모두</td><td>세션 쿠키 발급. 셀프 가입 없음 — 계정은 관리자가 화면에서 만든다</td></tr>
+        <tr><td>관제실</td><td class="mono">/admin</td><td>admin</td><td>잡 체인·슬롯·계좌 총람. 아래 네 질문에 답한다</td></tr>
+        <tr><td>운영 기준</td><td class="mono">/admin/schedule</td><td>admin</td><td>잡이 <b>언제·어떤 기준으로</b> 도는가 — 시계 기준 4단계(슬롯은 뉴욕 날짜, 주기는 경과일, 등록 순서=실행 순서, 러너는 60초 틱이되 잡은 하루 1회) + 잡 13종의 주기·마지막 성공·다음 예정 + <b>용어집</b>. 잡 목록은 러너에게 묻는다 — 화면이 자기 목록을 들면 등록이 갈리는 설치에서 실행과 다른 말을 한다</td></tr>
+        <tr><td>작동 로그</td><td class="mono">/admin/logs</td><td>admin</td><td>날짜별로 <b>돌았나·몇 번 돌았나·안내가 나갔나</b>. 10일씩 쪽 나누기. 재시도는 <code>tb_job_run.attempts</code>가 원장으로 답한다 — 그전까지 재시도는 성공 뒤에 숨었다</td></tr>
+        <tr><td>계좌 관리</td><td class="mono">/admin/accounts</td><td>admin</td><td><b>이 앱의 쓰기 전부가 여기 있다</b> — 개설(유저 생성 포함)·성향 지정·정지, 그리고 관제실의 <b>잠금 해제</b> 버튼(running으로 굳은 슬롯을 푼다 — 잡을 실행하지 않고 잠금만 푼다)</td></tr>
+        <tr><td>내 계좌</td><td class="mono">/me</td><td>user</td><td>총자산·수익률·보유·거래 타임라인(체결마다 판단·근거·반박)·리스크 상태. <b>원장 대조 테스트</b>가 화면 숫자와 원장의 일치를 강제한다(오차 0 실측)</td></tr>
+      </tbody>
+    </table></div>
+    <div class="grid c2" style="margin:18px 0">
+      <figure style="margin:0">
+        <img src="assets/screen-admin.png" alt="관제실 — 잡 체인 13개 succeeded와 슬롯 요약"
+             style="width:100%;border:1px solid var(--line, #d9dee6);border-radius:12px" loading="lazy">
+        <figcaption class="small muted" style="margin-top:6px"><code>/admin</code> 관제실 — 잡 13개(12+일일 안내) 전부 succeeded, 실 화면(2026-07-20 슬롯)</figcaption>
+      </figure>
+      <figure style="margin:0">
+        <img src="assets/screen-me.png" alt="내 계좌 — 총자산·보유·거래 내역과 판단·반박"
+             style="width:100%;border:1px solid var(--line, #d9dee6);border-radius:12px" loading="lazy">
+        <figcaption class="small muted" style="margin-top:6px"><code>/me</code> 내 계좌 — 체결마다 판단·확신도·크리틱의 반박문이 붙는다</figcaption>
+      </figure>
+    </div>
+    <figure style="margin:0 0 18px">
+      <img src="assets/screen-admin-accounts.png" alt="계좌 관리 — 개설·성향·정지"
+           style="width:100%;border:1px solid var(--line, #d9dee6);border-radius:12px" loading="lazy">
+      <figcaption class="small muted" style="margin-top:6px"><code>/admin/accounts</code> 계좌 관리 — 이 앱의 쓰기 전부(개설·성향·정지)가 이 화면이다</figcaption>
+    </figure>
+    <p>관제실이 답하는 질문은 네 가지다:</p>
+    <div class="grid c2">
+      <div class="stat"><div class="k">① 체인이 어디서 끊겼나</div><div class="v mono" style="font-size:15px">tb_job_run</div>
+        <div class="d">JOB 12종의 상태·소요시간·요약. 실패 시 <b>처음</b> 실패한 JOB을 지목한다 — 수집이 깨지면 뒤가 줄줄이 실패하고 범인은 첫 JOB이다.</div></div>
+      <div class="stat"><div class="k">② 무엇을 샀고 왜 못 샀나</div><div class="v mono" style="font-size:15px">tb_order_plan</div>
+        <div class="d">N 매수·M 보류 + 보류 사유 빈도 순위(min_cash·daily_order_cap…). 문턱 조정의 입력이 된다.</div></div>
+      <div class="stat"><div class="k">③ 계좌가 어떻게 움직이나</div><div class="v mono" style="font-size:15px">tb_account_equity_daily</div>
+        <div class="d">계좌별 시가평가 추이 + 스파크라인, 현금·보유·주문·체결 원장.</div></div>
+      <div class="stat"><div class="k">④ 판단과 반박</div><div class="v mono" style="font-size:15px">tb_strategist_signals</div>
+        <div class="d">성향별 승인 수, 종목별 side·확신도·요약과 크리틱의 반박문.</div></div>
+    </div>
+    <p class="small muted">
+      과거 슬롯은 <code>/admin?slot=YYYY-MM-DD</code>. JSON 관측 API: <code>GET /api/pipeline/today</code> ·
+      <code>GET /api/accounts</code>(구 <code>/api/portfolio</code> 대체 — 유령 계좌 하나가 아니라 계좌 전부) ·
+      <code>GET /health</code>. 리뷰 처리는 별도 라우터(<code>POST /api/reviews/{signal_id}/process</code>).
+      출처: <code>src/quantinue/main.py</code>.
+    </p>
+
+    <h3>알림 — 앱 내부 사건과 외부 생존 감시 <span class="b b-new">v6.3 갱신</span></h3>
+    <p>
+      화면을 매일 열지 않아도 되도록 알림을 두 층으로 나눈다. 앱 내부 Telegram은
+      <code>notify/telegram.py</code>, 외부 dead-man은 <code>notify/heartbeat.py</code>가 맡는다.
+    </p>
+    <div class="twrap"><table>
+      <thead><tr><th>주체</th><th>언제</th><th>무엇</th></tr></thead>
+      <tbody>
+        <tr><td>앱 내부 Telegram</td><td>잡 실패·일일 체인 완료·실제 청산·기동/굳음</td><td>앱이 살아 있을 때의 실행·매매 사건</td></tr>
+        <tr><td>8020 heartbeat</td><td>5분마다</td><td>DB 5445 + 일일 잡 부착 + WatchRunner liveness가 정상이면 success, 저하면 <code>/fail</code></td></tr>
+        <tr><td>Healthchecks Webhook</td><td>Period 5분 + Grace 5분</td><td>heartbeat 중단 시 Down, 재개 시 Up을 기존 Telegram bot으로 전달</td></tr>
+      </tbody>
+    </table></div>
+    <div class="note">
+      <b>설계 논거 — 침묵의 관찰자는 시스템 밖에 둔다.</b> 앱 내부 Telegram만으로는 앱·맥·네트워크가
+      통째로 죽었을 때 아무 말도 못 한다. 그래서 8020 단일 작업 소유자만 외부 heartbeat를 보내고,
+      8021 web-only는 같은 설정을 읽어도 reporter를 만들지 않는다. Healthchecks가 기존 Telegram bot을
+      Webhook으로 호출하므로 앱이 죽어도 Down을 보낼 수 있다. 일일 안내가 <b>잡</b>인 이유는 기능이 아니라
+      멱등이다: 하루 한 번 보장을 <code>tb_job_run</code> PK가 DB로 강제하므로 앱을 껐다 켜도 두 번
+      안 온다. 시각이 13시대인 이유는 슬롯이 <b>뉴욕 날짜</b> 기준이고 뉴욕 자정이 KST 13:00이기
+      때문이다. heartbeat ping URL·bot token·chat ID는 비밀값으로 설정 화면과 <code>.env</code>에만 두고,
+      로그·문서·스크린샷에는 남기지 않는다.
+    </div>
+  </section>
+
+  <!-- ═══════════════ 7. 확정 결정 D1~D8 ═══════════════ -->
+  <section id="decisions">
+    <div class="sec-eyebrow">Decisions</div>
+    <h2>확정 결정 D1~D8 — 그리고 그 이유</h2>
+    <p class="sec-intro">
+      2차 재설계(2026-07-19)에서 대화로 확정한 결정 8건. 이 문서에서 가장 자주 되물어지는
+      것들이라, 결정만이 아니라 <b>이유</b>를 함께 적는다.
+    </p>
+
+    <div class="dec"><div class="dn">D1</div><div>
+      <h3>체결은 로컬 시뮬(MockBroker), 시세는 실물 Alpaca</h3>
+      <p>주문은 MockBroker가 외부 호출 0건으로 시뮬 체결하고, 시세·뉴스만 실물 API에서 받는다.
+      <b>왜:</b> 정규장 시간에 결박되지 않아 밤에도 스모크할 수 있고, 브로커 청산 기계(취소 API·
+      페이로드 분기·멱등 재시도)를 만들지 않아도 된다. 실물처럼 굴러가는 부분(시세)과 실물이면
+      위험한 부분(돈)을 정확히 갈랐다.</p>
+    </div></div>
+
+    <div class="dec"><div class="dn">D2</div><div>
+      <h3>"무장" 개념 소멸 — mock이 최종 상태다</h3>
+      <p>1차의 "실 페이퍼 무장 대기"는 폐기됐다. 페이퍼 전환은 로드맵 R1이고, 지금 하지 않는다.
+      <b>왜:</b> mock 모드에 거래 활성 검증기가 얹힌 잔재가 실제로 앱 기동을 막는 결함을 냈다.
+      절반쯤 무장된 상태가 제일 위험하다 — 그래서 상태를 하나로 확정했다.</p>
+    </div></div>
+
+    <div class="dec"><div class="dn">D3</div><div>
+      <h3>주기는 config가 소유, 기본 일 1회</h3>
+      <p>모든 JOB의 주기는 <code>mvp2.jobs.cadences</code>가 정한다(universe 7일, 나머지 1일).
+      <b>왜:</b> 30분 주기로 조이는 것이 코드 수정이 아니라 숫자 하나 바꾸는 일이어야 한다(로드맵 R3의
+      전제). 요일 고정이 아니라 "마지막 성공으로부터 경과일"이라 꺼져 있던 날도 자연 복구된다.</p>
+      <div class="kv2"><span>universe <b>7일</b></span><span>daily_bars <b>1일</b></span><span>tick <b>60초</b></span><span>enabled <b>true</b> (2026-07-20 켬)</span></div>
+    </div></div>
+
+    <div class="dec"><div class="dn">D4</div><div>
+      <h3>정규장 전용</h3>
+      <p>장외(프리·애프터)는 다루지 않는다. <b>왜:</b> 장외는 시장가·브래킷 주문이 불가라
+      지정가+<code>extended_hours</code> 경로와 보호주문 상태기계가 통째로 필요하다. 데일리 케이던스에서
+      치를 비용이 아니다 — 로드맵 R2로 미룬다.</p>
+    </div></div>
+
+    <div class="dec"><div class="dn">D5</div><div>
+      <h3>손절·익절 동시 발동 시 손절 우선</h3>
+      <p>하루 봉의 고가·저가가 손절선과 익절선을 둘 다 건드리면 손절로 처리한다.
+      <b>왜:</b> 일봉으로는 장중에 무엇이 먼저였는지 알 수 없다. 모르면 보수적으로 —
+      수익을 놓친 셈 치는 쪽이 손실을 키운 셈 치는 쪽보다 낫다.</p>
+    </div></div>
+
+    <div class="dec"><div class="dn">D6</div><div>
+      <h3>빅뱅이 아니라 점진 교체</h3>
+      <p>구 11단계 러너를 한 번에 갈아엎지 않고, JOB을 하나씩 세워 공존시킨 뒤 소비자가
+      전부 옮겨간 시점에 러너를 삭제했다(<code>1a48aea</code>).
+      <b>왜:</b> 실행에서만 잡히는 결함이 통산 26건인 프로젝트다. 두 세계를 잠시 공존시키는 비용이
+      한 번에 바꾸고 며칠 눈이 머는 비용보다 싸다.</p>
+    </div></div>
+
+    <div class="dec"><div class="dn">D7</div><div>
+      <h3>매도는 별도 청산 행</h3>
+      <p>매도는 매수 행의 상태 변경이 아니라 <code>order_type='close'</code>인 새 행이고,
+      <code>closes_order_id</code>로 자기가 닫는 매수를 가리킨다.
+      <b>왜:</b> 실현손익은 매수-청산의 짝에서 나온다. 짝을 DB 제약으로 강제하면
+      "무엇을 판 것인지 모르는 매도"가 존재할 수 없게 된다.</p>
+    </div></div>
+
+    <div class="dec"><div class="dn">D8</div><div>
+      <h3>계좌 평가 = 현금 + 보유수량 × 종가</h3>
+      <p>매일 보유 종목을 직전 세션 종가로 재평가해 <code>equity</code>를 갱신한다.
+      <b>왜:</b> 평가액이 최초 자본에 동결된 채 포지션 사이징의 분모로 쓰이던 유령이 있었다.
+      <code>daily_loss_limit</code>·<code>max_weight</code> 같은 지갑 규칙은 분모가 살아 있어야 의미가 있다.</p>
+    </div></div>
+  </section>
+
+  <!-- ═══════════════ 8. 의도적으로 안 만든 것 ═══════════════ -->
+  <section id="notbuilt">
+    <div class="sec-eyebrow">Not Built — On Purpose</div>
+    <h2>의도적으로 안 만든 것</h2>
+    <p class="sec-intro">
+      "왜 이 기능이 없나"에 대한 답. 미룬 것(로드맵)과 <b>실 데이터에 기각당한 것</b>을
+      구분해서 적는다. 기각 기록이 이 문서에서 제일 값진 부분이다 — 같은 아이디어를
+      다시 시도하기 전에 여기부터 읽어야 한다.
+    </p>
+
+    <h3>로드맵 — 미룬 것과 그 이유</h3>
+    <div class="twrap"><table>
+      <thead><tr><th>#</th><th>항목</th><th>얻는 것</th><th>왜 지금이 아닌가</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">R1</td><td><b>Alpaca 페이퍼 전환</b></td><td>실주문 라이프사이클 검증 (거부·부분체결·정지)</td><td>정규장 시간 결박(KST 22:30~05:00) + 브로커 청산 기계 + 계좌 대사가 전제. <code>BROKER_MODE=alpaca</code> 한 줄과 휴면 코드 부활로 켠다</td></tr>
+        <tr><td class="mono">R2</td><td>장외 청산·매수</td><td>애프터아워 악재 즉시 반응</td><td>보호주문 상태기계(개장 부착·실패 폴백·재시작 복구)가 통째로 필요. R1 선행</td></tr>
+        <tr><td class="mono">R3</td><td>인트라데이 다회 사이클</td><td>진입 타이밍 개선</td><td>코드 변경 불필요(D3 — config 주기만 조임). 단 LLM 비용 ×N이라 예산 강제 배선이 선행</td></tr>
+        <tr><td class="mono">R4</td><td>실시간 스트리밍</td><td>논지 붕괴 감지 익일 → 수 분</td><td>유료 피드(SIP) + 스트리밍 인프라 — 시연 규모엔 과잉. R3 선행</td></tr>
+        <tr><td class="mono">R5</td><td>주기 조정 관리 UI</td><td>운영자가 yaml 없이 조정</td><td>런타임 설정 저장소 설계 필요. 지금 만들면 유령이 된다</td></tr>
+        <tr><td class="mono">R6</td><td>장중 손실 감시</td><td>당일 급락 시 즉시 매수 차단</td><td>데일리 케이던스에선 전일 종가 평가로 충분 — 장중 시가평가 루프는 R3 이후</td></tr>
+        <tr><td class="mono">R7</td><td>시뮬 충실도 (슬리피지·부분체결)</td><td>체결가 현실성</td><td>검증 데이터가 없다. 페이퍼(R1)와의 실체결 비교가 최선의 검증이라 R1 이후</td></tr>
+        <tr><td class="mono">R8</td><td>Form 4 인사이더 시그널</td><td colspan="2">✅ <b>완료 (2026-07-20, <code>610bc30</code>)</b> — <a href="#judgment">§판단</a> 참조</td></tr>
+        <tr><td class="mono">R9</td><td>거장 렌즈 팬-IN</td><td>렌즈 간 불일치 자체가 신호</td><td>종목당 LLM 콜 2 → 10+ 로 증가, 그리고 렌즈 절반이 재무 데이터(R10)를 요구</td></tr>
+        <tr><td class="mono">R10</td><td>재무 원장 (tb_fundamentals)</td><td>매출성장·FCF·부채비율</td><td>EDGAR XBRL 파서 + 분기 갱신 JOB. 분기 데이터로 T+5 판단을 하는 정합성 검토 선행</td></tr>
+        <tr><td class="mono">R11</td><td>보도자료 와이어 RSS</td><td colspan="2">1단계(수집) ✅ 운행 중 · <b>2단계(투표) 기각</b> — 아래 참조</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>기각된 것 2건 — 실 데이터가 안 된다고 했다</h3>
+
+    <div class="note bad">
+      <b>기각 ① 와이어 뉴스에 투표권 주기</b> (2026-07-20, 착수 전 조사에서 기각)<br><br>
+      와이어 보도자료(GNW·PRN)는 출처 등급 allow(0.95)라 투표 자격은 완벽했다. 그런데 실측하니
+      와이어 뉴스가 우리 픽을 <b>단 한 종목도 덮지 않았다</b> — 픽 날짜 4개 전부에서 겹침
+      0/59 · 0/21 · 0/22 · 0/3. 와이어에 등장한 24종목 중 유니버스에 있는 것은 3개뿐이었고,
+      나머지는 해외 ADR·워런트·유닛(<code>ALKEF</code>·<code>EVEXW</code>·<code>FNT.U</code>…)이었다.
+      와이어 최신 피드는 마이크로캡·OTC 보도자료가 지배하고, 우리 유니버스는 시총 상위 2,000이다.
+      <b>표본 문제가 아니라, 애초에 겹칠 수 없는 두 집합이었다.</b>
+      수집(1단계)은 무키·무비용이라 살려 뒀다 — news_wire JOB이 계속 도는 이유다.
+    </div>
+
+    <div class="note bad">
+      <b>기각 ② 공시 폼 종류만으로 채점하기</b> (2026-07-20, 실 LLM 스모크에서 기각, revert <code>6d75006</code>)<br><br>
+      "공시가 났다"는 사실과 폼 종류(8-K·10-Q…)만으로 LLM이 점수를 매기게 했다. JOB을 다 만들고
+      등록까지 한 뒤 실 공시 6건을 채점하니 <b>전부 정확히 0.500</b> — 상장폐지 공시(25-NSE)와
+      분기보고서(10-Q)가 같은 점수였다. 모델은 정직하게 거부한 것이다: 폼 종류만 주고 내용을
+      안 주면 방향을 매길 수 없다.<br><br>
+      더 나쁜 발견: <b>상수 투표는 표가 없는 것보다 나쁘다.</b> 확신도가 평균이라, 공시를 낸
+      종목만 0.900 → 0.700으로 일률 감점됐는데 그 감점에 정보가 0이다. 그래서 등록만 되돌리고
+      배관(잡·계약·테스트 8건)은 남겼다.<br><br>
+      <b>부수 수확이 다음 기능을 정했다:</b> 본문을 받아보니 10-Q는 13.7MB(컨텍스트 불가),
+      Form 4는 36KB 구조화 XML(가능) — 이것이 R8 인사이더 채점의 진입점이 됐다.
+    </div>
+
+    <div class="note ai">
+      <b>교훈 — 투표권의 조건은 출처 등급이 아니라 내용이다.</b> 두 기각 모두 배관은 완벽했고
+      증거가 문제였다. allow 등급을 확보하고도(와이어·SEC) 내용이 없거나 겹치지 않아 실패했다.
+      투표권을 다시 시도한다면 "어떤 소스인가"가 아니라 <b>"그 소스가 우리 픽에 대해 무엇을
+      말해주는가"</b>부터 실측해야 한다. R8이 성공한 이유가 정확히 그것이다 — Form 4는 픽에 걸리고,
+      구조화돼 있고, 방향이 있다.
+    </div>
+
+    <details class="schema">
+      <summary>성향 축을 거장 페르소나로 갈지 않은 이유 <span class="cnt">기각 3근거</span></summary>
+      <div class="inner">
+        <p>ai-berkshire류의 "버핏 에이전트"를 성향 축으로 쓰는 안은 세 가지 이유로 기각했다:</p>
+        <ul>
+          <li><b>축이 스키마에 박혀 있다</b> — <code>inv_type</code>은 판단 유일성 축이자 계좌 구성의 축이다.
+          4거장으로 갈면 계좌·배분이 함께 움직인다.</li>
+          <li><b>지평이 안 맞는다</b> — 버핏의 10년 확실성과 우리 T+5 회고는 다른 질문이다.</li>
+          <li><b>증거가 없다</b> — ROE·FCF·내재가치·경영진 평가가 원장에 없다. 주면 지어낸다.</li>
+        </ul>
+        <p>대신 두 성향을 실존 방법론에 정박하고(오닐·미너비니·드러켄밀러 / 막스·리버모어),
+        각 프롬프트에 "이 프레임이 요구하지만 우리 증거가 답할 수 없는 것" 섹션을 강제했다
+        (테스트로 고정). 기준은 하나다: <b>우리 원장의 증거로 정직하게 답할 수 있는가.</b></p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ═══════════════ 9. 정직한 한계 ═══════════════ -->
+  <section id="limits">
+    <div class="sec-eyebrow">Honest Limits</div>
+    <h2>정직한 한계</h2>
+    <p class="sec-intro">
+      이 시스템이 아직 못 하는 것, 그리고 지금의 선택이 치르고 있는 비용.
+      숨기면 다음 사람이 실행에서 발견하게 된다 — 그 비용이 더 크다.
+    </p>
+
+    <h3>데일리 케이던스가 치르는 비용</h3>
+    <div class="twrap"><table>
+      <thead><tr><th>잃는 것</th><th>어떻게 다루고 있나</th><th>해소 경로</th></tr></thead>
+      <tbody>
+        <tr><td>장중 급락은 <b>하루 늦게</b> 인식될 수 있다 (일봉 고저로만 판정)</td><td>동시 발동 시 손절 우선(D5)으로 보수 처리</td><td class="mono">R3 · R6</td></tr>
+        <tr><td>뉴스 반응이 <b>최대 익일</b>로 지연</td><td>하드 이벤트(상장폐지·정지)는 SEC 폼이 즉시 판정</td><td class="mono">R2 · R4</td></tr>
+        <tr><td>체결가 = 판단 시점 호가 가정 (슬리피지 0)</td><td>모의 계좌라 손익 왜곡은 있어도 실손실은 없다</td><td class="mono">R7</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>지금 이 순간의 사실</h3>
+    <ul class="rules">
+      <li><b>무인 완주 실적 0일.</b> 자동 운행은 2026-07-20에 켜졌고 관측 카운트는 2026-07-21부터다.
+        수동 스모크로는 전 JOB 완주를 확인했지만, 사람이 안 보는 날의 연속 완주는 아직 검증되지 않았다.
+        확인 루틴은 <a href="https://github.com/jaymunsh/quantinue/blob/main/docs/mvp2-planning/how-to-check-guide.md"><code>docs/mvp2-planning/how-to-check-guide.md</code></a>.</li>
+      <li><b>인사이더 표는 아직 드물다.</b> 픽의 12~14%만 Form 4가 걸리고 그중 재량 거래는 다시 일부다.
+        문턱(0.80/0.30)은 며칠 데이터를 쌓은 뒤 재조정해야 한다.</li>
+      <li><b><code>premarket_gap_max</code>(0.03)는 잠정값.</b> 실제 갭 분포를 1~2주 관측한 뒤 조정한다.
+        발동 사유는 <code>tb_order_plan</code>에 남는다.</li>
+      <li><b>LLM 예산 상한은 강제된다.</b> <code>budget.daily_llm_usd</code>(3.0) 아래에서
+        유료 호출의 최대 비용을 먼저 예약하고 동시 호출을 직렬화한다. 사용량이 누락되면 예약 최대액을
+        보수적으로 비용 처리한다. 사용처 전수와 전환 검토:
+        <code>llm-usage-guide.md</code> · <code>aws-migration-review.md</code>.</li>
+      <li><b>재시도는 config 소유로 복원됐지만 openai에서 미검증.</b> 한때 로컬 경로에
+        <code>retries=0</code>이 굳어 구조화 출력 1회 실패가 성향 22종목을 통째로 날렸다(결함 13) —
+        지금은 종목 단위 격리 + <code>llm_max_retries</code>(기본 1)로 수리됐다. openai 전환 시
+        재시도 동작 재확인이 남아 있다.</li>
+      <li><b>성향 격차가 기계적일 때가 있다.</b> 모델이 같은 판단을 내고 보수형에서 일괄 −0.100을 빼는
+        패턴이 관찰됐다. 성향이 "다른 사고"가 아니라 "같은 사고 − 상수"가 되고 있는지 감시가 필요하다.</li>
+      <li><b>구 러너의 유물이 남아 있다.</b> <code>pipeline_runs</code> 계열 테이블과
+        <code>ensure_holding_in_scope</code> 폴백(스크리닝이 실패한 날 청산을 지키는 안전망)은
+        의도적으로 유지 중이다. 페이퍼 전환(R1) 때 거래정지 종목 제출 차단 가드도 다시 세워야 한다.</li>
+    </ul>
+  </section>
+
+  <!-- ═══════════════ 10. 운영·검증 ═══════════════ -->
+  <section id="ops">
+    <div class="sec-eyebrow">Operations</div>
+    <h2>운영·검증</h2>
+    <p class="sec-intro">
+      <b>운영(켜고 보고 끄기)의 정본은 <a href="https://github.com/jaymunsh/quantinue/blob/main/docs/operations-runbook.md"><code>docs/operations-runbook.md</code></a>다.</b>
+      관측 인스턴스는 8020(<code>scripts/run_observation.sh</code>), 코드 작업은 8021로 분리한다.
+      외부 생존 감시는 owner-only heartbeat(5분/5분 + Telegram Webhook)로 구현돼 있다.
+      현재 8020의 송신 여부는 외부 원장으로 별도 확인한다. 자격 증명은 문서에 기록하지 않는다.
+    </p>
+    <div class="grid c3">
+      <div class="stat"><div class="k">앱 (웹)</div><div class="v mono" style="font-size:16px">:8020</div><div class="d">FastAPI + Jinja2 서버 렌더 · 작업용은 :8021</div></div>
+      <div class="stat"><div class="k">DB (dev)</div><div class="v mono" style="font-size:16px">:5445</div><div class="d">PostgreSQL · 격리 QA는 :5490</div></div>
+      <div class="stat"><div class="k">LLM (로컬)</div><div class="v mono" style="font-size:16px">:8888</div><div class="d">oMLX · Qwen3.6-35B-A3B-OptiQ-4bit</div></div>
+    </div>
+    <div class="twrap"><table>
+      <thead><tr><th>무엇을</th><th>어떻게</th><th>기대</th></tr></thead>
+      <tbody>
+        <tr><td>유닛 + 웹</td><td class="mono">cd app-v2 && uv run pytest tests/unit tests/test_*.py -q</td><td class="mono">799 green (2026-07-27)</td></tr>
+        <tr><td>통합 (실 Postgres)</td><td class="mono">uv run pytest tests/integration -q -p no:unraisableexception</td><td class="mono">190 green (2026-07-27) · 새 컨테이너에서 돌릴 것 (멱등 가드가 옛 행을 지킨다)</td></tr>
+        <tr><td>오늘 슬롯 확인</td><td class="mono">GET http://127.0.0.1:8020/admin?slot=YYYY-MM-DD</td><td>JOB 12(+1)종 상태 + 매수/보류 + 계좌 곡선 (로그인 필요)</td></tr>
+      </tbody>
+    </table></div>
+    <div class="note warn">
+      통합 테스트에 <code>-p no:unraisableexception</code>이 필요한 이유: asyncpg의 GC 경고가
+      에러로 승격돼 가짜 실패 15건을 만든다. 테스트가 깨지면 코드보다 이 플래그부터 확인.
+    </div>
+    <div class="note">
+      개발을 이어받는 사람은 <a href="quantinue-engineering.html"><b>기술 부록</b></a>을 함께 읽을 것 —
+      프로젝트 연대기(10일·281커밋), 결함 통산 27건의 전체 기록, 코드 구조 맵, 28테이블 전체 ERD,
+      운영 함정 목록이 거기 있다.
+    </div>
+  </section>
+
+  <!-- ═══════════════ 11. 변경 이력 ═══════════════ -->
+  <section id="changelog">
+    <div class="sec-eyebrow">Changelog</div>
+    <h2>변경 이력</h2>
+    <div class="twrap"><table>
+      <thead><tr><th>버전</th><th>날짜</th><th>내용</th></tr></thead>
+      <tbody>
+        <tr class="r-new"><td class="mono"><b>v6.5</b></td><td class="mono">2026-07-28</td>
+          <td><b>제3자 독해 보강 — 설계 서술 변경 없음.</b> "처음 읽는 분께"(3부작 읽는 순서 ·
+          키 없이 띄우는 법 · 모드 스위치 4개) 신설. <b>"장중 층 — 1분 방어와 사건 재판단"</b>
+          신설 — 그간 스키마·결정 기록으로만 존재하던 2차 장중 층의 산문 설명
+          (설계 서술임을 명시, 값은 <code>pipeline.yaml</code> 원문). 07-27 대조 주석 —
+          테스트 수 799+190 갱신, 계보 컬럼 채움률 실측 표(§데이터 모델).</td></tr>
+        <tr class="r-new"><td class="mono"><b>v6.4</b></td><td class="mono">2026-07-24</td>
+          <td><b>로컬 개발 완료 경계 반영.</b> 장중 사건 증분 수집·관련 종목
+          at-most-once 재판단·표적 모의 주문과 source 상태 관측을 구현했다.
+          poll-only Gate A는 통과했으며 rejudge·stream과 운영 DB migration은
+          별도 활성화 단계로 남긴다.</td></tr>
+        <tr class="r-new"><td class="mono"><b>v6.3</b></td><td class="mono">2026-07-23</td>
+          <td><b>외부 dead-man heartbeat 반영.</b> 앱 내부 Telegram은 잡·매매 사건,
+          Healthchecks.io는 8020/DB/WatchRunner가 통째로 침묵하는 경우를 맡는다.
+          8020 owner만 5분마다 success/<code>/fail</code>을 보내고 8021은 보내지 않는다.
+          Period 5분 / Grace 5분과 기존 Telegram bot Webhook의 Down/Up 연결을 운영 기준으로 확정했다.</td></tr>
+        <tr class="r-new"><td class="mono"><b>v6.2</b></td><td class="mono">2026-07-21 저녁</td>
+          <td><b>화면 넷 → 여섯.</b> 운영 기준(<code>/admin/schedule</code>)과 작동 로그
+          (<code>/admin/logs</code>) 신설 반영 — 전자는 "잡이 언제 도는가"의 화면 답이자
+          <b>용어집</b>(슬롯·잡·원장…10개)의 자리, 후자는 날짜별 실행 기록과 시도 횟수.
+          LLM 예산 배선(⑨) 완료로 <b>openai 전환</b>이 이뤄졌다(gpt-5.4-mini) — 모든 판단
+          콜이 <code>tb_llm_usage</code>를 통과하고 상한 초과 시 "안 사는" 쪽으로 멈춘다.
+          텔레그램 알림 4종(실패·일일 안내·방어선 발동·기동/굳음). 화면 시각은 KST,
+          상단바에 뉴욕·서울·UTC 실시간 시계. 곡선의 min/max 정규화 결함 수리
+          (−0.01%가 절벽으로 그려졌다).</td></tr>
+        <tr><td class="mono">v6.1</td><td class="mono">2026-07-21</td>
+          <td><b>웹 완성·알림 반영.</b> 관제실 절을 "웹 — 화면 넷"으로 교체(로그인·<code>/admin</code>·
+          계좌 관리·<code>/me</code>, 역할 갈림길, 관리자 쓰기 2종 — 계좌 CRUD·슬롯 잠금 해제).
+          텔레그램 알림 절 신설(실패 즉시 + 일일 안내, "침묵이 신호" 논거). JOB 체인 12종 +
+          조건부 1(<code>daily_summary</code>)로 갱신. 정직한 한계 현행화(retries 수리 반영 ·
+          무인 관측 07-21 시작). 운영·검증을 runbook 기준으로 교체(572+107 green).</td></tr>
+        <tr><td class="mono">v6.0</td><td class="mono">2026-07-20</td>
+          <td><b>전면 재작성 — JOB 체인 기준 정본화.</b> 구 11단계 러너 서술 전부 제거,
+          JOB 12종·인사이더 채점(R8)·기각 2건·D1~D8·Alpaca 한도 반영.
+          1차 대비 신규 항목 배지 표기. JOB 12종 상세 카드 + 전 테이블 컬럼 명세(schema.sql
+          기계 추출) + ENUM 사전 수록. mermaid 로컬 벤더링(오프라인 렌더).
+          모든 수치는 코드(<code>job_factory.py</code>·<code>pipeline.yaml</code>·<code>schema.sql</code>)와
+          핸드오프 실측(커밋 <code>bd287f3</code>까지)에서 확인해 인용.</td></tr>
+        <tr><td class="mono">v5.3</td><td class="mono">2026-07-20</td><td>잡 체인 절 추가 (부분 반영 — 주변 섹션은 구 러너 서술로 남아 있었다)</td></tr>
+        <tr><td class="mono">v4.0~v5.2</td><td class="mono">2026-07-18~20</td><td>최종 프로젝트 개발기 수기 이력 — git <code>docs/</code> 이력으로 대체</td></tr>
+        <tr><td class="mono">~v3.8</td><td class="mono">—</td><td>1차(MVP-1) 동결본 → <a href="quantinue-integrated-design-mvp1.html">quantinue-integrated-design-mvp1.html</a></td></tr>
+      </tbody>
+    </table></div>
+    <p class="small muted">작성: 문성혁 + Claude · 원천:
+    <a href="https://github.com/jaymunsh/quantinue/blob/main/docs/mvp2-planning/dev-handoff.md"><code>docs/mvp2-planning/dev-handoff.md</code></a> ·
+    <a href="https://github.com/jaymunsh/quantinue/blob/main/docs/mvp2-planning/future-roadmap.md"><code>docs/mvp2-planning/future-roadmap.md</code></a> ·
+    <a href="https://github.com/jaymunsh/quantinue/tree/main/app-v2"><code>app-v2/</code></a> 코드</p>
+  </section>
+
+  </div>
+  </main>
+</div>
+
+<script>
+  /* 좌측 내비 스크롤 활성 표시 + 사이드바 자동 추적 */
+  (function(){
+    var links = Array.prototype.slice.call(document.querySelectorAll('.nav a[href^="#"]'));
+    var rail = document.querySelector('.rail');
+    var targets = links.map(function(a){ return {a:a, el:document.getElementById(a.getAttribute('href').slice(1))}; })
+                       .filter(function(t){ return t.el; });
+    if(!targets.length) return;
+    var current=null, ticking=false;
+    function update(){
+      ticking=false;
+      var line=130, active=targets[0];              // 뷰포트 상단 130px 선을 지난 마지막 섹션 = 현재
+      for(let i=0;i<targets.length;i++){
+        if(targets[i].el.getBoundingClientRect().top <= line) active=targets[i];
+      }
+      if(active.a===current) return;
+      links.forEach(function(a){a.classList.remove('active');});
+      active.a.classList.add('active');
+      current=active.a;
+      if(rail && rail.scrollHeight > rail.clientHeight){   // 활성 항목을 사이드바 안에 유지
+        const r=active.a.getBoundingClientRect(), rr=rail.getBoundingClientRect();
+        if(r.top < rr.top+24) rail.scrollTop -= (rr.top+24 - r.top);
+        else if(r.bottom > rr.bottom-24) rail.scrollTop += (r.bottom - (rr.bottom-24));
+      }
+    }
+    function onScroll(){ if(!ticking){ ticking=true; requestAnimationFrame(update); } }
+    window.addEventListener('scroll', onScroll, {passive:true});
+    window.addEventListener('resize', onScroll);
+    update();
+  })();
+
+  /* 다크모드 토글 */
+  (function(){
+    function effective(){
+      var t = document.documentElement.getAttribute('data-theme');
+      if(t) return t;
+      return (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+    }
+    function paint(){
+      var dark = effective()==='dark';
+      ['themeBtn','themeBtnM'].forEach(function(id){ var b=document.getElementById(id); if(b) b.textContent = dark ? '☀️' : '🌙'; });
+    }
+    function toggle(){
+      var next = effective()==='dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try{ localStorage.setItem('q-theme', next); }catch(e){}
+      paint();
+    }
+    ['themeBtn','themeBtnM'].forEach(function(id){ var b=document.getElementById(id); if(b) b.addEventListener('click', toggle); });
+    paint();
+  })();
+
+  /* 모바일 목차 서랍 (햄버거) */
+  (function(){
+    var rail=document.querySelector('.rail'), bd=document.getElementById('railBackdrop'), hb=document.getElementById('hamburger');
+    if(!rail||!bd||!hb) return;
+    function open(){ rail.classList.add('open'); bd.classList.add('open'); hb.setAttribute('aria-expanded','true'); }
+    function close(){ rail.classList.remove('open'); bd.classList.remove('open'); hb.setAttribute('aria-expanded','false'); }
+    hb.addEventListener('click', open);
+    bd.addEventListener('click', close);
+    rail.querySelectorAll('a[href^="#"]').forEach(function(a){ a.addEventListener('click', close); });
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape') close(); });
+  })();
+</script>
+</body>
+</html>

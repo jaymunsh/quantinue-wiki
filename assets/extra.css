@@ -1,0 +1,139 @@
+/* Quantinue 문서 UI — 읽는 흐름과 현재 위치를 우선한다. */
+:root {
+  --md-text-font: "Noto Sans KR";
+  --quantinue-accent: #168052;
+  --quantinue-accent-soft: rgba(22, 128, 82, .09);
+  --quantinue-line: rgba(31, 41, 55, .12);
+}
+
+[data-md-color-scheme="slate"] {
+  --quantinue-accent: #57c991;
+  --quantinue-accent-soft: rgba(87, 201, 145, .11);
+  --quantinue-line: rgba(255, 255, 255, .12);
+}
+
+.md-typeset {
+  font-size: .82rem;
+  line-height: 1.78;
+  letter-spacing: -.006em;
+  color: var(--md-default-fg-color--light);
+}
+
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3 {
+  color: var(--md-default-fg-color);
+  text-wrap: balance;
+}
+
+.md-typeset h1 {
+  margin-bottom: 1.2rem;
+  font-weight: 750;
+  letter-spacing: -.025em;
+}
+
+.md-typeset h2 {
+  margin-top: 2.2em;
+  padding-bottom: .35em;
+  border-bottom: 1px solid var(--quantinue-line);
+  font-weight: 700;
+}
+
+.md-typeset h3 { font-weight: 650; }
+.md-typeset p { max-width: 52rem; }
+
+/* 본문 링크와 현재 위치 */
+.md-typeset a:not(.headerlink) {
+  text-underline-offset: .16em;
+}
+
+.md-nav__link--active,
+.md-nav__link:focus,
+.md-nav__link:hover {
+  color: var(--quantinue-accent);
+}
+
+.md-nav__item--active > .md-nav__link--active {
+  font-weight: 700;
+}
+
+/* 사이드바 최상단 위키명: 카테고리보다 한 단계 높은 시각적 위계 */
+.md-sidebar--primary .md-nav--primary > .md-nav__title {
+  padding-bottom: .45rem;
+  font-size: .92rem;
+  font-weight: 800;
+  line-height: 1.35;
+  letter-spacing: -.02em;
+  color: var(--md-default-fg-color);
+}
+
+.md-sidebar--primary .md-nav__item--section > .md-nav__link {
+  margin-top: .7rem;
+  margin-bottom: .18rem;
+  font-size: .76rem;
+  font-weight: 750;
+  line-height: 1.4;
+  letter-spacing: -.015em;
+  color: var(--md-default-fg-color);
+}
+
+.md-sidebar--secondary .md-nav {
+  border-left: 1px solid var(--quantinue-line);
+}
+
+/* 표 — 한글 줄바꿈·여백 개선 */
+.md-typeset table:not([class]) {
+  border: 1px solid var(--quantinue-line);
+  font-size: .74rem;
+  line-height: 1.62;
+}
+
+.md-typeset table:not([class]) th {
+  background: var(--quantinue-accent-soft);
+  color: var(--md-default-fg-color);
+  font-weight: 700;
+}
+
+.md-typeset table:not([class]) tbody tr:nth-child(even) {
+  background: rgba(127, 127, 127, .035);
+}
+
+.md-typeset table:not([class]) td,
+.md-typeset table:not([class]) th { padding: .62em .85em; }
+
+/* 넓은 표: 가로 스크롤(드래그) 대신 화면 폭에 맞춰 아래로 줄바꿈.
+   auto 레이아웃이라 내용 많은 칸에 폭이 자연히 몰리고, 긴 칸은 세로로 늘어난다. */
+.md-typeset__table { display: block; }          /* 스크롤 래퍼 무력화 */
+.md-typeset table:not([class]) {
+  display: table;
+  width: 100%;                                   /* 화면 폭을 넘지 않게 */
+}
+.md-typeset table:not([class]) td,
+.md-typeset table:not([class]) th {
+  white-space: normal;
+  overflow-wrap: break-word;                     /* 긴 영문·코드도 필요 시 줄바꿈 */
+  word-break: break-word;
+  vertical-align: top;
+}
+
+/* 요약·주의 박스는 본문과 구분하되 과하게 튀지 않게 한다. */
+.md-typeset .admonition,
+.md-typeset details {
+  border-width: 0 0 0 .18rem;
+  border-radius: .35rem;
+  box-shadow: 0 .12rem .5rem rgba(0, 0, 0, .045);
+}
+
+.md-typeset .admonition-title,
+.md-typeset summary {
+  font-weight: 700;
+}
+
+/* 본문 폭 살짝 넓혀 표 여유 확보 */
+.md-grid { max-width: 68rem; }
+
+/* 상단바(헤더) 색 — 라이트/다크 공통 #232323 */
+.md-header,
+.md-tabs {
+  background-color: #232323;
+}
