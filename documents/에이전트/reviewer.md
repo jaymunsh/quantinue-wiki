@@ -1,5 +1,9 @@
 # 📓 Reviewer Agent (⑪ 회고)
 
+!!! abstract "🧊 1차 역할 기준 · 동결 기록"
+    이 페이지는 1차 01→11 역할 설계를 보존한다. 수치·문턱·컬럼은 당시 값이며 현재
+    구현과 다를 수 있다. 최종 구현은 [핵심 기능 (최종)](../핵심기능/index.md)을 따른다.
+
 !!! success "✅ 구현됨 · 담당 문성혁"
     한 판단(signal)을 **T+5 이후 복기**해 결과를 채점하고 교훈을 남기는 모듈. 코드가 숫자를, LLM이 교훈을 쓴다.
     참조 소스: `quantinue` repo · `reviewer-agent` @ `abcec1a` · 패키지 `agents/reviewer/`

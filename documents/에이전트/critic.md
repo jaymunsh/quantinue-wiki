@@ -1,5 +1,9 @@
 # ⚖️ Critic Agent (⑧ 반박·검증)
 
+!!! abstract "🧊 1차 역할 기준 · 동결 기록"
+    이 페이지는 1차 01→11 역할 설계를 보존한다. 수치·문턱·컬럼은 당시 값이며 현재
+    구현과 다를 수 있다. 최종 구현은 [핵심 기능 (최종)](../핵심기능/index.md)을 따른다.
+
 !!! success "✅ 구현됨 · 담당 김미연"
     Strategist의 매수 추천을 **일부러 반박**해 통과/기각을 정하는 모듈. 코드 하드룰 → LLM 반박 → 코드 게이트의 3계층.
     참조 소스: `quantinue` repo · `critic-agent-1` @ `d107834` · 구현 완료·테스트 51개 통과(gpt-4o-mini) · 패키지 `agents/critic/` (import `quantinue.agents.risk_critic`)
