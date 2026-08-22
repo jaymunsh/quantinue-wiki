@@ -65,4 +65,4 @@ python3 -m mkdocs build --strict # 빌드 검증 (Material 팀 공지 경고는 
 | 병입 | `/병입 <결정 내용>` — 지시서 "병입 지시를 받았을 때" 절차대로 |
 | 사이트 점검 | `/점검` — lint.py(기계) + LLM(판단) 2단 감사 |
 | 배포 | `/배포` — lint·strict build 후 push → Actions 자동 배포 |
-| 에이전트 페이지 갱신 | `/에이전트갱신 <이름>` — quantinue repo 읽기전용 참조로 핵심 기능 페이지 갱신 |
+| 1차 역할 페이지 갱신 | `/에이전트갱신 <이름>` — 1차 quantinue repo 읽기전용 참조로 `documents/에이전트/` 갱신 (최종 구현 `documents/핵심기능/`은 대상 아님) |
